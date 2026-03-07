@@ -1,0 +1,97 @@
+<UserControl x:Class="BuyOldBike_Presentation.Controls.FilterPanelControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="600"
+             d:DesignWidth="260">
+    <Border Padding="16"
+            Background="White"
+            CornerRadius="12"
+            BorderBrush="#E5E7EB"
+            BorderThickness="1">
+        <StackPanel>
+            <TextBlock FontSize="16"
+                       FontWeight="SemiBold"
+                       Text="Bộ lọc" />
+
+            <TextBlock Margin="0,16,0,6"
+                       FontSize="12"
+                       Foreground="#6B7280"
+                       Text="Hãng (Brand)" />
+            <ComboBox Height="36">
+                <ComboBoxItem Content="Tất cả" IsSelected="True" />
+                <ComboBoxItem Content="Giant" />
+                <ComboBoxItem Content="Trek" />
+                <ComboBoxItem Content="Specialized" />
+            </ComboBox>
+
+            <TextBlock Margin="0,16,0,6"
+                       FontSize="12"
+                       Foreground="#6B7280"
+                       Text="Giá (Price Range)" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0"
+                         Height="36"
+                         MinWidth="90"
+                         VerticalContentAlignment="Center"
+                         Padding="10,0"
+                         Text="Min" />
+                <TextBlock Grid.Column="1"
+                           Margin="10,0"
+                           VerticalAlignment="Center"
+                           Foreground="#6B7280"
+                           Text="-" />
+                <TextBox Grid.Column="2"
+                         Height="36"
+                         MinWidth="90"
+                         VerticalContentAlignment="Center"
+                         Padding="10,0"
+                         Text="Max" />
+            </Grid>
+
+            <TextBlock Margin="0,16,0,6"
+                       FontSize="12"
+                       Foreground="#6B7280"
+                       Text="Kích cỡ khung (Frame Size)" />
+            <ComboBox Height="36">
+                <ComboBoxItem Content="Tất cả" IsSelected="True" />
+                <ComboBoxItem Content="S" />
+                <ComboBoxItem Content="M" />
+                <ComboBoxItem Content="L" />
+            </ComboBox>
+
+            <TextBlock Margin="0,16,0,6"
+                       FontSize="12"
+                       Foreground="#6B7280"
+                       Text="Tình trạng (Condition)" />
+            <StackPanel>
+                <CheckBox Content="Như mới" />
+                <CheckBox Content="Tốt" />
+                <CheckBox Content="Đã qua sử dụng" />
+            </StackPanel>
+
+            <TextBlock Margin="0,16,0,6"
+                       FontSize="12"
+                       Foreground="#6B7280"
+                       Text="Khu vực (Location)" />
+            <ComboBox Height="36">
+                <ComboBoxItem Content="Tất cả" IsSelected="True" />
+                <ComboBoxItem Content="Hà Nội" />
+                <ComboBoxItem Content="TP.HCM" />
+                <ComboBoxItem Content="Đà Nẵng" />
+            </ComboBox>
+
+            <Button Margin="0,18,0,0"
+                    Height="38"
+                    Content="Áp dụng" />
+        </StackPanel>
+    </Border>
+</UserControl>

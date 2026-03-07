@@ -1,0 +1,15 @@
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_BLL\bin\Debug\net9.0\BuyOldBike_BLL.deps.json
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_BLL\bin\Debug\net9.0\BuyOldBike_BLL.dll
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_BLL\bin\Debug\net9.0\BuyOldBike_BLL.pdb
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_BLL\obj\Debug\net9.0\BuyOldBike_BLL.GeneratedMSBuildEditorConfig.editorconfig
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_BLL\obj\Debug\net9.0\BuyOldBike_BLL.AssemblyInfoInputs.cache
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_BLL\obj\Debug\net9.0\BuyOldBike_BLL.AssemblyInfo.cs
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_BLL\obj\Debug\net9.0\BuyOldBike_BLL.csproj.CoreCompileInputs.cache
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_BLL\obj\Debug\net9.0\BuyOldBike_BLL.dll
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_BLL\obj\Debug\net9.0\refint\BuyOldBike_BLL.dll
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_BLL\obj\Debug\net9.0\BuyOldBike_BLL.pdb
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_BLL\obj\Debug\net9.0\ref\BuyOldBike_BLL.dll
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_BLL\bin\Debug\net9.0\BuyOldBike_DAL.dll
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_BLL\bin\Debug\net9.0\BuyOldBike_DAL.pdb
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_BLL\obj\Debug\net9.0\BuyOldBike_BLL.csproj.AssemblyReference.cache
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_BLL\obj\Debug\net9.0\BuyOldBi.BE2DC7AD.Up2Date
