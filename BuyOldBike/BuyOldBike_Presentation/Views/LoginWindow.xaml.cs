@@ -39,5 +39,12 @@ namespace BuyOldBike_Presentation.Views
                 this.Close();
             }
         }
+
+        private void OpenRegister_Click(object sender, RoutedEventArgs e)
+        {
+            var registerWindow = new RegisterWindow();
+            registerWindow.Show();
+            Close();
+        }
     }
 }

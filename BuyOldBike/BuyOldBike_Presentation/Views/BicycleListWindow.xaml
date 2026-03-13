@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Danh sách xe"        
-        Width="1280"
+        Width="1200"
         Height="800"
         MinWidth="1024"
         MinHeight="640"

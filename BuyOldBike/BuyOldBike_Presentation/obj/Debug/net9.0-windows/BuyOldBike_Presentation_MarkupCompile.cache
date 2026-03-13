@@ -1,20 +1,20 @@
 ﻿BuyOldBike_Presentation
-
+1.0.0.0
 
 winexe
 C#
 .cs
-D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\
+d:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\
 BuyOldBike_Presentation
 none
 false
 TRACE;DEBUG;NET;NET9_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
-D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\App.xaml
-6-661970519
+d:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\App.xaml
+7-72062274
+1-1454789297
+111496799364
+238630449351
+Controls\FilterPanelControl.xaml;Controls\PaginationControl.xaml;Controls\SearchBarControl.xaml;Resources\Theme.xaml;Views\BicycleListWindow.xaml;Views\LoginWindow.xaml;Views\RegisterWindow.xaml;
 
-8673983473
-237-1527407740
-Controls\FilterPanelControl.xaml;Controls\PaginationControl.xaml;Controls\SearchBarControl.xaml;Resources\Theme.xaml;Views\BicycleListWindow.xaml;Views\LoginWindow.xaml;
-
-False
+True
 

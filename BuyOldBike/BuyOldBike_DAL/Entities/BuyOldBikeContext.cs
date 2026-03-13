@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace BuyOldBike_DAL.Entities;
 
@@ -49,21 +48,6 @@ public partial class BuyOldBikeContext : DbContext
     public virtual DbSet<Type> Types { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
-
-    private string GetConnectionString()
-    {
-        IConfiguration config = new ConfigurationBuilder()
-             .SetBasePath(AppContext.BaseDirectory)
-                    .AddJsonFile("appsettings.json", true, true)
-                    .Build();
-        var strConn = config["ConnectionStrings:DefaultConnection"];
-
-        return strConn;
-    }
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer(GetConnectionString());
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -280,10 +264,25 @@ public partial class BuyOldBikeContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("image_type");
+
             entity.Property(e => e.ImageUrl)
                 .HasMaxLength(500)
                 .IsUnicode(false)
                 .HasColumnName("image_url");
+
+            entity.Property(e => e.ImageData)
+                .HasColumnType("varbinary(max)")
+                .HasColumnName("image_data");
+
+            entity.Property(e => e.ContentType)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("content_type");
+
+            entity.Property(e => e.FileName)
+                .HasMaxLength(255)
+                .HasColumnName("file_name");
+
             entity.Property(e => e.KycId).HasColumnName("kyc_id");
 
             entity.HasOne(d => d.Kyc).WithMany(p => p.KycImages)
