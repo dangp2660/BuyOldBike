@@ -187,3 +187,9 @@ d:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-wi
 d:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\Views\EkycConfirmDialog.g.cs
 D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\Views\ProfileWindow.baml
 D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\Views\ProfileWindow.g.cs
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\Views\SellerWindow.baml
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\Views\SellerWindow.g.cs
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\Views\InspectorWindow.baml
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\Views\InspectorWindow.g.cs
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\Views\AdminWindow.baml
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\Views\AdminWindow.g.cs

@@ -36,13 +36,11 @@ namespace BuyOldBike_Presentation.Views
             {
                 txtStatus.Text = "Tài khoản này chưa có hồ sơ eKYC.";
                 kycInfoSection.Visibility = Visibility.Collapsed;
-                kycImagesSection.Visibility = Visibility.Collapsed;
                 return;
             }
 
             txtStatus.Text = "Đã tải hồ sơ eKYC.";
             FillKycInfo(profile);
-            FillKycImages(profile);
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
@@ -61,15 +59,6 @@ namespace BuyOldBike_Presentation.Views
             txtResidence.Text = profile.PlaceOfResidence ?? "";
             txtExpiry.Text = profile.ExpiryDate ?? "";
             txtVerifiedAt.Text = profile.VerifiedAt?.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss") ?? "";
-        }
-
-        private void FillKycImages(KycProfile profile)
-        {
-            var images = profile.KycImages?.ToList() ?? [];
-
-            imgFront.Source = ToBitmapImage(images.FirstOrDefault(i => i.ImageType == "Front")?.ImageData);
-            imgBack.Source = ToBitmapImage(images.FirstOrDefault(i => i.ImageType == "Back")?.ImageData);
-            imgSelfie.Source = ToBitmapImage(images.FirstOrDefault(i => i.ImageType == "Selfie")?.ImageData);
         }
 
         private static BitmapImage? ToBitmapImage(byte[]? bytes)
