@@ -62,6 +62,24 @@
                             Content="Đăng nhập"
                             Name="btnLogin"
                             Click="btnLogin_Click" />
+                    <Button Margin="12,0,0,0"
+                            Height="40"
+                            MinWidth="40"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Padding="10,0"
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            Content="👤"
+                            Name="btnProfile"
+                            Visibility="Collapsed"
+                            Click="btnProfile_Click">
+                        <Button.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Hồ sơ eKYC" Click="MenuProfile_Click" />
+                                <MenuItem Header="Đăng xuất" Click="MenuLogout_Click" />
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                    </Button>
                 </StackPanel>
             </Grid>
         </Border>

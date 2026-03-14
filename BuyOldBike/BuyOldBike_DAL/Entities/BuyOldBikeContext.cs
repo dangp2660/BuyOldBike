@@ -327,10 +327,6 @@ public partial class BuyOldBikeContext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false)
                 .HasColumnName("placeOfResidence");
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("status");
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.VerifiedAt)
                 .HasColumnType("datetime")

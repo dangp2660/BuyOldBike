@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace BuyOldBike_DAL.Entities;
@@ -26,8 +26,6 @@ public partial class KycProfile
     public string? ExpiryDate { get; set; }
 
     public DateTime? VerifiedAt { get; set; }
-
-    public string? Status { get; set; }
 
     public virtual ICollection<KycImage> KycImages { get; set; } = new List<KycImage>();
 

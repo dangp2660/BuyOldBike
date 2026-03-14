@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BuyOldBike_BLL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+93d6b61eca28b4544ea34bc2ba299f7b68efc2d2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6ce7121b09794e737d3c1216b6fb3d0b908227dc")]
 [assembly: System.Reflection.AssemblyProductAttribute("BuyOldBike_BLL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BuyOldBike_BLL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

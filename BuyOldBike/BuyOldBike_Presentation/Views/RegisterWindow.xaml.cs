@@ -1,28 +1,14 @@
 using BuyOldBike_BLL.Services.Kyc;
-using BuyOldBike_DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using Microsoft.Win32;
+using System.IO;
+using System.Windows;
+using System.Windows.Media.Imaging;
 namespace BuyOldBike_Presentation.Views
 {
 
 
     public partial class RegisterWindow : Window
     {
-
-
-
         private byte[]? _front;
         private byte[]? _back;
         private byte[]? _selfie;
@@ -36,21 +22,23 @@ namespace BuyOldBike_Presentation.Views
             btnRegister.IsEnabled = false;
         }
 
-        private void btnFrontImge_Click(object sender, RoutedEventArgs e) => ChoiceImage(bytes => { _front = bytes; 
-            imgFrontPreview.Source = ToImage(bytes); });
+        private void btnFrontImge_Click(object sender, RoutedEventArgs e) => ChoiceImage(bytes =>
+        {
+            _front = bytes;
+            imgFrontPreview.Source = ToImage(bytes);
+        });
 
-        private void btnBackImg_Click(object sender, RoutedEventArgs e) => ChoiceImage(bytes => {
+        private void btnBackImg_Click(object sender, RoutedEventArgs e) => ChoiceImage(bytes =>
+        {
             _back = bytes;
             imgBackPreview.Source = ToImage(bytes);
         });
 
-        private void btnSelfiImg_Click(object sender, RoutedEventArgs e) => ChoiceImage(bytes => {
+        private void btnSelfiImg_Click(object sender, RoutedEventArgs e) => ChoiceImage(bytes =>
+        {
             _selfie = bytes;
             imgSelfiePreview.Source = ToImage(bytes);
         });
-
-        private void btnSelfie_Click(object sender, RoutedEventArgs e) => ChoiceImage(bytes => { _selfie = bytes; 
-            imgSelfiePreview.Source = ToImage(bytes); });
 
         private void ChoiceImage(Action<byte[]> selected)
         {
@@ -110,9 +98,10 @@ namespace BuyOldBike_Presentation.Views
                 btnRegister.IsEnabled = true;
             }
             catch (Exception ex)
-            { 
+            {
                 _extractedInfo = null;
-                MessageBox.Show($"Lỗi trích xuất thông tin từ ảnh: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                var root = ex.GetBaseException();
+                MessageBox.Show($"Lỗi trích xuất thông tin từ ảnh: {root.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 btnRegister.IsEnabled = false;
             }
         }
@@ -128,14 +117,66 @@ namespace BuyOldBike_Presentation.Views
             string phone = txtPhone.Text.Trim() ?? "";
             string password = txtPassword.Password.Trim() ?? "";
             string confirmPassword = txtConfirmPassword.Password.Trim() ?? "";
+            if (string.IsNullOrWhiteSpace(email) ||
+                string.IsNullOrWhiteSpace(phone) ||
+                string.IsNullOrWhiteSpace(password) ||
+                string.IsNullOrWhiteSpace(confirmPassword))
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ email, số điện thoại và mật khẩu.", "Thiếu thông tin", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (!email.Contains("@") || !email.Contains("."))
+            {
+                MessageBox.Show("Vui lòng nhập email hợp lệ.", "Email không hợp lệ", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (email.Length > 255)
+            {
+                MessageBox.Show("Email quá dài (tối đa 255 ký tự).", "Email không hợp lệ", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (phone.Length > 20)
+            {
+                MessageBox.Show("Số điện thoại quá dài (tối đa 20 ký tự).", "Số điện thoại không hợp lệ", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (password.Length > 255)
+            {
+                MessageBox.Show("Mật khẩu quá dài (tối đa 255 ký tự).", "Mật khẩu không hợp lệ", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
             if(password != confirmPassword)
             {
                 MessageBox.Show("Mật khẩu và xác nhận mật khẩu không khớp.", "Lỗi mật khẩu", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            bool ok = _ekycService.RegisterBuyer(email, phone, password, _front, _back, _selfie);
-            MessageBox.Show(ok ? "Đăng ký thành công! Vui lòng chờ xét duyệt eKYC." : "Đăng ký thất bại. Email có thể đã được sử dụng.", ok ? "Thành công" : "Thất bại", MessageBoxButton.OK, ok ? MessageBoxImage.Information : MessageBoxImage.Error);
+            var confirmDialog = new EkycConfirmDialog(_extractedInfo)
+            {
+                Owner = this
+            };
+            bool confirmed = confirmDialog.ShowDialog() == true;
+            if (!confirmed) return;
+
+            _extractedInfo = confirmDialog.Result;
+
+            try
+            {
+                bool ok = _ekycService.RegisterBuyer(email, phone, password, _extractedInfo, _front, _back, _selfie);
+                MessageBox.Show(ok ? "Đăng ký thành công!" : "Đăng ký thất bại. Email có thể đã được sử dụng.", ok ? "Thành công" : "Thất bại", MessageBoxButton.OK, ok ? MessageBoxImage.Information : MessageBoxImage.Error);
+                if (ok)
+                {
+                    this.Close();
+                    LoginWindow lgWindow = new LoginWindow();
+                    lgWindow.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                var root = ex.GetBaseException();
+                MessageBox.Show($"Đăng ký thất bại: {root.Message}", "Thất bại", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
         }
 
 

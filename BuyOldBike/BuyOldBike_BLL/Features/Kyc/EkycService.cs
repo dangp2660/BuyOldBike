@@ -29,6 +29,16 @@ namespace BuyOldBike_BLL.Services.Kyc
             byte[] front, byte[] back, byte[] selfie)
         {
             KycExtractResult extractResult = ExtractKycInfo(front, back, selfie);
+            return RegisterBuyer(email, phone, password, extractResult, front, back, selfie);
+        }
+
+        public bool RegisterBuyer(string email, string phone, string password, KycExtractResult extractResult,
+            byte[] front, byte[] back, byte[] selfie)
+        {
+            if (string.IsNullOrWhiteSpace(extractResult.IdNumber) ||
+                string.IsNullOrWhiteSpace(extractResult.FullName) ||
+                string.IsNullOrWhiteSpace(extractResult.DateOfBirth))
+                throw new ArgumentException("Thông tin eKYC không hợp lệ.");
 
             BuyOldBikeContext db = new();
             var transaction = db.Database.BeginTransaction();
@@ -53,7 +63,12 @@ namespace BuyOldBike_BLL.Services.Kyc
                 IdNumber = extractResult.IdNumber,
                 FullName = extractResult.FullName,
                 DateOfBirth = extractResult.DateOfBirth,
-                Status = "Pending"
+                VerifiedAt = DateTime.UtcNow,
+                Gender = extractResult.Gender,
+                Nationality = extractResult.Nationality,
+                PlaceOfOrigin = extractResult.PlaceOfOrigin,
+                PlaceOfResidence = extractResult.PlaceOfResidence,
+                ExpiryDate = extractResult.ExpiryDate,
             };
             db.KycProfiles.Add(kycProfile);
 
@@ -64,6 +79,7 @@ namespace BuyOldBike_BLL.Services.Kyc
                     ImageId = Guid.NewGuid(),
                     KycId = kycProfile.KycId,
                     ImageType = "Front",
+                    ImageUrl = "",
                     ImageData = front
                 },
                 new KycImage()
@@ -71,6 +87,7 @@ namespace BuyOldBike_BLL.Services.Kyc
                     ImageId = Guid.NewGuid(),
                     KycId = kycProfile.KycId,
                     ImageType = "Back",
+                    ImageUrl = "",
                     ImageData = back
                 },
                 new KycImage()
@@ -78,6 +95,7 @@ namespace BuyOldBike_BLL.Services.Kyc
                     ImageId = Guid.NewGuid(),
                     KycId = kycProfile.KycId,
                     ImageType = "Selfie",
+                    ImageUrl = "",
                     ImageData = selfie
                 }
             });

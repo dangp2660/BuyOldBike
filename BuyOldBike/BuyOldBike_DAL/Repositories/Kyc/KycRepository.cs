@@ -15,6 +15,10 @@ namespace BuyOldBike_DAL.Repositories.Kyc
         public bool CreateProfileWithImages(KycProfile profile, IEnumerable<KycImage> images)
         {
             _db.KycProfiles.Add(profile);
+            foreach (var img in images)
+            {
+                img.ImageUrl ??= "";
+            }
             _db.KycImages.AddRange(images);
             return _db.SaveChanges() > 0;
         }

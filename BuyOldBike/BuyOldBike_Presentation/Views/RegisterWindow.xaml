@@ -35,7 +35,7 @@
                                        Text="Lưu ý" />
                             <TextBlock Margin="0,10,0,0"
                                        Foreground="#E5E7EB"
-                                       Text="Bạn có thể bổ sung eKYC để tăng độ tin cậy tài khoản." />
+                                       Text="Bảo mật thông tin đăng nhập và không chia sẻ mật khẩu với người khác." />
                         </StackPanel>
                     </Border>
                 </StackPanel>
@@ -109,7 +109,7 @@
                                     <StackPanel Margin="0,10,0,0">
                                         <TextBlock Foreground="{StaticResource SubtleTextBrush}"
                                                    FontSize="12"
-                                                   Text="Chọn 3 ảnh (CCCD mặt trước, mặt sau, selfie)."/>
+                                                   Text="Chọn 3 ảnh (CCCD mặt trước, mặt sau, selfie)." />
 
                                         <StackPanel Margin="0,12,0,0">
                                             <DockPanel>
@@ -120,8 +120,9 @@
                                                         Style="{StaticResource SecondaryButtonStyle}"
                                                         Height="30"
                                                         Padding="10,4"
-                                                        Content="Chọn ảnh" 
-                                                        Name="btnFrontImge" Click="btnFrontImge_Click"/>
+                                                        Content="Chọn ảnh"
+                                                        Name="btnFrontImge"
+                                                        Click="btnFrontImge_Click" />
                                             </DockPanel>
 
                                             <DockPanel Margin="0,10,0,0">
@@ -132,8 +133,9 @@
                                                         Style="{StaticResource SecondaryButtonStyle}"
                                                         Height="30"
                                                         Padding="10,4"
-                                                        Content="Chọn ảnh" 
-                                                        Name="btnBackImg" Click="btnBackImg_Click"/>
+                                                        Content="Chọn ảnh"
+                                                        Name="btnBackImg"
+                                                        Click="btnBackImg_Click" />
                                             </DockPanel>
 
                                             <DockPanel Margin="0,10,0,0">
@@ -145,7 +147,8 @@
                                                         Height="30"
                                                         Padding="10,4"
                                                         Content="Chọn ảnh"
-                                                        Name="btnSelfiImg" Click="btnSelfiImg_Click"/>
+                                                        Name="btnSelfiImg"
+                                                        Click="btnSelfiImg_Click" />
                                             </DockPanel>
                                         </StackPanel>
 
@@ -189,7 +192,8 @@
                                                     Style="{StaticResource SecondaryButtonStyle}"
                                                     Content="Lưu hồ sơ eKYC"
                                                     Name="btnSaveEkyc"
-                                                    IsEnabled="False" Click="btnSaveEkyc_Click" />
+                                                    IsEnabled="False"
+                                                    Click="btnSaveEkyc_Click" />
                                         </StackPanel>
                                     </StackPanel>
                                 </Expander>

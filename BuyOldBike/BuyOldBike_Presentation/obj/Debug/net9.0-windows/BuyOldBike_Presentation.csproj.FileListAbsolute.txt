@@ -183,3 +183,7 @@ D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-wi
 D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\BuyOldBike_Presentation.pdb
 D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\BuyOldBike_Presentation.genruntimeconfig.cache
 D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\ref\BuyOldBike_Presentation.dll
+d:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\Views\EkycConfirmDialog.baml
+d:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\Views\EkycConfirmDialog.g.cs
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\Views\ProfileWindow.baml
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\Views\ProfileWindow.g.cs

@@ -19,5 +19,12 @@ namespace BuyOldBike_BLL.Services.Auth
         {
             return _userRepository.FindUser(email, password) != null;
         }
+
+        public User? LoginAndGetUser(string email, string password)
+        {
+            return _userRepository.FindUser(email, password);
+        }
+
+        public string GetRoleUser(string email) => _userRepository.FindByEmail(email)?.Role ?? "";
     }
 }
