@@ -1,0 +1,277 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|d:\\sp26\\prn212\\buyoldbike\\buyoldbike\\buyoldbike_presentation\\views\\inspectorwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|solutionrelative:buyoldbike_presentation\\views\\inspectorwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|d:\\sp26\\prn212\\buyoldbike\\buyoldbike\\buyoldbike_presentation\\views\\inspectorwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|solutionrelative:buyoldbike_presentation\\views\\inspectorwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|d:\\sp26\\prn212\\buyoldbike\\buyoldbike\\buyoldbike_presentation\\views\\bicyclelistwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|solutionrelative:buyoldbike_presentation\\views\\bicyclelistwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|d:\\sp26\\prn212\\buyoldbike\\buyoldbike\\buyoldbike_presentation\\viewmodels\\bicyclecardvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|solutionrelative:buyoldbike_presentation\\viewmodels\\bicyclecardvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|d:\\sp26\\prn212\\buyoldbike\\buyoldbike\\buyoldbike_presentation\\viewmodels\\bicyclelistwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|solutionrelative:buyoldbike_presentation\\viewmodels\\bicyclelistwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7BFEBD3B-18DD-4638-92A4-4648EF6CECDF}|BuyOldBike_BLL\\BuyOldBike_BLL.csproj|d:\\sp26\\prn212\\buyoldbike\\buyoldbike\\buyoldbike_bll\\services\\bicyclelistwindow\\listingbrowseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7BFEBD3B-18DD-4638-92A4-4648EF6CECDF}|BuyOldBike_BLL\\BuyOldBike_BLL.csproj|solutionrelative:buyoldbike_bll\\services\\bicyclelistwindow\\listingbrowseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{75B68A1A-1614-4D45-8207-8A22D7753B61}|BuyOldBike_DAL\\BuyOldBike_DAL.csproj|d:\\sp26\\prn212\\buyoldbike\\buyoldbike\\buyoldbike_dal\\repositories\\seller\\bikepostrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{75B68A1A-1614-4D45-8207-8A22D7753B61}|BuyOldBike_DAL\\BuyOldBike_DAL.csproj|solutionrelative:buyoldbike_dal\\repositories\\seller\\bikepostrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7BFEBD3B-18DD-4638-92A4-4648EF6CECDF}|BuyOldBike_BLL\\BuyOldBike_BLL.csproj|d:\\sp26\\prn212\\buyoldbike\\buyoldbike\\buyoldbike_bll\\services\\seller\\listingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7BFEBD3B-18DD-4638-92A4-4648EF6CECDF}|BuyOldBike_BLL\\BuyOldBike_BLL.csproj|solutionrelative:buyoldbike_bll\\services\\seller\\listingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7BFEBD3B-18DD-4638-92A4-4648EF6CECDF}|BuyOldBike_BLL\\BuyOldBike_BLL.csproj|d:\\sp26\\prn212\\buyoldbike\\buyoldbike\\buyoldbike_bll\\services\\inspector\\inspectionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7BFEBD3B-18DD-4638-92A4-4648EF6CECDF}|BuyOldBike_BLL\\BuyOldBike_BLL.csproj|solutionrelative:buyoldbike_bll\\services\\inspector\\inspectionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{75B68A1A-1614-4D45-8207-8A22D7753B61}|BuyOldBike_DAL\\BuyOldBike_DAL.csproj|d:\\sp26\\prn212\\buyoldbike\\buyoldbike\\buyoldbike_dal\\constants\\statusconstants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{75B68A1A-1614-4D45-8207-8A22D7753B61}|BuyOldBike_DAL\\BuyOldBike_DAL.csproj|solutionrelative:buyoldbike_dal\\constants\\statusconstants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|d:\\sp26\\prn212\\buyoldbike\\buyoldbike\\buyoldbike_presentation\\views\\sellerwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|solutionrelative:buyoldbike_presentation\\views\\sellerwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|d:\\sp26\\prn212\\buyoldbike\\buyoldbike\\buyoldbike_presentation\\views\\sellerwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|solutionrelative:buyoldbike_presentation\\views\\sellerwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|d:\\sp26\\prn212\\buyoldbike\\buyoldbike\\buyoldbike_presentation\\views\\adminwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|solutionrelative:buyoldbike_presentation\\views\\adminwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|d:\\sp26\\prn212\\buyoldbike\\buyoldbike\\buyoldbike_presentation\\viewmodels\\sellerwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|solutionrelative:buyoldbike_presentation\\viewmodels\\sellerwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|d:\\sp26\\prn212\\buyoldbike\\buyoldbike\\buyoldbike_presentation\\viewmodels\\sellerlistingrow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E9E30594-BE21-46E1-82FE-DB91226C551A}|BuyOldBike_Presentation\\BuyOldBike_Presentation.csproj|solutionrelative:buyoldbike_presentation\\viewmodels\\sellerlistingrow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ListingBrowseService.cs",
+              "DocumentMoniker": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_BLL\\Services\\BicycleListWindow\\ListingBrowseService.cs",
+              "RelativeDocumentMoniker": "BuyOldBike_BLL\\Services\\BicycleListWindow\\ListingBrowseService.cs",
+              "ToolTip": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_BLL\\Services\\BicycleListWindow\\ListingBrowseService.cs",
+              "RelativeToolTip": "BuyOldBike_BLL\\Services\\BicycleListWindow\\ListingBrowseService.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABIAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T15:49:15.507Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "InspectorWindow.xaml.cs",
+              "DocumentMoniker": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\Views\\InspectorWindow.xaml.cs",
+              "RelativeDocumentMoniker": "BuyOldBike_Presentation\\Views\\InspectorWindow.xaml.cs",
+              "ToolTip": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\Views\\InspectorWindow.xaml.cs",
+              "RelativeToolTip": "BuyOldBike_Presentation\\Views\\InspectorWindow.xaml.cs",
+              "ViewState": "AgIAAEwAAAAAAAAAAAAmwFwAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T15:32:21.141Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "InspectorWindow.xaml",
+              "DocumentMoniker": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\Views\\InspectorWindow.xaml",
+              "RelativeDocumentMoniker": "BuyOldBike_Presentation\\Views\\InspectorWindow.xaml",
+              "ToolTip": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\Views\\InspectorWindow.xaml",
+              "RelativeToolTip": "BuyOldBike_Presentation\\Views\\InspectorWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-03-18T14:42:26.817Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "BicycleListWindowViewModel.cs",
+              "DocumentMoniker": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\ViewModels\\BicycleListWindowViewModel.cs",
+              "RelativeDocumentMoniker": "BuyOldBike_Presentation\\ViewModels\\BicycleListWindowViewModel.cs",
+              "ToolTip": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\ViewModels\\BicycleListWindowViewModel.cs",
+              "RelativeToolTip": "BuyOldBike_Presentation\\ViewModels\\BicycleListWindowViewModel.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAA1wBkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T15:56:54.753Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BicycleListWindow.xaml",
+              "DocumentMoniker": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\Views\\BicycleListWindow.xaml",
+              "RelativeDocumentMoniker": "BuyOldBike_Presentation\\Views\\BicycleListWindow.xaml",
+              "ToolTip": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\Views\\BicycleListWindow.xaml",
+              "RelativeToolTip": "BuyOldBike_Presentation\\Views\\BicycleListWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-03-18T15:18:27.629Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ListingService.cs",
+              "DocumentMoniker": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_BLL\\Services\\Seller\\ListingService.cs",
+              "RelativeDocumentMoniker": "BuyOldBike_BLL\\Services\\Seller\\ListingService.cs",
+              "ToolTip": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_BLL\\Services\\Seller\\ListingService.cs",
+              "RelativeToolTip": "BuyOldBike_BLL\\Services\\Seller\\ListingService.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAApwBEAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T15:54:22.843Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "BicycleCardVm.cs",
+              "DocumentMoniker": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\ViewModels\\BicycleCardVm.cs",
+              "RelativeDocumentMoniker": "BuyOldBike_Presentation\\ViewModels\\BicycleCardVm.cs",
+              "ToolTip": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\ViewModels\\BicycleCardVm.cs",
+              "RelativeToolTip": "BuyOldBike_Presentation\\ViewModels\\BicycleCardVm.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T15:55:40.05Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "StatusConstants.cs",
+              "DocumentMoniker": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_DAL\\Constants\\StatusConstants.cs",
+              "RelativeDocumentMoniker": "BuyOldBike_DAL\\Constants\\StatusConstants.cs",
+              "ToolTip": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_DAL\\Constants\\StatusConstants.cs",
+              "RelativeToolTip": "BuyOldBike_DAL\\Constants\\StatusConstants.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAuwBUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T15:44:10.91Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "BikePostRepository.cs",
+              "DocumentMoniker": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_DAL\\Repositories\\Seller\\BikePostRepository.cs",
+              "RelativeDocumentMoniker": "BuyOldBike_DAL\\Repositories\\Seller\\BikePostRepository.cs",
+              "ToolTip": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_DAL\\Repositories\\Seller\\BikePostRepository.cs",
+              "RelativeToolTip": "BuyOldBike_DAL\\Repositories\\Seller\\BikePostRepository.cs",
+              "ViewState": "AgIAAH8AAAAAAAAAAAAswJAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T15:38:09.531Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "InspectionService.cs",
+              "DocumentMoniker": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_BLL\\Services\\Inspector\\InspectionService.cs",
+              "RelativeDocumentMoniker": "BuyOldBike_BLL\\Services\\Inspector\\InspectionService.cs",
+              "ToolTip": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_BLL\\Services\\Inspector\\InspectionService.cs",
+              "RelativeToolTip": "BuyOldBike_BLL\\Services\\Inspector\\InspectionService.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAowCAAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T15:35:21.7Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "AdminWindow.xaml",
+              "DocumentMoniker": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\Views\\AdminWindow.xaml",
+              "RelativeDocumentMoniker": "BuyOldBike_Presentation\\Views\\AdminWindow.xaml",
+              "ToolTip": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\Views\\AdminWindow.xaml",
+              "RelativeToolTip": "BuyOldBike_Presentation\\Views\\AdminWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-03-18T09:03:32.527Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "SellerWindow.xaml",
+              "DocumentMoniker": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\Views\\SellerWindow.xaml",
+              "RelativeDocumentMoniker": "BuyOldBike_Presentation\\Views\\SellerWindow.xaml",
+              "ToolTip": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\Views\\SellerWindow.xaml",
+              "RelativeToolTip": "BuyOldBike_Presentation\\Views\\SellerWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-03-18T06:20:06.436Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "SellerWindow.xaml.cs",
+              "DocumentMoniker": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\Views\\SellerWindow.xaml.cs",
+              "RelativeDocumentMoniker": "BuyOldBike_Presentation\\Views\\SellerWindow.xaml.cs",
+              "ToolTip": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\Views\\SellerWindow.xaml.cs",
+              "RelativeToolTip": "BuyOldBike_Presentation\\Views\\SellerWindow.xaml.cs",
+              "ViewState": "AgIAAIEAAAAAAAAAAIAywEAAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T06:32:20.14Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "SellerWindowViewModel.cs",
+              "DocumentMoniker": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\ViewModels\\SellerWindowViewModel.cs",
+              "RelativeDocumentMoniker": "BuyOldBike_Presentation\\ViewModels\\SellerWindowViewModel.cs",
+              "ToolTip": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\ViewModels\\SellerWindowViewModel.cs",
+              "RelativeToolTip": "BuyOldBike_Presentation\\ViewModels\\SellerWindowViewModel.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAywCkAAABmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T07:05:30.04Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "SellerListingRow.cs",
+              "DocumentMoniker": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\ViewModels\\SellerListingRow.cs",
+              "RelativeDocumentMoniker": "BuyOldBike_Presentation\\ViewModels\\SellerListingRow.cs",
+              "ToolTip": "D:\\SP26\\PRN212\\BuyOldBike\\BuyOldBike\\BuyOldBike_Presentation\\ViewModels\\SellerListingRow.cs",
+              "RelativeToolTip": "BuyOldBike_Presentation\\ViewModels\\SellerListingRow.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-18T07:05:28.983Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

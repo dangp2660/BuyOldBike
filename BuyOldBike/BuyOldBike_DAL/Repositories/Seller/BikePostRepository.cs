@@ -63,21 +63,43 @@ namespace BuyOldBike_DAL.Repositories.Seller
                 .ToList();
         }
 
-        public void UpdateInspectionResult(Guid inspectionId, string result, string listingStatus)
+        public void UpdateInspectionResult(Guid inspectionId, string result,
+            string listingStatus, int overallScore, string? notes)
         {
-            var inspection = _db.Inspections.Find(inspectionId);
+            Inspection inspection = _db.Inspections.Find(inspectionId);
             if (inspection != null)
             {
                 inspection.Status = StatusConstants.InspectionStatus.Completed;
                 inspection.Result = result;
+                inspection.OverallScore = overallScore;
 
-                var listing = _db.Listings.Find(inspection.ListingId);
+                if (result == StatusConstants.InspectionResult.Passed)
+                {
+                    inspection.RejectReason = null;
+                }
+                else
+                {
+                    inspection.RejectReason = notes;
+                }
+
+                Listing listing = _db.Listings.Find(inspection.ListingId);
                 if (listing != null)
                 {
                     listing.Status = listingStatus;
                 }
+
                 _db.SaveChanges();
             }
+        }
+
+        public List<Listing> GetListingsBySellerId(Guid sellerId)
+        {
+            return _db.Listings
+                .Include(l => l.Brand)
+                .Include(l => l.BikeType)
+                .Where(l => l.SellerId == sellerId)
+                .OrderByDescending(l => l.CreatedAt)
+                .ToList();
         }
 
         private Guid EnsureInspectionLocationId(Guid inspectionLocationId)
@@ -105,6 +127,18 @@ namespace BuyOldBike_DAL.Repositories.Seller
             _db.InspectionLocations.Add(location);
             _db.SaveChanges();
             return location.InspectionLocationId;
+        }
+
+
+        public List<Listing> GetAvailableListings()
+        {
+            return _db.Listings
+                .Include(l => l.Brand)
+                .Include(l => l.BikeType)
+                .Include(l => l.ListingImages)
+                .Where(l => l.Status == StatusConstants.ListingStatus.Available)
+                .OrderByDescending(l => l.CreatedAt)
+                .ToList();
         }
     }
 }

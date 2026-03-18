@@ -24,10 +24,15 @@ namespace BuyOldBike_BLL.Services.Seller
 
         public void ProcessInspection(Guid inspectionId, bool isPassed)
         {
+            ProcessInspection(inspectionId, isPassed, 0, null);
+        }
+
+        public void ProcessInspection(Guid inspectionId, bool isPassed, int overallScore, string? notes)
+        {
             string result = isPassed ? StatusConstants.InspectionResult.Passed : StatusConstants.InspectionResult.Failed;
             string listingStatus = isPassed ? StatusConstants.ListingStatus.Available : StatusConstants.ListingStatus.Rejected;
 
-            _bikePostRepository.UpdateInspectionResult(inspectionId, result, listingStatus);
+            _bikePostRepository.UpdateInspectionResult(inspectionId, result, listingStatus, overallScore, notes);
         }
     }
 }

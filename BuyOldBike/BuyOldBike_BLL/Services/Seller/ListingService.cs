@@ -31,5 +31,10 @@ namespace BuyOldBike_BLL.Services.Seller
 
             _bikePostRepo.SaveFullListing(listing, imagePaths, inspection);
         }
+
+        public List<Listing> GetListingsBySeller(Guid sellerId)
+        {
+            return _bikePostRepo.GetListingsBySellerId(sellerId);
+        }
     }
 }

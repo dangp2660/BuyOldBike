@@ -193,3 +193,5 @@ D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-wi
 D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\Views\InspectorWindow.g.cs
 D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\Views\AdminWindow.baml
 D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\Views\AdminWindow.g.cs
+d:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\Views\ListingDetailWindow.baml
+d:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\obj\Debug\net9.0-windows\Views\ListingDetailWindow.g.cs

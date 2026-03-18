@@ -19,6 +19,7 @@ namespace BuyOldBike_DAL.Constants
         {
             public const string Pending = "Pending";
             public const string Completed = "Completed";
+
         }
 
         public static class InspectionResult

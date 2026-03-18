@@ -153,8 +153,8 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="12" />
-                                    <RowDefinition Height="0.84" />
-                                    <RowDefinition Height="89.16"/>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="12" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="12" />
@@ -173,7 +173,7 @@
                                 <TextBox Grid.Row="0" Grid.Column="2" x:Name="txtTitle" />
 
                                 <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="Description" />
-                                <TextBox Grid.Row="2" Grid.Column="2" Height="90" Padding="10,8" TextWrapping="Wrap" AcceptsReturn="True"
+                                <TextBox Grid.Row="2" Grid.Column="2" MinHeight="90" Padding="10,8" TextWrapping="Wrap" AcceptsReturn="True"
                                          Grid.RowSpan="2" 
                                          Name="txtDecription"/>
 
@@ -196,17 +196,48 @@
 
                                 <TextBlock Grid.Row="3" Grid.Column="4" VerticalAlignment="Center" Text="Upload Images" />
                                 <Border Grid.Row="2" Grid.Column="6"
-                                        Height="90"
+                                        MinHeight="90"
                                         Background="#FFF3F4F6"
                                         BorderBrush="{StaticResource BorderBrush}"
                                         BorderThickness="1"
                                         CornerRadius="12"
                                         Padding="10" Grid.RowSpan="2">
-                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <TextBlock FontWeight="SemiBold" Text="Kéo thả ảnh vào đây" />
-                                        <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Hoặc bấm nút chọn ảnh" Name="l"/>
-                                        <Button Margin="0,10,0,0" Style="{StaticResource SecondaryButtonStyle}" Content="Chọn ảnh" Name="btnUpImage" Click="btnUpImage_Click"/>
-                                        <Label Name="lblImageCount"/>
+                                    <StackPanel>
+                                        <StackPanel HorizontalAlignment="Center">
+                                            <TextBlock FontWeight="SemiBold" Text="Kéo thả ảnh vào đây" />
+                                            <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Hoặc bấm nút chọn ảnh" Name="l"/>
+                                            <Button Margin="0,10,0,0" Style="{StaticResource SecondaryButtonStyle}" Content="Chọn ảnh" Name="btnUpImage" Click="btnUpImage_Click"/>
+                                            <Label Name="lblImageCount"/>
+                                        </StackPanel>
+
+                                        <TextBlock Margin="0,12,0,6" FontWeight="SemiBold" Text="Ảnh đã chọn" />
+                                        <Border Background="White"
+                                                BorderBrush="{StaticResource BorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="10"
+                                                Padding="8">
+                                            <ScrollViewer Height="120" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                                                <ItemsControl ItemsSource="{Binding SelectedImagePreviews}">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <WrapPanel />
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Width="72"
+                                                                    Height="72"
+                                                                    Margin="0,0,8,8"
+                                                                    Background="#FFF3F4F6"
+                                                                    CornerRadius="8"
+                                                                    ClipToBounds="True">
+                                                                <Image Source="{Binding}" Stretch="UniformToFill" />
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </ScrollViewer>
+                                        </Border>
                                     </StackPanel>
                                 </Border>
 
@@ -226,7 +257,7 @@
                                 </Border>
 
                                 <StackPanel Grid.Row="15" Grid.Column="6" Orientation="Horizontal" HorizontalAlignment="Left" Margin="68,0,0,0">
-                                    <Button Style="{StaticResource SecondaryButtonStyle}" MinWidth="120" Height="40" Content="Cancel" />
+                                    <Button Style="{StaticResource SecondaryButtonStyle}" MinWidth="120" Height="40" Content="Cancel" Name="btnCancel" Click="btnCancel_Click" />
                                     <Button Margin="12,0,0,0" MinWidth="140" Height="40" Content="Publish Listing" Name="btnPublish" Click="btnPublish_Click" />
                                 </StackPanel>
                             </Grid>
@@ -259,49 +290,32 @@
 
                                 <Border Margin="0,12,0,0" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0" />
 
-                                <Border Padding="10,12">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="2*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="2*" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="Giant TCR Advanced 2" />
-                                        <TextBlock Grid.Column="1" Text="15,000,000" />
-                                        <TextBlock Grid.Column="2" Text="Active" />
-                                        <TextBlock Grid.Column="3" Text="128" />
-                                        <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Left">
-                                            <Button Style="{StaticResource ActionButtonStyle}" Content="Edit" />
-                                            <Button Style="{StaticResource ActionButtonStyle}" Content="Hide" />
-                                            <Button Style="{StaticResource ActionButtonStyle}" Content="Delete" />
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
-
-                                <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0" />
-
-                                <Border Padding="10,12">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="2*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="2*" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="Trek Domane AL 3" />
-                                        <TextBlock Grid.Column="1" Text="9,500,000" />
-                                        <TextBlock Grid.Column="2" Text="Hidden" />
-                                        <TextBlock Grid.Column="3" Text="44" />
-                                        <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Left">
-                                            <Button Style="{StaticResource ActionButtonStyle}" Content="Edit" />
-                                            <Button Style="{StaticResource ActionButtonStyle}" Content="Hide" />
-                                            <Button Style="{StaticResource ActionButtonStyle}" Content="Delete" />
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
+                                <ItemsControl ItemsSource="{Binding SellerListings}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Padding="10,12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="2*" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="2*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0" Text="{Binding Title}" />
+                                                    <TextBlock Grid.Column="1" Text="{Binding Price, StringFormat=N0}" />
+                                                    <TextBlock Grid.Column="2" Text="{Binding Status}" />
+                                                    <TextBlock Grid.Column="3" Text="{Binding Views}" />
+                                                    <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Left">
+                                                        <Button Style="{StaticResource ActionButtonStyle}" Content="Edit" IsEnabled="{Binding IsPending}" />
+                                                        <Button Style="{StaticResource ActionButtonStyle}" Content="Delete" IsEnabled="{Binding IsPending}" />
+                                                        <Button Style="{StaticResource ActionButtonStyle}" Content="Hide" IsEnabled="{Binding IsPending}" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                             </StackPanel>
                         </Border>
                     </StackPanel>
