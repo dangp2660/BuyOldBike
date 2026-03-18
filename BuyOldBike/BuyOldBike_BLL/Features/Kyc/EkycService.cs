@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BuyOldBike_DAL.Constants;
 using BuyOldBike_DAL.Entities;
 using BuyOldBike_DAL.Repositories.Kyc;
 using BuyOldBike_DAL.Repositories.Auth;
@@ -52,7 +53,7 @@ namespace BuyOldBike_BLL.Services.Kyc
                 Email = email,
                 PhoneNumber = phone,
                 Password = password,
-                Role = "Buyer"
+                Role = RoleConstants.Buyer
             };
             db.Users.Add(user);
 

@@ -46,5 +46,6 @@ namespace BuyOldBike_DAL.Repositories.Auth
             _db.Users.Add(user);
             return _db.SaveChanges() > 0;
         }
+
     }
 }

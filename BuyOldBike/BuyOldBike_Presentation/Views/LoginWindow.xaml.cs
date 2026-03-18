@@ -36,9 +36,7 @@ namespace BuyOldBike_Presentation.Views
             else
             {
                 AppSession.SetCurrentUser(user);
-                BicycleListWindow bicycleListWindow = new BicycleListWindow();
-                bicycleListWindow.Show();
-                this.Close();
+                RoleNavigator.NavigateToHome(this);
             }
         }
 

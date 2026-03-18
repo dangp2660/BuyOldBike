@@ -154,7 +154,7 @@
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button Style="{StaticResource SecondaryButtonStyle}" Height="40" MinWidth="130" Content="Xem hồ sơ" />
-                    <Button Margin="12,0,0,0" Height="40" MinWidth="130" Content="Đăng xuất" />
+                    <Button Margin="12,0,0,0" Height="40" MinWidth="130" Content="Đăng xuất" Click="BtnLogout_Click" />
                 </StackPanel>
             </Grid>
         </Border>

@@ -135,7 +135,7 @@
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button Style="{StaticResource SecondaryButtonStyle}" Height="40" MinWidth="130" Content="Xem hồ sơ" />
-                    <Button Margin="12,0,0,0" Height="40" MinWidth="130" Content="Đăng xuất" />
+                    <Button Margin="12,0,0,0" Height="40" MinWidth="130" Content="Đăng xuất" Click="BtnLogout_Click" />
                 </StackPanel>
             </Grid>
         </Border>
@@ -195,13 +195,13 @@
                                     <DataGrid Margin="0,12,0,0"
                                               Height="240"
                                               Style="{StaticResource DataGridBaseStyle}"
-                                              ItemsSource="{Binding Source={StaticResource PendingInspectionsProvider}}">
+                                              x:Name="dgPendingInspections">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Header="Mã" Width="90" Binding="{Binding XPath=@Code}" />
-                                            <DataGridTextColumn Header="Xe" Width="210" Binding="{Binding XPath=@Bike}" />
-                                            <DataGridTextColumn Header="Người bán" Width="160" Binding="{Binding XPath=@Seller}" />
-                                            <DataGridTextColumn Header="Hẹn lịch" Width="140" Binding="{Binding XPath=@Appointment}" />
-                                            <DataGridTextColumn Header="Trạng thái" Width="120" Binding="{Binding XPath=@Status}" />
+                                            <DataGridTextColumn Header="Mã" Width="90" Binding="{Binding Listing.ListingId}" />
+                                            <DataGridTextColumn Header="Xe" Width="210" Binding="{Binding Listing.Title}" />
+                                            <DataGridTextColumn Header="Người bán" Width="160" Binding="{Binding Listing.Seller.Email}" />
+                                            <DataGridTextColumn Header="Hẹn lịch" Width="140" Binding="{Binding CreatedAt}" />
+                                            <DataGridTextColumn Header="Trạng thái" Width="120" Binding="{Binding Status}" />
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </StackPanel>
@@ -254,10 +254,10 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
-                                <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Frame Condition" />
+                                <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Overall Result" />
                                 <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
-                                    <RadioButton Style="{StaticResource SmallRadioStyle}" GroupName="FrameCondition" Content="Pass" IsChecked="True" />
-                                    <RadioButton Style="{StaticResource SmallRadioStyle}" GroupName="FrameCondition" Content="Fail" />
+                                    <RadioButton Style="{StaticResource SmallRadioStyle}" GroupName="Overall" Content="Pass" IsChecked="True" x:Name="rbPass" />
+                                    <RadioButton Style="{StaticResource SmallRadioStyle}" GroupName="Overall" Content="Fail" x:Name="rbFail" />
                                 </StackPanel>
 
                                 <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Brake System" />
@@ -308,7 +308,7 @@
 
                                     <StackPanel Margin="0,12,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
                                         <Button Style="{StaticResource SecondaryButtonStyle}" Content="Lưu nháp" />
-                                        <Button Margin="10,0,0,0" Content="Hoàn tất" />
+                                        <Button Margin="10,0,0,0" Content="Hoàn tất" x:Name="btnComplete" Click="btnComplete_Click" />
                                     </StackPanel>
                                 </StackPanel>
                             </Border>

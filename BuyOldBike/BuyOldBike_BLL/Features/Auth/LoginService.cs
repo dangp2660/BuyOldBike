@@ -26,5 +26,6 @@ namespace BuyOldBike_BLL.Services.Auth
         }
 
         public string GetRoleUser(string email) => _userRepository.FindByEmail(email)?.Role ?? "";
+
     }
 }

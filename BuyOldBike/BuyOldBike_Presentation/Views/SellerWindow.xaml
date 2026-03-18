@@ -63,7 +63,7 @@
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button Style="{StaticResource SecondaryButtonStyle}" Height="40" MinWidth="130" Content="Xem hồ sơ" />
-                    <Button Margin="12,0,0,0" Height="40" MinWidth="130" Content="Đăng xuất" />
+                    <Button Margin="12,0,0,0" Height="40" MinWidth="130" Content="Đăng xuất" Click="BtnLogout_Click" />
                 </StackPanel>
             </Grid>
         </Border>
@@ -153,7 +153,8 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="12" />
-                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="0.84" />
+                                    <RowDefinition Height="89.16"/>
                                     <RowDefinition Height="12" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="12" />
@@ -168,59 +169,49 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
-                                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Title" />
-                                <TextBox Grid.Row="0" Grid.Column="2" Text="Xe đạp road Giant TCR" />
+                                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Title" />
+                                <TextBox Grid.Row="0" Grid.Column="2" x:Name="txtTitle" />
 
-                                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="Description" />
+                                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="Description" />
                                 <TextBox Grid.Row="2" Grid.Column="2" Height="90" Padding="10,8" TextWrapping="Wrap" AcceptsReturn="True"
-                                         Text="Mô tả tình trạng, phụ kiện kèm theo, lịch sử sử dụng..." />
+                                         Grid.RowSpan="2" 
+                                         Name="txtDecription"/>
 
-                                <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="Price" />
-                                <TextBox Grid.Row="4" Grid.Column="2" Text="15000000" />
+                                <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="Price" />
+                                <TextBox Grid.Row="5" Grid.Column="2" Margin="0,27,0,27" Name="txtPrice" />
 
-                                <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Text="Brand" />
-                                <ComboBox Grid.Row="6" Grid.Column="2" SelectedIndex="0">
-                                    <ComboBoxItem Content="Giant" />
-                                    <ComboBoxItem Content="Trek" />
-                                    <ComboBoxItem Content="Specialized" />
-                                    <ComboBoxItem Content="Khác" />
-                                </ComboBox>
+                                <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Text="Brand" />
+                                <ComboBox Grid.Row="7" Grid.Column="2" SelectedIndex="0" Name="cbxBrand"/>
 
-                                <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Text="Frame Size" />
-                                <ComboBox Grid.Row="8" Grid.Column="2" SelectedIndex="1">
+                                <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center" Text="Frame Size" />
+                                <ComboBox Grid.Row="9" Grid.Column="2" SelectedIndex="1" x:Name="cbxFrameSize">
                                     <ComboBoxItem Content="50" />
                                     <ComboBoxItem Content="52" />
                                     <ComboBoxItem Content="54" />
                                     <ComboBoxItem Content="56" />
                                 </ComboBox>
 
-                                <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Text="Condition" />
-                                <ComboBox Grid.Row="10" Grid.Column="2" SelectedIndex="1">
-                                    <ComboBoxItem Content="New" />
-                                    <ComboBoxItem Content="Like new" />
-                                    <ComboBoxItem Content="Used" />
-                                </ComboBox>
+                                <TextBlock Grid.Column="4" VerticalAlignment="Center" Text="Usage History" />
+                                <TextBox Grid.Row="0" Grid.Column="6" x:Name="txtUsage" />
 
-                                <TextBlock Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" Text="Usage History" />
-                                <TextBox Grid.Row="0" Grid.Column="6" Text="Đi ~500km, bảo dưỡng định kỳ" />
-
-                                <TextBlock Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" Text="Upload Images" />
+                                <TextBlock Grid.Row="3" Grid.Column="4" VerticalAlignment="Center" Text="Upload Images" />
                                 <Border Grid.Row="2" Grid.Column="6"
                                         Height="90"
                                         Background="#FFF3F4F6"
                                         BorderBrush="{StaticResource BorderBrush}"
                                         BorderThickness="1"
                                         CornerRadius="12"
-                                        Padding="10">
+                                        Padding="10" Grid.RowSpan="2">
                                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                                         <TextBlock FontWeight="SemiBold" Text="Kéo thả ảnh vào đây" />
-                                        <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Hoặc bấm nút chọn ảnh" />
-                                        <Button Margin="0,10,0,0" Style="{StaticResource SecondaryButtonStyle}" Content="Chọn ảnh" />
+                                        <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Hoặc bấm nút chọn ảnh" Name="l"/>
+                                        <Button Margin="0,10,0,0" Style="{StaticResource SecondaryButtonStyle}" Content="Chọn ảnh" Name="btnUpImage" Click="btnUpImage_Click"/>
+                                        <Label Name="lblImageCount"/>
                                     </StackPanel>
                                 </Border>
 
-                                <TextBlock Grid.Row="4" Grid.Column="4" VerticalAlignment="Center" Text="Upload Video" />
-                                <Border Grid.Row="4" Grid.Column="6"
+                                <TextBlock Grid.Row="5" Grid.Column="4" VerticalAlignment="Center" Text="Upload Video" />
+                                <Border Grid.Row="5" Grid.Column="6"
                                         Height="90"
                                         Background="#FFF3F4F6"
                                         BorderBrush="{StaticResource BorderBrush}"
@@ -234,9 +225,9 @@
                                     </StackPanel>
                                 </Border>
 
-                                <StackPanel Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="7" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <StackPanel Grid.Row="15" Grid.Column="6" Orientation="Horizontal" HorizontalAlignment="Left" Margin="68,0,0,0">
                                     <Button Style="{StaticResource SecondaryButtonStyle}" MinWidth="120" Height="40" Content="Cancel" />
-                                    <Button Margin="12,0,0,0" MinWidth="140" Height="40" Content="Publish Listing" />
+                                    <Button Margin="12,0,0,0" MinWidth="140" Height="40" Content="Publish Listing" Name="btnPublish" Click="btnPublish_Click" />
                                 </StackPanel>
                             </Grid>
                         </Border>
