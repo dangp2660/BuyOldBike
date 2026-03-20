@@ -140,5 +140,14 @@ namespace BuyOldBike_DAL.Repositories.Seller
                 .OrderByDescending(l => l.CreatedAt)
                 .ToList();
         }
+
+        public Listing? GetListingDetailById(Guid listingId)
+        {
+            return _db.Listings
+                .Include(l => l.Brand)
+                .Include(l => l.BikeType)
+                .Include(l => l.ListingImages)
+                .FirstOrDefault(l => l.ListingId == listingId);
+        }
     }
 }

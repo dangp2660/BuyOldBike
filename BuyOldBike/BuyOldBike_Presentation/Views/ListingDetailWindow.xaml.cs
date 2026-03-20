@@ -11,6 +11,12 @@ namespace BuyOldBike_Presentation.Views
             InitializeComponent();
             var vm = new ListingDetailViewModel();
             vm.Load(listingId);
+            if (vm.ListingBike == null)
+            {
+                MessageBox.Show("Không tìm thấy listing.");
+                Close();
+                return;
+            }
             DataContext = vm;
         }
 

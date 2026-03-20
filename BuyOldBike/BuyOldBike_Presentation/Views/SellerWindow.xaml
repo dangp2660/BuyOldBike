@@ -10,33 +10,6 @@
         MinWidth="1024"
         MinHeight="640"
         WindowStartupLocation="CenterScreen">
-    <Window.Resources>
-        <Style x:Key="CardBorderStyle" TargetType="Border">
-            <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
-            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="14" />
-            <Setter Property="Padding" Value="16" />
-        </Style>
-
-        <Style x:Key="SectionTitleStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Foreground" Value="#FF111827" />
-        </Style>
-
-        <Style x:Key="MutedTextStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{StaticResource SubtleTextBrush}" />
-        </Style>
-
-        <Style x:Key="ActionButtonStyle" TargetType="Button" BasedOn="{StaticResource SecondaryButtonStyle}">
-            <Setter Property="MinWidth" Value="72" />
-            <Setter Property="Height" Value="30" />
-            <Setter Property="Padding" Value="10,4" />
-            <Setter Property="Margin" Value="6,0,0,0" />
-        </Style>
-    </Window.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -44,8 +17,8 @@
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0"
-                Background="{StaticResource SurfaceBrush}"
-                BorderBrush="{StaticResource BorderBrush}"
+                Background="White"
+                BorderBrush="#FFE5E7EB"
                 BorderThickness="0,0,0,1"
                 Padding="16">
             <Grid>
@@ -57,12 +30,12 @@
                 <StackPanel>
                     <TextBlock FontSize="18" FontWeight="SemiBold" Text="Seller Center" />
                     <TextBlock Margin="0,4,0,0"
-                               Style="{StaticResource MutedTextStyle}"
+                               Foreground="#FF6B7280"
                                Text="Quản lý đăng bán, đơn hàng và đánh giá" />
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Style="{StaticResource SecondaryButtonStyle}" Height="40" MinWidth="130" Content="Xem hồ sơ" />
+                    <Button Height="40" MinWidth="130" Content="Xem hồ sơ" />
                     <Button Margin="12,0,0,0" Height="40" MinWidth="130" Content="Đăng xuất" Click="BtnLogout_Click" />
                 </StackPanel>
             </Grid>
@@ -72,7 +45,7 @@
             <TabItem Header="Dashboard">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
-                        <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Tổng quan" />
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Tổng quan" />
 
                         <Grid Margin="0,12,0,0">
                             <Grid.ColumnDefinitions>
@@ -86,44 +59,44 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource CardBorderStyle}">
+                            <Border Grid.Row="0" Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
-                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="Total Listings" />
+                                    <TextBlock Foreground="#FF6B7280" Text="Total Listings" />
                                     <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="12" />
-                                    <TextBlock Margin="0,8,0,0" Style="{StaticResource MutedTextStyle}" Text="Số bài đăng đã tạo" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Số bài đăng đã tạo" />
                                 </StackPanel>
                             </Border>
 
-                            <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource CardBorderStyle}">
+                            <Border Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
-                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="Active Listings" />
+                                    <TextBlock Foreground="#FF6B7280" Text="Active Listings" />
                                     <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="7" />
-                                    <TextBlock Margin="0,8,0,0" Style="{StaticResource MutedTextStyle}" Text="Đang hiển thị cho người mua" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Đang hiển thị cho người mua" />
                                 </StackPanel>
                             </Border>
 
-                            <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource CardBorderStyle}">
+                            <Border Grid.Row="2" Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
-                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="Pending Orders" />
+                                    <TextBlock Foreground="#FF6B7280" Text="Pending Orders" />
                                     <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="3" />
-                                    <TextBlock Margin="0,8,0,0" Style="{StaticResource MutedTextStyle}" Text="Đơn chờ phản hồi" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Đơn chờ phản hồi" />
                                 </StackPanel>
                             </Border>
 
-                            <Border Grid.Row="2" Grid.Column="2" Style="{StaticResource CardBorderStyle}">
+                            <Border Grid.Row="2" Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
-                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="Recent Messages" />
+                                    <TextBlock Foreground="#FF6B7280" Text="Recent Messages" />
                                     <StackPanel Margin="0,10,0,0">
                                         <Border Background="#FFF3F4F6" CornerRadius="10" Padding="10">
                                             <StackPanel>
                                                 <TextBlock FontWeight="SemiBold" Text="Nguyễn A" />
-                                                <TextBlock Style="{StaticResource MutedTextStyle}" Text="Xe còn không bạn? Mình xin thêm ảnh..." />
+                                                <TextBlock Foreground="#FF6B7280" Text="Xe còn không bạn? Mình xin thêm ảnh..." />
                                             </StackPanel>
                                         </Border>
                                         <Border Margin="0,10,0,0" Background="#FFF3F4F6" CornerRadius="10" Padding="10">
                                             <StackPanel>
                                                 <TextBlock FontWeight="SemiBold" Text="Trần B" />
-                                                <TextBlock Style="{StaticResource MutedTextStyle}" Text="Cho mình hỏi size frame 54 có vừa 1m75 không?" />
+                                                <TextBlock Foreground="#FF6B7280" Text="Cho mình hỏi size frame 54 có vừa 1m75 không?" />
                                             </StackPanel>
                                         </Border>
                                     </StackPanel>
@@ -137,9 +110,9 @@
             <TabItem Header="Create Listing">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
-                        <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Tạo bài đăng mới" />
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Tạo bài đăng mới" />
 
-                        <Border Margin="0,12,0,0" Style="{StaticResource CardBorderStyle}">
+                        <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="200" />
@@ -198,21 +171,21 @@
                                 <Border Grid.Row="2" Grid.Column="6"
                                         MinHeight="90"
                                         Background="#FFF3F4F6"
-                                        BorderBrush="{StaticResource BorderBrush}"
+                                        BorderBrush="#FFE5E7EB"
                                         BorderThickness="1"
                                         CornerRadius="12"
                                         Padding="10" Grid.RowSpan="2">
                                     <StackPanel>
                                         <StackPanel HorizontalAlignment="Center">
                                             <TextBlock FontWeight="SemiBold" Text="Kéo thả ảnh vào đây" />
-                                            <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Hoặc bấm nút chọn ảnh" Name="l"/>
-                                            <Button Margin="0,10,0,0" Style="{StaticResource SecondaryButtonStyle}" Content="Chọn ảnh" Name="btnUpImage" Click="btnUpImage_Click"/>
+                                            <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Hoặc bấm nút chọn ảnh" Name="l"/>
+                                            <Button Margin="0,10,0,0" Content="Chọn ảnh" Name="btnUpImage" Click="btnUpImage_Click"/>
                                             <Label Name="lblImageCount"/>
                                         </StackPanel>
 
                                         <TextBlock Margin="0,12,0,6" FontWeight="SemiBold" Text="Ảnh đã chọn" />
                                         <Border Background="White"
-                                                BorderBrush="{StaticResource BorderBrush}"
+                                                BorderBrush="#FFE5E7EB"
                                                 BorderThickness="1"
                                                 CornerRadius="10"
                                                 Padding="8">
@@ -220,7 +193,7 @@
                                                 <ItemsControl ItemsSource="{Binding SelectedImagePreviews}">
                                                     <ItemsControl.ItemsPanel>
                                                         <ItemsPanelTemplate>
-                                                            <WrapPanel />
+                                                            <StackPanel Orientation="Horizontal" />
                                                         </ItemsPanelTemplate>
                                                     </ItemsControl.ItemsPanel>
                                                     <ItemsControl.ItemTemplate>
@@ -245,19 +218,19 @@
                                 <Border Grid.Row="5" Grid.Column="6"
                                         Height="90"
                                         Background="#FFF3F4F6"
-                                        BorderBrush="{StaticResource BorderBrush}"
+                                        BorderBrush="#FFE5E7EB"
                                         BorderThickness="1"
                                         CornerRadius="12"
                                         Padding="10">
                                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                                         <TextBlock FontWeight="SemiBold" Text="Video (tuỳ chọn)" />
-                                        <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Định dạng .mp4, tối đa 50MB" />
-                                        <Button Margin="0,10,0,0" Style="{StaticResource SecondaryButtonStyle}" Content="Chọn video" />
+                                        <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Định dạng .mp4, tối đa 50MB" />
+                                        <Button Margin="0,10,0,0" Content="Chọn video" />
                                     </StackPanel>
                                 </Border>
 
                                 <StackPanel Grid.Row="15" Grid.Column="6" Orientation="Horizontal" HorizontalAlignment="Left" Margin="68,0,0,0">
-                                    <Button Style="{StaticResource SecondaryButtonStyle}" MinWidth="120" Height="40" Content="Cancel" Name="btnCancel" Click="btnCancel_Click" />
+                                    <Button MinWidth="120" Height="40" Content="Cancel" Name="btnCancel" Click="btnCancel_Click" />
                                     <Button Margin="12,0,0,0" MinWidth="140" Height="40" Content="Publish Listing" Name="btnPublish" Click="btnPublish_Click" />
                                 </StackPanel>
                             </Grid>
@@ -269,9 +242,9 @@
             <TabItem Header="Manage Listings">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
-                        <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Quản lý bài đăng" />
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Quản lý bài đăng" />
 
-                        <Border Margin="0,12,0,0" Style="{StaticResource CardBorderStyle}">
+                        <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                             <StackPanel>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -288,12 +261,12 @@
                                     <TextBlock Grid.Column="4" FontWeight="SemiBold" Text="Actions" />
                                 </Grid>
 
-                                <Border Margin="0,12,0,0" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0" />
+                                <Border Margin="0,12,0,0" BorderBrush="#FFE5E7EB" BorderThickness="0,1,0,0" />
 
                                 <ItemsControl ItemsSource="{Binding SellerListings}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Padding="10,12" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1">
+                                            <Border Padding="10,12" BorderBrush="#FFE5E7EB" BorderThickness="0,0,0,1">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="2*" />
@@ -307,9 +280,9 @@
                                                     <TextBlock Grid.Column="2" Text="{Binding Status}" />
                                                     <TextBlock Grid.Column="3" Text="{Binding Views}" />
                                                     <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Left">
-                                                        <Button Style="{StaticResource ActionButtonStyle}" Content="Edit" IsEnabled="{Binding IsPending}" />
-                                                        <Button Style="{StaticResource ActionButtonStyle}" Content="Delete" IsEnabled="{Binding IsPending}" />
-                                                        <Button Style="{StaticResource ActionButtonStyle}" Content="Hide" IsEnabled="{Binding IsPending}" />
+                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Edit" IsEnabled="{Binding IsPending}" />
+                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Delete" IsEnabled="{Binding IsPending}" />
+                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Hide" IsEnabled="{Binding IsPending}" />
                                                     </StackPanel>
                                                 </Grid>
                                             </Border>
@@ -325,9 +298,9 @@
             <TabItem Header="Seller Orders">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
-                        <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Đơn hàng của tôi" />
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Đơn hàng của tôi" />
 
-                        <Border Margin="0,12,0,0" Style="{StaticResource CardBorderStyle}">
+                        <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                             <StackPanel>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -346,7 +319,7 @@
                                     <TextBlock Grid.Column="5" FontWeight="SemiBold" Text="Actions" />
                                 </Grid>
 
-                                <Border Margin="0,12,0,0" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0" />
+                                <Border Margin="0,12,0,0" BorderBrush="#FFE5E7EB" BorderThickness="0,1,0,0" />
 
                                 <Border Padding="10,12">
                                     <Grid>
@@ -364,14 +337,14 @@
                                         <TextBlock Grid.Column="3" Text="Paid" />
                                         <TextBlock Grid.Column="4" Text="Pending" />
                                         <StackPanel Grid.Column="5" Orientation="Horizontal" HorizontalAlignment="Left">
-                                            <Button Style="{StaticResource ActionButtonStyle}" Content="Accept" />
-                                            <Button Style="{StaticResource ActionButtonStyle}" Content="Reject" />
-                                            <Button Style="{StaticResource ActionButtonStyle}" Content="Completed" />
+                                            <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Accept" />
+                                            <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Reject" />
+                                            <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Completed" />
                                         </StackPanel>
                                     </Grid>
                                 </Border>
 
-                                <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0" />
+                                <Border BorderBrush="#FFE5E7EB" BorderThickness="0,1,0,0" />
 
                                 <Border Padding="10,12">
                                     <Grid>
@@ -389,9 +362,9 @@
                                         <TextBlock Grid.Column="3" Text="Unpaid" />
                                         <TextBlock Grid.Column="4" Text="New" />
                                         <StackPanel Grid.Column="5" Orientation="Horizontal" HorizontalAlignment="Left">
-                                            <Button Style="{StaticResource ActionButtonStyle}" Content="Accept" />
-                                            <Button Style="{StaticResource ActionButtonStyle}" Content="Reject" />
-                                            <Button Style="{StaticResource ActionButtonStyle}" Content="Completed" />
+                                            <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Accept" />
+                                            <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Reject" />
+                                            <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Completed" />
                                         </StackPanel>
                                     </Grid>
                                 </Border>
@@ -404,7 +377,7 @@
             <TabItem Header="Seller Reviews">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
-                        <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Đánh giá" />
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Đánh giá" />
 
                         <Grid Margin="0,12,0,0">
                             <Grid.ColumnDefinitions>
@@ -413,24 +386,24 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}">
+                            <Border Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
-                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="Average Rating" />
+                                    <TextBlock Foreground="#FF6B7280" Text="Average Rating" />
                                     <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="4.6" />
-                                    <TextBlock Margin="0,8,0,0" Style="{StaticResource MutedTextStyle}" Text="Trên thang 5" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Trên thang 5" />
                                 </StackPanel>
                             </Border>
 
-                            <Border Grid.Column="2" Style="{StaticResource CardBorderStyle}">
+                            <Border Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
-                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="Total Reviews" />
+                                    <TextBlock Foreground="#FF6B7280" Text="Total Reviews" />
                                     <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="18" />
-                                    <TextBlock Margin="0,8,0,0" Style="{StaticResource MutedTextStyle}" Text="Tổng lượt đánh giá" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Tổng lượt đánh giá" />
                                 </StackPanel>
                             </Border>
                         </Grid>
 
-                        <Border Margin="0,16,0,0" Style="{StaticResource CardBorderStyle}">
+                        <Border Margin="0,16,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                             <StackPanel>
                                 <TextBlock FontWeight="SemiBold" Text="Danh sách reviews" />
                                 <Border Margin="0,12,0,0" Background="#FFF3F4F6" CornerRadius="12" Padding="12">
@@ -446,7 +419,7 @@
                                     </Grid>
                                 </Border>
 
-                                <Border Margin="0,10,0,0" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0" />
+                                <Border Margin="0,10,0,0" BorderBrush="#FFE5E7EB" BorderThickness="0,1,0,0" />
                                 <Border Padding="12,10">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
@@ -460,7 +433,7 @@
                                     </Grid>
                                 </Border>
 
-                                <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0" />
+                                <Border BorderBrush="#FFE5E7EB" BorderThickness="0,1,0,0" />
                                 <Border Padding="12,10">
                                     <Grid>
                                         <Grid.ColumnDefinitions>

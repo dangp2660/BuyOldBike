@@ -16,5 +16,5 @@ D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_Presentation\App.xaml
 2382142761455
 Controls\FilterPanelControl.xaml;Controls\PaginationControl.xaml;Controls\SearchBarControl.xaml;Resources\Theme.xaml;Views\AdminWindow.xaml;Views\BicycleListWindow.xaml;Views\EkycConfirmDialog.xaml;Views\InspectorWindow.xaml;Views\ListingDetailWindow.xaml;Views\LoginWindow.xaml;Views\ProfileWindow.xaml;Views\RegisterWindow.xaml;Views\SellerWindow.xaml;
 
-False
+True
 

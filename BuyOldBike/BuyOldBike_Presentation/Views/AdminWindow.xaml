@@ -11,57 +11,6 @@
         MinHeight="680"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <Style x:Key="CardBorderStyle" TargetType="Border">
-            <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
-            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="14" />
-            <Setter Property="Padding" Value="16" />
-        </Style>
-
-        <Style x:Key="SectionTitleStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Foreground" Value="#FF111827" />
-        </Style>
-
-        <Style x:Key="MutedTextStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{StaticResource SubtleTextBrush}" />
-        </Style>
-
-        <Style x:Key="DataGridBaseStyle" TargetType="{x:Type DataGrid}">
-            <Setter Property="AutoGenerateColumns" Value="False" />
-            <Setter Property="CanUserAddRows" Value="False" />
-            <Setter Property="CanUserDeleteRows" Value="False" />
-            <Setter Property="CanUserResizeRows" Value="False" />
-            <Setter Property="CanUserReorderColumns" Value="False" />
-            <Setter Property="IsReadOnly" Value="True" />
-            <Setter Property="SelectionMode" Value="Single" />
-            <Setter Property="SelectionUnit" Value="FullRow" />
-            <Setter Property="HeadersVisibility" Value="Column" />
-            <Setter Property="GridLinesVisibility" Value="None" />
-            <Setter Property="RowHeaderWidth" Value="0" />
-            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="Background" Value="White" />
-            <Setter Property="RowBackground" Value="White" />
-            <Setter Property="AlternatingRowBackground" Value="#FFF9FAFB" />
-        </Style>
-
-        <Style TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="Background" Value="#FFF3F4F6" />
-            <Setter Property="Foreground" Value="#FF111827" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Padding" Value="8,6" />
-            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
-            <Setter Property="BorderThickness" Value="0,0,0,1" />
-        </Style>
-
-        <Style TargetType="{x:Type DataGridCell}">
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Padding" Value="8,6" />
-        </Style>
-
         <XmlDataProvider x:Key="AdminUsersProvider" XPath="/Items/Item">
             <x:XData>
                 <Items xmlns="">
@@ -135,8 +84,8 @@
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0"
-                Background="{StaticResource SurfaceBrush}"
-                BorderBrush="{StaticResource BorderBrush}"
+                Background="White"
+                BorderBrush="#FFE5E7EB"
                 BorderThickness="0,0,0,1"
                 Padding="16">
             <Grid>
@@ -148,12 +97,12 @@
                 <StackPanel>
                     <TextBlock FontSize="18" FontWeight="SemiBold" Text="Admin Center" />
                     <TextBlock Margin="0,4,0,0"
-                               Style="{StaticResource MutedTextStyle}"
+                               Foreground="#FF6B7280"
                                Text="Quản trị người dùng, bài đăng, danh mục và giao dịch" />
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Style="{StaticResource SecondaryButtonStyle}" Height="40" MinWidth="130" Content="Xem hồ sơ" />
+                    <Button Height="40" MinWidth="130" Content="Xem hồ sơ" />
                     <Button Margin="12,0,0,0" Height="40" MinWidth="130" Content="Đăng xuất" Click="BtnLogout_Click" />
                 </StackPanel>
             </Grid>
@@ -163,7 +112,7 @@
             <TabItem Header="Dashboard">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
-                        <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Tổng quan hệ thống" />
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Tổng quan hệ thống" />
 
                         <Grid Margin="0,12,0,0">
                             <Grid.RowDefinitions>
@@ -177,43 +126,43 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource CardBorderStyle}">
+                            <Border Grid.Row="0" Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
-                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="Total Users" />
+                                    <TextBlock Foreground="#FF6B7280" Text="Total Users" />
                                     <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="1,248" />
-                                    <TextBlock Margin="0,8,0,0" Style="{StaticResource MutedTextStyle}" Text="Tổng số người dùng" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Tổng số người dùng" />
                                 </StackPanel>
                             </Border>
 
-                            <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource CardBorderStyle}">
+                            <Border Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
-                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="Active Listings" />
+                                    <TextBlock Foreground="#FF6B7280" Text="Active Listings" />
                                     <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="312" />
-                                    <TextBlock Margin="0,8,0,0" Style="{StaticResource MutedTextStyle}" Text="Bài đăng đang hoạt động" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Bài đăng đang hoạt động" />
                                 </StackPanel>
                             </Border>
 
-                            <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource CardBorderStyle}">
+                            <Border Grid.Row="2" Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
-                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="Total Transactions" />
+                                    <TextBlock Foreground="#FF6B7280" Text="Total Transactions" />
                                     <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="842" />
-                                    <TextBlock Margin="0,8,0,0" Style="{StaticResource MutedTextStyle}" Text="Tổng số giao dịch" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Tổng số giao dịch" />
                                 </StackPanel>
                             </Border>
 
-                            <Border Grid.Row="2" Grid.Column="2" Style="{StaticResource CardBorderStyle}">
+                            <Border Grid.Row="2" Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
-                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="System Revenue" />
+                                    <TextBlock Foreground="#FF6B7280" Text="System Revenue" />
                                     <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="128,500,000" />
-                                    <TextBlock Margin="0,8,0,0" Style="{StaticResource MutedTextStyle}" Text="Doanh thu hệ thống (VND)" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Doanh thu hệ thống (VND)" />
                                 </StackPanel>
                             </Border>
                         </Grid>
 
-                        <Border Margin="0,16,0,0" Style="{StaticResource CardBorderStyle}">
+                        <Border Margin="0,16,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                             <StackPanel>
-                                <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Hoạt động gần đây" />
-                                <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Một số sự kiện mẫu để minh hoạ" />
+                                <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Hoạt động gần đây" />
+                                <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Một số sự kiện mẫu để minh hoạ" />
 
                                 <ListBox Margin="0,12,0,0">
                                     <ListBoxItem Content="12/03 - 3 listing mới đang chờ duyệt" />
@@ -229,9 +178,9 @@
             <TabItem Header="User Management">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
-                        <TextBlock Style="{StaticResource SectionTitleStyle}" Text="User Management" />
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="User Management" />
 
-                        <Border Margin="0,12,0,0" Style="{StaticResource CardBorderStyle}">
+                        <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                             <StackPanel>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -259,7 +208,22 @@
 
                                 <DataGrid Margin="0,12,0,0"
                                           Height="480"
-                                          Style="{StaticResource DataGridBaseStyle}"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          CanUserDeleteRows="False"
+                                          CanUserResizeRows="False"
+                                          CanUserReorderColumns="False"
+                                          IsReadOnly="True"
+                                          SelectionMode="Single"
+                                          SelectionUnit="FullRow"
+                                          HeadersVisibility="Column"
+                                          GridLinesVisibility="None"
+                                          RowHeaderWidth="0"
+                                          BorderBrush="#FFE5E7EB"
+                                          BorderThickness="1"
+                                          Background="White"
+                                          RowBackground="White"
+                                          AlternatingRowBackground="#FFF9FAFB"
                                           ItemsSource="{Binding Source={StaticResource AdminUsersProvider}}">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="User Name" Width="220" Binding="{Binding XPath=@Name}" />
@@ -270,8 +234,8 @@
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                                        <Button Style="{StaticResource SecondaryButtonStyle}" Height="28" Padding="10,4" Content="Suspend" />
-                                                        <Button Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Height="28" Padding="10,4" Content="Activate" />
+                                                        <Button Height="28" Padding="10,4" Content="Suspend" />
+                                                        <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Activate" />
                                                         <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="View Profile" />
                                                     </StackPanel>
                                                 </DataTemplate>
@@ -288,9 +252,9 @@
             <TabItem Header="Listing Moderation">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
-                        <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Listing Moderation" />
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Listing Moderation" />
 
-                        <Border Margin="0,12,0,0" Style="{StaticResource CardBorderStyle}">
+                        <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                             <StackPanel>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -309,12 +273,27 @@
                                         <ComboBoxItem Content="Rejected" />
                                         <ComboBoxItem Content="Flagged" />
                                     </ComboBox>
-                                    <Button Grid.Column="4" Style="{StaticResource SecondaryButtonStyle}" Content="Làm mới" />
+                                    <Button Grid.Column="4" Content="Làm mới" />
                                 </Grid>
 
                                 <DataGrid Margin="0,12,0,0"
                                           Height="480"
-                                          Style="{StaticResource DataGridBaseStyle}"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          CanUserDeleteRows="False"
+                                          CanUserResizeRows="False"
+                                          CanUserReorderColumns="False"
+                                          IsReadOnly="True"
+                                          SelectionMode="Single"
+                                          SelectionUnit="FullRow"
+                                          HeadersVisibility="Column"
+                                          GridLinesVisibility="None"
+                                          RowHeaderWidth="0"
+                                          BorderBrush="#FFE5E7EB"
+                                          BorderThickness="1"
+                                          Background="White"
+                                          RowBackground="White"
+                                          AlternatingRowBackground="#FFF9FAFB"
                                           ItemsSource="{Binding Source={StaticResource ModerationListingsProvider}}">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Listing Title" Width="340" Binding="{Binding XPath=@Title}" />
@@ -325,8 +304,8 @@
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                                        <Button Style="{StaticResource SecondaryButtonStyle}" Height="28" Padding="10,4" Content="Approve" />
-                                                        <Button Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Height="28" Padding="10,4" Content="Reject" />
+                                                        <Button Height="28" Padding="10,4" Content="Approve" />
+                                                        <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Reject" />
                                                         <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Remove" />
                                                     </StackPanel>
                                                 </DataTemplate>
@@ -343,7 +322,7 @@
             <TabItem Header="Category Management">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
-                        <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Category Management" />
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Category Management" />
 
                         <Grid Margin="0,12,0,0">
                             <Grid.ColumnDefinitions>
@@ -354,17 +333,17 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}">
+                            <Border Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Bicycle Categories" />
+                                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Bicycle Categories" />
                                         <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                            <Button Style="{StaticResource SecondaryButtonStyle}" Height="28" Padding="10,4" Content="Add" />
-                                            <Button Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Height="28" Padding="10,4" Content="Edit" />
+                                            <Button Height="28" Padding="10,4" Content="Add" />
+                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Edit" />
                                             <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Delete" />
                                         </StackPanel>
                                     </Grid>
@@ -378,17 +357,17 @@
                                 </StackPanel>
                             </Border>
 
-                            <Border Grid.Column="2" Style="{StaticResource CardBorderStyle}">
+                            <Border Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Brands" />
+                                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Brands" />
                                         <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                            <Button Style="{StaticResource SecondaryButtonStyle}" Height="28" Padding="10,4" Content="Add" />
-                                            <Button Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Height="28" Padding="10,4" Content="Edit" />
+                                            <Button Height="28" Padding="10,4" Content="Add" />
+                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Edit" />
                                             <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Delete" />
                                         </StackPanel>
                                     </Grid>
@@ -402,17 +381,17 @@
                                 </StackPanel>
                             </Border>
 
-                            <Border Grid.Column="4" Style="{StaticResource CardBorderStyle}">
+                            <Border Grid.Column="4" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Frame Sizes" />
+                                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Frame Sizes" />
                                         <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                            <Button Style="{StaticResource SecondaryButtonStyle}" Height="28" Padding="10,4" Content="Add" />
-                                            <Button Margin="8,0,0,0" Style="{StaticResource SecondaryButtonStyle}" Height="28" Padding="10,4" Content="Edit" />
+                                            <Button Height="28" Padding="10,4" Content="Add" />
+                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Edit" />
                                             <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Delete" />
                                         </StackPanel>
                                     </Grid>
@@ -433,9 +412,9 @@
             <TabItem Header="Transaction Management">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
-                        <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Transaction Management" />
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Transaction Management" />
 
-                        <Border Margin="0,12,0,0" Style="{StaticResource CardBorderStyle}">
+                        <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                             <StackPanel>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -454,12 +433,27 @@
                                         <ComboBoxItem Content="Disputed" />
                                         <ComboBoxItem Content="Refunded" />
                                     </ComboBox>
-                                    <Button Grid.Column="4" Style="{StaticResource SecondaryButtonStyle}" Content="Export" />
+                                    <Button Grid.Column="4" Content="Export" />
                                 </Grid>
 
                                 <DataGrid Margin="0,12,0,0"
                                           Height="480"
-                                          Style="{StaticResource DataGridBaseStyle}"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          CanUserDeleteRows="False"
+                                          CanUserResizeRows="False"
+                                          CanUserReorderColumns="False"
+                                          IsReadOnly="True"
+                                          SelectionMode="Single"
+                                          SelectionUnit="FullRow"
+                                          HeadersVisibility="Column"
+                                          GridLinesVisibility="None"
+                                          RowHeaderWidth="0"
+                                          BorderBrush="#FFE5E7EB"
+                                          BorderThickness="1"
+                                          Background="White"
+                                          RowBackground="White"
+                                          AlternatingRowBackground="#FFF9FAFB"
                                           ItemsSource="{Binding Source={StaticResource TransactionsProvider}}">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Transaction ID" Width="130" Binding="{Binding XPath=@TxId}" />

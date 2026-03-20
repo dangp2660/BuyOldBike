@@ -10,29 +10,71 @@
         MinWidth="560"
         MinHeight="620"
         WindowStartupLocation="CenterOwner">
-    <Border Background="{StaticResource AppBackgroundBrush}"
+    <Border Background="#FFF9FAFB"
             Padding="22">
-        <Border Background="{StaticResource SurfaceBrush}"
-                BorderBrush="{StaticResource BorderBrush}"
+        <Border Background="White"
+                BorderBrush="#FFE5E7EB"
                 BorderThickness="1"
                 CornerRadius="16"
                 Padding="20">
-            <DockPanel LastChildFill="True">
-                <StackPanel DockPanel.Dock="Top">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0">
                     <TextBlock FontSize="20"
                                FontWeight="Bold"
                                Text="Xác nhận thông tin eKYC" />
                     <TextBlock Margin="0,6,0,0"
-                               Foreground="{StaticResource SubtleTextBrush}"
+                               Foreground="#FF6B7280"
                                Text="Vui lòng kiểm tra và chỉnh sửa (nếu cần) trước khi gửi đăng ký." />
                 </StackPanel>
 
-                <StackPanel DockPanel.Dock="Bottom"
+                <ScrollViewer Grid.Row="1"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
+                              Margin="0,16,0,0">
+                    <StackPanel>
+                        <TextBlock FontSize="12" Foreground="#FF6B7280" Text="CCCD" />
+                        <TextBox Margin="0,8,0,0" Name="txtIdNumber" />
+
+                        <TextBlock Margin="0,14,0,0" FontSize="12" Foreground="#FF6B7280" Text="Họ tên" />
+                        <TextBox Margin="0,8,0,0" Name="txtFullName" />
+
+                        <TextBlock Margin="0,14,0,0" FontSize="12" Foreground="#FF6B7280" Text="Ngày sinh" />
+                        <TextBox Margin="0,8,0,0" Name="txtDateOfBirth" />
+
+                        <TextBlock Margin="0,14,0,0" FontSize="12" Foreground="#FF6B7280" Text="Giới tính" />
+                        <TextBox Margin="0,8,0,0" Name="txtGender" />
+
+                        <TextBlock Margin="0,14,0,0" FontSize="12" Foreground="#FF6B7280" Text="Quốc tịch" />
+                        <TextBox Margin="0,8,0,0" Name="txtNationality" />
+
+                        <TextBlock Margin="0,14,0,0" FontSize="12" Foreground="#FF6B7280" Text="Quê quán" />
+                        <TextBox Margin="0,8,0,0" Name="txtPlaceOfOrigin" />
+
+                        <TextBlock Margin="0,14,0,0" FontSize="12" Foreground="#FF6B7280" Text="Nơi thường trú" />
+                        <TextBox Margin="0,8,0,0"
+                                 Name="txtPlaceOfResidence"
+                                 Height="96"
+                                 Padding="10,8"
+                                 VerticalContentAlignment="Top"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True" />
+
+                        <TextBlock Margin="0,14,0,0" FontSize="12" Foreground="#FF6B7280" Text="Giá trị đến" />
+                        <TextBox Margin="0,8,0,0" Name="txtExpiryDate" />
+                    </StackPanel>
+                </ScrollViewer>
+
+                <StackPanel Grid.Row="2"
                             Margin="0,16,0,0"
                             Orientation="Horizontal"
                             HorizontalAlignment="Right">
-                    <Button Style="{StaticResource SecondaryButtonStyle}"
-                            MinWidth="110"
+                    <Button MinWidth="110"
                             Height="36"
                             Padding="14,6"
                             Content="Huỷ"
@@ -44,73 +86,7 @@
                             Content="Xác nhận"
                             Click="Confirm_Click" />
                 </StackPanel>
-
-                <ScrollViewer VerticalScrollBarVisibility="Auto"
-                              HorizontalScrollBarVisibility="Disabled"
-                              Margin="0,16,0,0">
-                    <StackPanel>
-                        <TextBlock FontSize="12"
-                                   Foreground="{StaticResource SubtleTextBrush}"
-                                   Text="CCCD" />
-                        <TextBox Margin="0,8,0,0"
-                                 Name="txtIdNumber" />
-
-                        <TextBlock Margin="0,14,0,0"
-                                   FontSize="12"
-                                   Foreground="{StaticResource SubtleTextBrush}"
-                                   Text="Họ tên" />
-                        <TextBox Margin="0,8,0,0"
-                                 Name="txtFullName" />
-
-                        <TextBlock Margin="0,14,0,0"
-                                   FontSize="12"
-                                   Foreground="{StaticResource SubtleTextBrush}"
-                                   Text="Ngày sinh" />
-                        <TextBox Margin="0,8,0,0"
-                                 Name="txtDateOfBirth" />
-
-                        <TextBlock Margin="0,14,0,0"
-                                   FontSize="12"
-                                   Foreground="{StaticResource SubtleTextBrush}"
-                                   Text="Giới tính" />
-                        <TextBox Margin="0,8,0,0"
-                                 Name="txtGender" />
-
-                        <TextBlock Margin="0,14,0,0"
-                                   FontSize="12"
-                                   Foreground="{StaticResource SubtleTextBrush}"
-                                   Text="Quốc tịch" />
-                        <TextBox Margin="0,8,0,0"
-                                 Name="txtNationality" />
-
-                        <TextBlock Margin="0,14,0,0"
-                                   FontSize="12"
-                                   Foreground="{StaticResource SubtleTextBrush}"
-                                   Text="Quê quán" />
-                        <TextBox Margin="0,8,0,0"
-                                 Name="txtPlaceOfOrigin" />
-
-                        <TextBlock Margin="0,14,0,0"
-                                   FontSize="12"
-                                   Foreground="{StaticResource SubtleTextBrush}"
-                                   Text="Nơi thường trú" />
-                        <TextBox Margin="0,8,0,0"
-                                 Name="txtPlaceOfResidence"
-                                 Height="96"
-                                 Padding="10,8"
-                                 VerticalContentAlignment="Top"
-                                 TextWrapping="Wrap"
-                                 AcceptsReturn="True" />
-
-                        <TextBlock Margin="0,14,0,0"
-                                   FontSize="12"
-                                   Foreground="{StaticResource SubtleTextBrush}"
-                                   Text="Giá trị đến" />
-                        <TextBox Margin="0,8,0,0"
-                                 Name="txtExpiryDate" />
-                    </StackPanel>
-                </ScrollViewer>
-            </DockPanel>
+            </Grid>
         </Border>
     </Border>
 </Window>

@@ -1,4 +1,5 @@
 using BuyOldBike_DAL.Entities;
+using BuyOldBike_DAL.Repositories.Seller;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.ObjectModel;
@@ -9,24 +10,18 @@ namespace BuyOldBike_Presentation.ViewModels
 {
     public class ListingDetailViewModel
     {
-        public Listing? Listing { get; private set; }
+        public Listing? ListingBike { get; private set; }
         public ObservableCollection<BitmapImage> Images { get; } = new ObservableCollection<BitmapImage>();
 
         public void Load(Guid listingId)
         {
-            BuyOldBikeContext db = new BuyOldBikeContext();
-            Listing = db.Listings
-                .Include(l => l.Seller)
-                .Include(l => l.Brand)
-                .Include(l => l.BikeType)
-                .Include(l => l.ListingImages)
-                .AsNoTracking()
-                .FirstOrDefault(l => l.ListingId == listingId);
+            BikePostRepository _bikeRepo = new();
+            ListingBike = _bikeRepo.GetListingDetailById(listingId);
 
             Images.Clear();
-            if (Listing?.ListingImages == null) return;
+            if (ListingBike?.ListingImages == null) return;
 
-            foreach (var img in Listing.ListingImages)
+            foreach (var img in ListingBike.ListingImages)
             {
                 var bitmap = TryCreateBitmap(img.ImageUrl);
                 if (bitmap != null) Images.Add(bitmap);

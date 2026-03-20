@@ -19,13 +19,13 @@
                        FontWeight="Bold"
                        Text="Hồ sơ eKYC" />
             <TextBlock Margin="0,6,0,0"
-                       Foreground="{StaticResource SubtleTextBrush}"
+                       Foreground="#FF6B7280"
                        Name="txtStatus"
                        Text="Đang tải dữ liệu..." />
 
             <Border Margin="0,18,0,0"
-                    Background="{StaticResource SurfaceBrush}"
-                    BorderBrush="{StaticResource BorderBrush}"
+                    Background="White"
+                    BorderBrush="#FFE5E7EB"
                     BorderThickness="1"
                     CornerRadius="16"
                     Padding="18">
@@ -42,21 +42,21 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Grid.Column="0" Foreground="{StaticResource SubtleTextBrush}" Text="Email" />
+                        <TextBlock Grid.Row="0" Grid.Column="0" Foreground="#FF6B7280" Text="Email" />
                         <TextBlock Grid.Row="0" Grid.Column="1" Name="txtEmail" />
 
-                        <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,10,0,0" Foreground="{StaticResource SubtleTextBrush}" Text="Số điện thoại" />
+                        <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Số điện thoại" />
                         <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,10,0,0" Name="txtPhone" />
 
-                        <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,10,0,0" Foreground="{StaticResource SubtleTextBrush}" Text="Vai trò" />
+                        <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Vai trò" />
                         <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" Name="txtRole" />
                     </Grid>
                 </StackPanel>
             </Border>
 
             <Border Margin="0,14,0,0"
-                    Background="{StaticResource SurfaceBrush}"
-                    BorderBrush="{StaticResource BorderBrush}"
+                    Background="White"
+                    BorderBrush="#FFE5E7EB"
                     BorderThickness="1"
                     CornerRadius="16"
                     Padding="18"
@@ -80,31 +80,31 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Grid.Column="0" Foreground="{StaticResource SubtleTextBrush}" Text="Số CCCD" />
+                        <TextBlock Grid.Row="0" Grid.Column="0" Foreground="#FF6B7280" Text="Số CCCD" />
                         <TextBlock Grid.Row="0" Grid.Column="1" Name="txtIdNumber" />
 
-                        <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,10,0,0" Foreground="{StaticResource SubtleTextBrush}" Text="Họ và tên" />
+                        <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Họ và tên" />
                         <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,10,0,0" Name="txtFullName" />
 
-                        <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,10,0,0" Foreground="{StaticResource SubtleTextBrush}" Text="Ngày sinh" />
+                        <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Ngày sinh" />
                         <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" Name="txtDob" />
 
-                        <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,10,0,0" Foreground="{StaticResource SubtleTextBrush}" Text="Giới tính" />
+                        <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Giới tính" />
                         <TextBlock Grid.Row="3" Grid.Column="1" Margin="0,10,0,0" Name="txtGender" />
 
-                        <TextBlock Grid.Row="4" Grid.Column="0" Margin="0,10,0,0" Foreground="{StaticResource SubtleTextBrush}" Text="Quốc tịch" />
+                        <TextBlock Grid.Row="4" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Quốc tịch" />
                         <TextBlock Grid.Row="4" Grid.Column="1" Margin="0,10,0,0" Name="txtNationality" />
 
-                        <TextBlock Grid.Row="5" Grid.Column="0" Margin="0,10,0,0" Foreground="{StaticResource SubtleTextBrush}" Text="Quê quán" />
+                        <TextBlock Grid.Row="5" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Quê quán" />
                         <TextBlock Grid.Row="5" Grid.Column="1" Margin="0,10,0,0" Name="txtOrigin" TextWrapping="Wrap" />
 
-                        <TextBlock Grid.Row="6" Grid.Column="0" Margin="0,10,0,0" Foreground="{StaticResource SubtleTextBrush}" Text="Thường trú" />
+                        <TextBlock Grid.Row="6" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Thường trú" />
                         <TextBlock Grid.Row="6" Grid.Column="1" Margin="0,10,0,0" Name="txtResidence" TextWrapping="Wrap" />
 
-                        <TextBlock Grid.Row="7" Grid.Column="0" Margin="0,10,0,0" Foreground="{StaticResource SubtleTextBrush}" Text="Hạn sử dụng" />
+                        <TextBlock Grid.Row="7" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Hạn sử dụng" />
                         <TextBlock Grid.Row="7" Grid.Column="1" Margin="0,10,0,0" Name="txtExpiry" />
 
-                        <TextBlock Grid.Row="8" Grid.Column="0" Margin="0,10,0,0" Foreground="{StaticResource SubtleTextBrush}" Text="Xác thực lúc" />
+                        <TextBlock Grid.Row="8" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Xác thực lúc" />
                         <TextBlock Grid.Row="8" Grid.Column="1" Margin="0,10,0,0" Name="txtVerifiedAt" />
                     </Grid>
                 </StackPanel>
@@ -114,7 +114,6 @@
                     HorizontalAlignment="Right"
                     Width="120"
                     Height="40"
-                    Style="{StaticResource SecondaryButtonStyle}"
                     Content="Đóng"
                     Click="Close_Click" />
         </StackPanel>

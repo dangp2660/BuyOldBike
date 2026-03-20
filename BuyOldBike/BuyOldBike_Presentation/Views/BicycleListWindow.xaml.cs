@@ -122,5 +122,33 @@ namespace BuyOldBike_Presentation.Views
 
             return part.Substring(0, Math.Min(2, part.Length)).ToUpperInvariant();
         }
+
+        private void PrevPage_Click(object sender, RoutedEventArgs e)
+        {
+            _vm.PrevPage();
+        }
+
+        private void NextPage_Click(object sender, RoutedEventArgs e)
+        {
+            _vm.NextPage();
+        }
+
+        private void PageButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button btn) return;
+            if (btn.Tag is not int page) return;
+            _vm.GoToPage(page);
+        }
+
+        private void ListingCard_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is not FrameworkElement fe) return;
+            if (fe.DataContext is not BicycleCardVm card) return;
+            if (card.ListingId == Guid.Empty) return;
+
+            var detailWindow = new ListingDetailWindow(card.ListingId);
+            detailWindow.Owner = this;
+            detailWindow.ShowDialog();
+        }
     }
 }

@@ -17,5 +17,10 @@ namespace BuyOldBike_BLL.Services.BicycleListWindow
         {
             return _repo.GetAvailableListings();
         }
+
+        public Listing? GetListingDetailById(Guid listingId)
+        {
+            return _repo.GetListingDetailById(listingId);
+        }
     }
 }

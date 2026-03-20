@@ -14,74 +14,6 @@
     <Window.Resources>
         <converters:ImageUrlToBitmapImageConverter x:Key="ImageUrlToBitmapImageConverter" />
 
-        <Style x:Key="CardBorderStyle" TargetType="Border">
-            <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
-            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="14" />
-            <Setter Property="Padding" Value="16" />
-        </Style>
-
-        <Style x:Key="SectionTitleStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Foreground" Value="#FF111827" />
-        </Style>
-
-        <Style x:Key="MutedTextStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{StaticResource SubtleTextBrush}" />
-        </Style>
-
-        <Style x:Key="ActionButtonStyle" TargetType="Button" BasedOn="{StaticResource SecondaryButtonStyle}">
-            <Setter Property="MinWidth" Value="72" />
-            <Setter Property="Height" Value="30" />
-            <Setter Property="Padding" Value="10,4" />
-            <Setter Property="Margin" Value="6,0,0,0" />
-        </Style>
-
-        <Style x:Key="InlineLabelStyle" TargetType="TextBlock">
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Foreground" Value="#FF111827" />
-        </Style>
-
-        <Style x:Key="SmallRadioStyle" TargetType="RadioButton">
-            <Setter Property="Margin" Value="0,0,8,0" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-        </Style>
-
-        <Style x:Key="DataGridBaseStyle" TargetType="{x:Type DataGrid}">
-            <Setter Property="AutoGenerateColumns" Value="False" />
-            <Setter Property="CanUserAddRows" Value="False" />
-            <Setter Property="CanUserDeleteRows" Value="False" />
-            <Setter Property="CanUserResizeRows" Value="False" />
-            <Setter Property="CanUserReorderColumns" Value="False" />
-            <Setter Property="IsReadOnly" Value="True" />
-            <Setter Property="SelectionMode" Value="Single" />
-            <Setter Property="SelectionUnit" Value="FullRow" />
-            <Setter Property="HeadersVisibility" Value="Column" />
-            <Setter Property="GridLinesVisibility" Value="None" />
-            <Setter Property="RowHeaderWidth" Value="0" />
-            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="Background" Value="White" />
-            <Setter Property="RowBackground" Value="White" />
-            <Setter Property="AlternatingRowBackground" Value="#FFF9FAFB" />
-        </Style>
-
-        <Style TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="Background" Value="#FFF3F4F6" />
-            <Setter Property="Foreground" Value="#FF111827" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Padding" Value="8,6" />
-            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
-            <Setter Property="BorderThickness" Value="0,0,0,1" />
-        </Style>
-
-        <Style TargetType="{x:Type DataGridCell}">
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Padding" Value="8,6" />
-        </Style>
-
         <XmlDataProvider x:Key="PendingInspectionsProvider" XPath="/Items/Item">
             <x:XData>
                 <Items xmlns="">
@@ -119,8 +51,8 @@
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0"
-                Background="{StaticResource SurfaceBrush}"
-                BorderBrush="{StaticResource BorderBrush}"
+                Background="White"
+                BorderBrush="#FFE5E7EB"
                 BorderThickness="0,0,0,1"
                 Padding="16">
             <Grid>
@@ -132,12 +64,12 @@
                 <StackPanel>
                     <TextBlock FontSize="18" FontWeight="SemiBold" Text="Inspector Center" />
                     <TextBlock Margin="0,4,0,0"
-                               Style="{StaticResource MutedTextStyle}"
+                               Foreground="#FF6B7280"
                                Text="Thực hiện kiểm định và hỗ trợ xử lý tranh chấp" />
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Style="{StaticResource SecondaryButtonStyle}" Height="40" MinWidth="130" Content="Xem hồ sơ" />
+                    <Button Height="40" MinWidth="130" Content="Xem hồ sơ" />
                     <Button Margin="12,0,0,0" Height="40" MinWidth="130" Content="Đăng xuất" Click="BtnLogout_Click" />
                 </StackPanel>
             </Grid>
@@ -147,7 +79,7 @@
             <TabItem Header="Dashboard">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
-                        <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Tổng quan" />
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Tổng quan" />
 
                         <Grid Margin="0,12,0,0">
                             <Grid.ColumnDefinitions>
@@ -158,27 +90,27 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}">
+                            <Border Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
-                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="Pending Inspections" />
+                                    <TextBlock Foreground="#FF6B7280" Text="Pending Inspections" />
                                     <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="5" />
-                                    <TextBlock Margin="0,8,0,0" Style="{StaticResource MutedTextStyle}" Text="Đơn kiểm định đang chờ xử lý" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Đơn kiểm định đang chờ xử lý" />
                                 </StackPanel>
                             </Border>
 
-                            <Border Grid.Column="2" Style="{StaticResource CardBorderStyle}">
+                            <Border Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
-                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="Completed Inspections" />
+                                    <TextBlock Foreground="#FF6B7280" Text="Completed Inspections" />
                                     <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="18" />
-                                    <TextBlock Margin="0,8,0,0" Style="{StaticResource MutedTextStyle}" Text="Đã hoàn tất trong 30 ngày" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Đã hoàn tất trong 30 ngày" />
                                 </StackPanel>
                             </Border>
 
-                            <Border Grid.Column="4" Style="{StaticResource CardBorderStyle}">
+                            <Border Grid.Column="4" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
-                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="Dispute Cases" />
+                                    <TextBlock Foreground="#FF6B7280" Text="Dispute Cases" />
                                     <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="2" />
-                                    <TextBlock Margin="0,8,0,0" Style="{StaticResource MutedTextStyle}" Text="Tranh chấp cần kết luận" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Tranh chấp cần kết luận" />
                                 </StackPanel>
                             </Border>
                         </Grid>
@@ -190,14 +122,29 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}">
+                            <Border Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
-                                    <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Danh sách chờ kiểm định" />
-                                    <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Hiển thị các đơn mới nhất" />
+                                    <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Danh sách chờ kiểm định" />
+                                    <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Hiển thị các đơn mới nhất" />
 
                                     <DataGrid Margin="0,12,0,0"
                                               Height="240"
-                                              Style="{StaticResource DataGridBaseStyle}"
+                                              AutoGenerateColumns="False"
+                                              CanUserAddRows="False"
+                                              CanUserDeleteRows="False"
+                                              CanUserResizeRows="False"
+                                              CanUserReorderColumns="False"
+                                              IsReadOnly="True"
+                                              SelectionMode="Single"
+                                              SelectionUnit="FullRow"
+                                              HeadersVisibility="Column"
+                                              GridLinesVisibility="None"
+                                              RowHeaderWidth="0"
+                                              BorderBrush="#FFE5E7EB"
+                                              BorderThickness="1"
+                                              Background="White"
+                                              RowBackground="White"
+                                              AlternatingRowBackground="#FFF9FAFB"
                                               x:Name="dgPendingInspections"
                                               SelectionChanged="dgPendingInspections_SelectionChanged">
                                         <DataGrid.Columns>
@@ -210,14 +157,29 @@
                                 </StackPanel>
                             </Border>
 
-                            <Border Grid.Column="2" Style="{StaticResource CardBorderStyle}">
+                            <Border Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
-                                    <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Tranh chấp gần đây" />
-                                    <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Các case đang mở" />
+                                    <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Tranh chấp gần đây" />
+                                    <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Các case đang mở" />
 
                                     <DataGrid Margin="0,12,0,0"
                                               Height="240"
-                                              Style="{StaticResource DataGridBaseStyle}"
+                                              AutoGenerateColumns="False"
+                                              CanUserAddRows="False"
+                                              CanUserDeleteRows="False"
+                                              CanUserResizeRows="False"
+                                              CanUserReorderColumns="False"
+                                              IsReadOnly="True"
+                                              SelectionMode="Single"
+                                              SelectionUnit="FullRow"
+                                              HeadersVisibility="Column"
+                                              GridLinesVisibility="None"
+                                              RowHeaderWidth="0"
+                                              BorderBrush="#FFE5E7EB"
+                                              BorderThickness="1"
+                                              Background="White"
+                                              RowBackground="White"
+                                              AlternatingRowBackground="#FFF9FAFB"
                                               ItemsSource="{Binding Source={StaticResource RecentDisputesProvider}}">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Header="Mã" Width="90" Binding="{Binding XPath=@Code}" />
@@ -241,14 +203,29 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}">
+                    <Border Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                         <StackPanel>
-                            <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Danh sách chờ kiểm định" />
-                            <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Chọn một listing để xem chi tiết và kiểm định" />
+                            <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Danh sách chờ kiểm định" />
+                            <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Chọn một listing để xem chi tiết và kiểm định" />
 
                             <DataGrid Margin="0,12,0,0"
                                       Height="640"
-                                      Style="{StaticResource DataGridBaseStyle}"
+                                      AutoGenerateColumns="False"
+                                      CanUserAddRows="False"
+                                      CanUserDeleteRows="False"
+                                      CanUserResizeRows="False"
+                                      CanUserReorderColumns="False"
+                                      IsReadOnly="True"
+                                      SelectionMode="Single"
+                                      SelectionUnit="FullRow"
+                                      HeadersVisibility="Column"
+                                      GridLinesVisibility="None"
+                                      RowHeaderWidth="0"
+                                      BorderBrush="#FFE5E7EB"
+                                      BorderThickness="1"
+                                      Background="White"
+                                      RowBackground="White"
+                                      AlternatingRowBackground="#FFF9FAFB"
                                       x:Name="dgInspectionQueue"
                                       SelectionChanged="dgInspectionQueue_SelectionChanged">
                                 <DataGrid.Columns>
@@ -262,10 +239,10 @@
 
                     <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                         <StackPanel x:Name="pnlInspectionDetails">
-                            <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Thông tin xe" />
-                            <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Chi tiết listing đang chọn" />
+                            <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Thông tin xe" />
+                            <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Chi tiết listing đang chọn" />
 
-                            <Border Margin="0,12,0,0" Style="{StaticResource CardBorderStyle}">
+                            <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="160" />
@@ -289,65 +266,67 @@
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Listing ID" />
+                                    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Listing ID" />
                                     <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ListingId}" />
 
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Tiêu đề" />
+                                    <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Tiêu đề" />
                                     <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Title}" />
 
-                                    <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Người bán" />
+                                    <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Người bán" />
                                     <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Seller.Email}" />
 
-                                    <TextBlock Grid.Row="6" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Hãng / Loại" />
+                                    <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Hãng / Loại" />
                                     <TextBlock Grid.Row="6" Grid.Column="1">
                                         <Run Text="{Binding Brand.BrandName}" />
                                         <Run Text=" • " />
                                         <Run Text="{Binding BikeType.Name}" />
                                     </TextBlock>
 
-                                    <TextBlock Grid.Row="8" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Giá" />
+                                    <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Giá" />
                                     <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding Price, StringFormat={}{0:N0}đ}" />
 
-                                    <TextBlock Grid.Row="10" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Số khung" />
+                                    <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Số khung" />
                                     <TextBlock Grid.Row="10" Grid.Column="1" Text="{Binding FrameNumber}" />
 
-                                    <TextBlock Grid.Row="12" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Sử dụng (tháng)" />
+                                    <TextBlock Grid.Row="12" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Sử dụng (tháng)" />
                                     <TextBlock Grid.Row="12" Grid.Column="1" Text="{Binding UsageDuration}" />
 
-                                    <TextBlock Grid.Row="14" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Mô tả" />
+                                    <TextBlock Grid.Row="14" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Mô tả" />
                                     <TextBlock Grid.Row="14" Grid.Column="1" Text="{Binding Description}" TextWrapping="Wrap" />
                                 </Grid>
                             </Border>
 
-                            <Border Margin="0,16,0,0" Style="{StaticResource CardBorderStyle}">
+                            <Border Margin="0,16,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
-                                    <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Ảnh listing" />
-                                    <ItemsControl Margin="0,12,0,0" ItemsSource="{Binding ListingImages}">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <WrapPanel />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border Margin="0,0,10,10"
-                                                        Width="120"
-                                                        Height="80"
-                                                        Background="#F3F4F6"
-                                                        CornerRadius="10"
-                                                        ClipToBounds="True">
-                                                    <Image Source="{Binding ImageUrl, Converter={StaticResource ImageUrlToBitmapImageConverter}}"
-                                                           Stretch="UniformToFill" />
-                                                </Border>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
+                                    <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Ảnh listing" />
+                                    <ScrollViewer Margin="0,12,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                        <ItemsControl ItemsSource="{Binding ListingImages}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Margin="0,0,10,0"
+                                                            Width="120"
+                                                            Height="80"
+                                                            Background="#FFF3F4F6"
+                                                            CornerRadius="10"
+                                                            ClipToBounds="True">
+                                                        <Image Source="{Binding ImageUrl, Converter={StaticResource ImageUrlToBitmapImageConverter}}"
+                                                               Stretch="UniformToFill" />
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
                                 </StackPanel>
                             </Border>
 
-                            <TextBlock Margin="0,16,0,0" Style="{StaticResource SectionTitleStyle}" Text="Inspection Checklist" />
+                            <TextBlock Margin="0,16,0,0" FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Inspection Checklist" />
 
-                            <Border Margin="0,12,0,0" Style="{StaticResource CardBorderStyle}">
+                            <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="260" />
@@ -366,34 +345,34 @@
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Frame System" />
+                                    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Frame System" />
                                     <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
-                                        <RadioButton Style="{StaticResource SmallRadioStyle}" GroupName="FrameSystem" Content="Pass" IsChecked="True" x:Name="rbFramePass" />
-                                        <RadioButton Style="{StaticResource SmallRadioStyle}" GroupName="FrameSystem" Content="Fail" />
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="FrameSystem" Content="Pass" IsChecked="True" x:Name="rbFramePass" />
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="FrameSystem" Content="Fail" />
                                     </StackPanel>
 
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Brake System" />
+                                    <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Brake System" />
                                     <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal">
-                                        <RadioButton Style="{StaticResource SmallRadioStyle}" GroupName="BrakeSystem" Content="Pass" IsChecked="True" x:Name="rbBrakePass" />
-                                        <RadioButton Style="{StaticResource SmallRadioStyle}" GroupName="BrakeSystem" Content="Fail" />
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="BrakeSystem" Content="Pass" IsChecked="True" x:Name="rbBrakePass" />
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="BrakeSystem" Content="Fail" />
                                     </StackPanel>
 
-                                    <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Drivetrain" />
+                                    <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Drivetrain" />
                                     <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal">
-                                        <RadioButton Style="{StaticResource SmallRadioStyle}" GroupName="Drivetrain" Content="Pass" IsChecked="True" x:Name="rbDrivetrainPass" />
-                                        <RadioButton Style="{StaticResource SmallRadioStyle}" GroupName="Drivetrain" Content="Fail" />
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="Drivetrain" Content="Pass" IsChecked="True" x:Name="rbDrivetrainPass" />
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="Drivetrain" Content="Fail" />
                                     </StackPanel>
 
-                                    <TextBlock Grid.Row="6" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Wheel Alignment" />
+                                    <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Wheel Alignment" />
                                     <StackPanel Grid.Row="6" Grid.Column="2" Orientation="Horizontal">
-                                        <RadioButton Style="{StaticResource SmallRadioStyle}" GroupName="WheelAlignment" Content="Pass" IsChecked="True" x:Name="rbWheelAlignmentPass" />
-                                        <RadioButton Style="{StaticResource SmallRadioStyle}" GroupName="WheelAlignment" Content="Fail" />
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="WheelAlignment" Content="Pass" IsChecked="True" x:Name="rbWheelAlignmentPass" />
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="WheelAlignment" Content="Fail" />
                                     </StackPanel>
 
-                                    <TextBlock Grid.Row="8" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Handlebar and Steering" />
+                                    <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Handlebar and Steering" />
                                     <StackPanel Grid.Row="8" Grid.Column="2" Orientation="Horizontal">
-                                        <RadioButton Style="{StaticResource SmallRadioStyle}" GroupName="HandlebarSteering" Content="Pass" IsChecked="True" x:Name="rbHandlebarSteeringPass" />
-                                        <RadioButton Style="{StaticResource SmallRadioStyle}" GroupName="HandlebarSteering" Content="Fail" />
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="HandlebarSteering" Content="Pass" IsChecked="True" x:Name="rbHandlebarSteeringPass" />
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="HandlebarSteering" Content="Fail" />
                                     </StackPanel>
                                 </Grid>
                             </Border>
@@ -405,10 +384,10 @@
                                     <ColumnDefinition Width="380" />
                                 </Grid.ColumnDefinitions>
 
-                                <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}">
+                                <Border Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                     <StackPanel>
-                                        <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Notes" />
-                                        <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Ghi chú chi tiết cho báo cáo kiểm định" />
+                                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Notes" />
+                                        <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Ghi chú chi tiết cho báo cáo kiểm định" />
 
                                         <TextBox Margin="0,12,0,0"
                                                  x:Name="txtNotes"
@@ -425,22 +404,22 @@
                                     </StackPanel>
                                 </Border>
 
-                                <Border Grid.Column="2" Style="{StaticResource CardBorderStyle}">
+                                <Border Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                     <StackPanel>
-                                        <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Upload Report" />
-                                        <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Tải lên file PDF/ảnh báo cáo" />
+                                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Upload Report" />
+                                        <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Tải lên file PDF/ảnh báo cáo" />
 
                                         <Border Margin="0,12,0,0"
                                                 Height="140"
                                                 Background="#FFF3F4F6"
-                                                BorderBrush="{StaticResource BorderBrush}"
+                                                BorderBrush="#FFE5E7EB"
                                                 BorderThickness="1"
                                                 CornerRadius="12"
                                                 Padding="12">
                                             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                                                 <TextBlock FontWeight="SemiBold" Text="Kéo thả file vào đây" />
-                                                <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Hoặc bấm để chọn file" />
-                                                <Button Margin="0,10,0,0" Style="{StaticResource SecondaryButtonStyle}" Content="Chọn file" />
+                                                <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Hoặc bấm để chọn file" />
+                                                <Button Margin="0,10,0,0" Content="Chọn file" />
                                             </StackPanel>
                                         </Border>
                                     </StackPanel>
@@ -460,16 +439,31 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}">
+                        <Border Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                             <StackPanel>
-                                <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Dispute List" />
-                                <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Chọn một case để xem chi tiết" />
+                                <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Dispute List" />
+                                <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Chọn một case để xem chi tiết" />
 
                                 <TextBox Margin="0,12,0,0" Text="Tìm theo mã / xe / người mua..." />
 
                                 <DataGrid Margin="0,12,0,0"
                                           Height="520"
-                                          Style="{StaticResource DataGridBaseStyle}"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          CanUserDeleteRows="False"
+                                          CanUserResizeRows="False"
+                                          CanUserReorderColumns="False"
+                                          IsReadOnly="True"
+                                          SelectionMode="Single"
+                                          SelectionUnit="FullRow"
+                                          HeadersVisibility="Column"
+                                          GridLinesVisibility="None"
+                                          RowHeaderWidth="0"
+                                          BorderBrush="#FFE5E7EB"
+                                          BorderThickness="1"
+                                          Background="White"
+                                          RowBackground="White"
+                                          AlternatingRowBackground="#FFF9FAFB"
                                           ItemsSource="{Binding Source={StaticResource DisputeListProvider}}">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Mã" Width="120" Binding="{Binding XPath=@Code}" />
@@ -481,10 +475,10 @@
                         </Border>
 
                         <StackPanel Grid.Column="2">
-                            <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Details Panel" />
-                            <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Thông tin xe, khiếu nại và kết luận inspector" />
+                            <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Details Panel" />
+                            <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Thông tin xe, khiếu nại và kết luận inspector" />
 
-                            <Border Margin="0,12,0,0" Style="{StaticResource CardBorderStyle}">
+                            <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
                                     <TextBlock FontWeight="SemiBold" Text="Bicycle Information" />
                                     <Grid Margin="0,10,0,0">
@@ -501,14 +495,14 @@
                                             <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
 
-                                        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource MutedTextStyle}" Text="Listing" />
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Foreground="#FF6B7280" Text="Listing" />
                                         <TextBlock Grid.Row="0" Grid.Column="1" Text="Giant Defy Advanced 2 (2020)" />
-                                        <TextBlock Grid.Row="0" Grid.Column="3" Style="{StaticResource MutedTextStyle}" Text="Transaction" />
+                                        <TextBlock Grid.Row="0" Grid.Column="3" Foreground="#FF6B7280" Text="Transaction" />
                                         <TextBlock Grid.Row="0" Grid.Column="4" Text="TX-00421" />
 
-                                        <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource MutedTextStyle}" Text="Seller" />
+                                        <TextBlock Grid.Row="2" Grid.Column="0" Foreground="#FF6B7280" Text="Seller" />
                                         <TextBlock Grid.Row="2" Grid.Column="1" Text="Nguyễn A" />
-                                        <TextBlock Grid.Row="2" Grid.Column="3" Style="{StaticResource MutedTextStyle}" Text="Buyer" />
+                                        <TextBlock Grid.Row="2" Grid.Column="3" Foreground="#FF6B7280" Text="Buyer" />
                                         <TextBlock Grid.Row="2" Grid.Column="4" Text="Trần B" />
                                     </Grid>
                                 </StackPanel>
@@ -521,7 +515,7 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}">
+                                <Border Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                     <StackPanel>
                                         <TextBlock FontWeight="SemiBold" Text="Buyer Complaint" />
                                         <TextBlock Margin="0,10,0,0"
@@ -530,7 +524,7 @@
                                     </StackPanel>
                                 </Border>
 
-                                <Border Grid.Column="2" Style="{StaticResource CardBorderStyle}">
+                                <Border Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                     <StackPanel>
                                         <TextBlock FontWeight="SemiBold" Text="Seller Response" />
                                         <TextBlock Margin="0,10,0,0"
@@ -540,10 +534,10 @@
                                 </Border>
                             </Grid>
 
-                            <Border Margin="0,16,0,0" Style="{StaticResource CardBorderStyle}">
+                            <Border Margin="0,16,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
                                     <TextBlock FontWeight="SemiBold" Text="Inspector Conclusion" />
-                                    <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Ghi kết luận và đề xuất xử lý" />
+                                    <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Ghi kết luận và đề xuất xử lý" />
 
                                     <TextBox Margin="0,12,0,0"
                                              Height="140"
@@ -554,7 +548,7 @@
                                              Text="Kiểm tra thực tế: phanh sau cần căn chỉnh, không có vết nứt khung. Đề xuất hỗ trợ phí bảo dưỡng phanh, giao dịch tiếp tục." />
 
                                     <StackPanel Margin="0,12,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
-                                        <Button Style="{StaticResource SecondaryButtonStyle}" Content="Yêu cầu thêm bằng chứng" />
+                                        <Button Content="Yêu cầu thêm bằng chứng" />
                                         <Button Margin="10,0,0,0" Content="Chốt kết luận" />
                                     </StackPanel>
                                 </StackPanel>

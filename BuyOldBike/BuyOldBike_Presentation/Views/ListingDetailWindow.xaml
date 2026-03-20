@@ -10,61 +10,30 @@
         MinWidth="760"
         MinHeight="600"
         WindowStartupLocation="CenterOwner">
-    <Window.Resources>
-        <Style x:Key="CardBorderStyle" TargetType="Border">
-            <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
-            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="14" />
-            <Setter Property="Padding" Value="16" />
-        </Style>
-
-        <Style x:Key="SectionTitleStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Foreground" Value="#FF111827" />
-        </Style>
-
-        <Style x:Key="MutedTextStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{StaticResource SubtleTextBrush}" />
-        </Style>
-
-        <Style x:Key="InlineLabelStyle" TargetType="TextBlock">
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Foreground" Value="#FF111827" />
-        </Style>
-    </Window.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0"
-                Background="{StaticResource SurfaceBrush}"
-                BorderBrush="{StaticResource BorderBrush}"
+                Background="White"
+                BorderBrush="#FFE5E7EB"
                 BorderThickness="0,0,0,1"
                 Padding="16">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <StackPanel>
-                    <TextBlock FontSize="18" FontWeight="SemiBold" Text="Listing Detail" />
-                    <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Xem chi tiết bài đăng vừa tạo" />
-                </StackPanel>
-                <Button Grid.Column="1" Height="40" MinWidth="120" Content="Đóng" Click="BtnClose_Click" />
-            </Grid>
+            <StackPanel>
+                <TextBlock FontSize="18" FontWeight="SemiBold" Text="Listing Detail" />
+                <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Xem chi tiết bài đăng vừa tạo" />
+            </StackPanel>
         </Border>
 
         <ScrollViewer Grid.Row="1" Margin="16" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel>
-                <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Thông tin xe" />
-                <TextBlock Margin="0,4,0,0" Style="{StaticResource MutedTextStyle}" Text="Chi tiết listing" />
+                <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Thông tin xe" />
+                <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Chi tiết listing" />
 
-                <Border Margin="0,12,0,0" Style="{StaticResource CardBorderStyle}">
+                <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="160" />
@@ -90,64 +59,77 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Listing ID" />
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Listing.ListingId}" />
+                        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Listing ID" />
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ListingBike.ListingId}" />
 
-                        <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Trạng thái" />
-                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Listing.Status}" />
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Trạng thái" />
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ListingBike.Status}" />
 
-                        <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Tiêu đề" />
-                        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Listing.Title}" />
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Tiêu đề" />
+                        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding ListingBike.Title}" />
 
-                        <TextBlock Grid.Row="6" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Người bán" />
-                        <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Listing.Seller.Email}" />
+                        <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Người bán" />
+                        <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding ListingBike.Seller.Email}" />
 
-                        <TextBlock Grid.Row="8" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Hãng / Loại" />
+                        <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Hãng / Loại" />
                         <TextBlock Grid.Row="8" Grid.Column="1">
-                            <Run Text="{Binding Listing.Brand.BrandName}" />
+                            <Run Text="{Binding ListingBike.Brand.BrandName}" />
                             <Run Text=" • " />
-                            <Run Text="{Binding Listing.BikeType.Name}" />
+                            <Run Text="{Binding ListingBike.BikeType.Name}" />
                         </TextBlock>
 
-                        <TextBlock Grid.Row="10" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Giá" />
-                        <TextBlock Grid.Row="10" Grid.Column="1" Text="{Binding Listing.Price, StringFormat={}{0:N0}đ}" />
+                        <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Giá" />
+                        <TextBlock Grid.Row="10" Grid.Column="1" Text="{Binding ListingBike.Price, StringFormat={}{0:N0}đ}" />
 
-                        <TextBlock Grid.Row="12" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Số khung" />
-                        <TextBlock Grid.Row="12" Grid.Column="1" Text="{Binding Listing.FrameNumber}" />
+                        <TextBlock Grid.Row="12" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Số khung" />
+                        <TextBlock Grid.Row="12" Grid.Column="1" Text="{Binding ListingBike.FrameNumber}" />
 
-                        <TextBlock Grid.Row="14" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Sử dụng (tháng)" />
-                        <TextBlock Grid.Row="14" Grid.Column="1" Text="{Binding Listing.UsageDuration}" />
+                        <TextBlock Grid.Row="14" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Sử dụng (tháng)" />
+                        <TextBlock Grid.Row="14" Grid.Column="1" Text="{Binding ListingBike.UsageDuration}" />
 
-                        <TextBlock Grid.Row="16" Grid.Column="0" Style="{StaticResource InlineLabelStyle}" Text="Mô tả" />
-                        <TextBlock Grid.Row="16" Grid.Column="1" Text="{Binding Listing.Description}" TextWrapping="Wrap" />
+                        <TextBlock Grid.Row="16" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Mô tả" />
+                        <TextBlock Grid.Row="16" Grid.Column="1" Text="{Binding ListingBike.Description}" TextWrapping="Wrap" />
                     </Grid>
                 </Border>
 
-                <Border Margin="0,16,0,0" Style="{StaticResource CardBorderStyle}">
+                <Border Margin="0,16,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                     <StackPanel>
-                        <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Ảnh listing" />
-                        <ItemsControl Margin="0,12,0,0" ItemsSource="{Binding Images}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Margin="0,0,10,10"
-                                            Width="160"
-                                            Height="110"
-                                            Background="#F3F4F6"
-                                            CornerRadius="10"
-                                            ClipToBounds="True">
-                                        <Image Source="{Binding}" Stretch="UniformToFill" />
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Ảnh listing" />
+                        <ScrollViewer Margin="0,12,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                            <ItemsControl ItemsSource="{Binding Images}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Margin="0,0,10,0"
+                                                Width="160"
+                                                Height="110"
+                                                Background="#FFF3F4F6"
+                                                CornerRadius="10"
+                                                ClipToBounds="True">
+                                            <Image Source="{Binding}" Stretch="UniformToFill" />
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
                     </StackPanel>
                 </Border>
             </StackPanel>
         </ScrollViewer>
+
+        <Border Grid.Row="2"
+                Background="White"
+                BorderBrush="#FFE5E7EB"
+                BorderThickness="1,0,0,0"
+                Padding="16">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Height="40" MinWidth="120" Margin="0,0,10,0" Content="Đặt mua" />
+                <Button Height="40" MinWidth="120" Content="Đóng" Click="BtnClose_Click" />
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>
