@@ -1,0 +1,562 @@
+<Window x:Class="BuyOldBike_Presentation.Views.InspectorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:converters="clr-namespace:BuyOldBike_Presentation.Converters"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Khu vực Inspector"
+        Width="1200"
+        Height="800"
+        MinWidth="1024"
+        MinHeight="640"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <converters:ImageUrlToBitmapImageConverter x:Key="ImageUrlToBitmapImageConverter" />
+
+        <XmlDataProvider x:Key="PendingInspectionsProvider" XPath="/Items/Item">
+            <x:XData>
+                <Items xmlns="">
+                    <Item Code="INSP-00012" Bike="Giant TCR 2021" Seller="Nguyễn A" Appointment="10:30 14/03" Status="Pending" />
+                    <Item Code="INSP-00013" Bike="Trek Emonda" Seller="Trần B" Appointment="15:00 16/03" Status="Pending" />
+                    <Item Code="INSP-00014" Bike="Specialized Allez" Seller="Lê C" Appointment="09:00 18/03" Status="Pending" />
+                </Items>
+            </x:XData>
+        </XmlDataProvider>
+
+        <XmlDataProvider x:Key="RecentDisputesProvider" XPath="/Items/Item">
+            <x:XData>
+                <Items xmlns="">
+                    <Item Code="DSP-00007" Bike="Giant Defy" Severity="High" Status="Open" />
+                    <Item Code="DSP-00008" Bike="Trek Domane" Severity="Medium" Status="Open" />
+                </Items>
+            </x:XData>
+        </XmlDataProvider>
+
+        <XmlDataProvider x:Key="DisputeListProvider" XPath="/Items/Item">
+            <x:XData>
+                <Items xmlns="">
+                    <Item Code="DSP-00007" Bike="Giant Defy" Status="Open" />
+                    <Item Code="DSP-00008" Bike="Trek Domane" Status="Open" />
+                    <Item Code="DSP-00009" Bike="Specialized Roubaix" Status="Closed" />
+                </Items>
+            </x:XData>
+        </XmlDataProvider>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Background="White"
+                BorderBrush="#FFE5E7EB"
+                BorderThickness="0,0,0,1"
+                Padding="16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <TextBlock FontSize="18" FontWeight="SemiBold" Text="Inspector Center" />
+                    <TextBlock Margin="0,4,0,0"
+                               Foreground="#FF6B7280"
+                               Text="Thực hiện kiểm định và hỗ trợ xử lý tranh chấp" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Height="40" MinWidth="130" Content="Xem hồ sơ" />
+                    <Button Margin="12,0,0,0" Height="40" MinWidth="130" Content="Đăng xuất" Click="BtnLogout_Click" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <TabControl Grid.Row="1" Margin="16" Background="{x:Null}" x:Name="tabInspector">
+            <TabItem Header="Dashboard">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Tổng quan" />
+
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                <StackPanel>
+                                    <TextBlock Foreground="#FF6B7280" Text="Pending Inspections" />
+                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="5" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Đơn kiểm định đang chờ xử lý" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                <StackPanel>
+                                    <TextBlock Foreground="#FF6B7280" Text="Completed Inspections" />
+                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="18" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Đã hoàn tất trong 30 ngày" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="4" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                <StackPanel>
+                                    <TextBlock Foreground="#FF6B7280" Text="Dispute Cases" />
+                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="2" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Tranh chấp cần kết luận" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <Grid Margin="0,16,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                <StackPanel>
+                                    <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Danh sách chờ kiểm định" />
+                                    <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Hiển thị các đơn mới nhất" />
+
+                                    <DataGrid Margin="0,12,0,0"
+                                              Height="240"
+                                              AutoGenerateColumns="False"
+                                              CanUserAddRows="False"
+                                              CanUserDeleteRows="False"
+                                              CanUserResizeRows="False"
+                                              CanUserReorderColumns="False"
+                                              IsReadOnly="True"
+                                              SelectionMode="Single"
+                                              SelectionUnit="FullRow"
+                                              HeadersVisibility="Column"
+                                              GridLinesVisibility="None"
+                                              RowHeaderWidth="0"
+                                              BorderBrush="#FFE5E7EB"
+                                              BorderThickness="1"
+                                              Background="White"
+                                              RowBackground="White"
+                                              AlternatingRowBackground="#FFF9FAFB"
+                                              x:Name="dgPendingInspections"
+                                              SelectionChanged="dgPendingInspections_SelectionChanged">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Mã" Width="90" Binding="{Binding Listing.ListingId}" />
+                                            <DataGridTextColumn Header="Xe" Width="210" Binding="{Binding Listing.Title}" />
+                                            <DataGridTextColumn Header="Người bán" Width="160" Binding="{Binding Listing.Seller.Email}" />
+                                            <DataGridTextColumn Header="Trạng thái" Width="120" Binding="{Binding Status}" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                <StackPanel>
+                                    <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Tranh chấp gần đây" />
+                                    <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Các case đang mở" />
+
+                                    <DataGrid Margin="0,12,0,0"
+                                              Height="240"
+                                              AutoGenerateColumns="False"
+                                              CanUserAddRows="False"
+                                              CanUserDeleteRows="False"
+                                              CanUserResizeRows="False"
+                                              CanUserReorderColumns="False"
+                                              IsReadOnly="True"
+                                              SelectionMode="Single"
+                                              SelectionUnit="FullRow"
+                                              HeadersVisibility="Column"
+                                              GridLinesVisibility="None"
+                                              RowHeaderWidth="0"
+                                              BorderBrush="#FFE5E7EB"
+                                              BorderThickness="1"
+                                              Background="White"
+                                              RowBackground="White"
+                                              AlternatingRowBackground="#FFF9FAFB"
+                                              ItemsSource="{Binding Source={StaticResource RecentDisputesProvider}}">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Mã" Width="90" Binding="{Binding XPath=@Code}" />
+                                            <DataGridTextColumn Header="Xe" Width="220" Binding="{Binding XPath=@Bike}" />
+                                            <DataGridTextColumn Header="Mức độ" Width="110" Binding="{Binding XPath=@Severity}" />
+                                            <DataGridTextColumn Header="Trạng thái" Width="120" Binding="{Binding XPath=@Status}" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Inspection" x:Name="tabInspection">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="360" />
+                        <ColumnDefinition Width="16" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                        <StackPanel>
+                            <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Danh sách chờ kiểm định" />
+                            <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Chọn một listing để xem chi tiết và kiểm định" />
+
+                            <DataGrid Margin="0,12,0,0"
+                                      Height="640"
+                                      AutoGenerateColumns="False"
+                                      CanUserAddRows="False"
+                                      CanUserDeleteRows="False"
+                                      CanUserResizeRows="False"
+                                      CanUserReorderColumns="False"
+                                      IsReadOnly="True"
+                                      SelectionMode="Single"
+                                      SelectionUnit="FullRow"
+                                      HeadersVisibility="Column"
+                                      GridLinesVisibility="None"
+                                      RowHeaderWidth="0"
+                                      BorderBrush="#FFE5E7EB"
+                                      BorderThickness="1"
+                                      Background="White"
+                                      RowBackground="White"
+                                      AlternatingRowBackground="#FFF9FAFB"
+                                      x:Name="dgInspectionQueue"
+                                      SelectionChanged="dgInspectionQueue_SelectionChanged">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Mã" Width="140" Binding="{Binding Listing.ListingId}" />
+                                    <DataGridTextColumn Header="Xe" Width="140" Binding="{Binding Listing.Title}" />
+                                    <DataGridTextColumn Header="Trạng thái" Width="80" Binding="{Binding Status}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </Border>
+
+                    <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel x:Name="pnlInspectionDetails">
+                            <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Thông tin xe" />
+                            <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Chi tiết listing đang chọn" />
+
+                            <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="160" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="10" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="10" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="10" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="10" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="10" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="10" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="10" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Listing ID" />
+                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ListingId}" />
+
+                                    <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Tiêu đề" />
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Title}" />
+
+                                    <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Người bán" />
+                                    <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Seller.Email}" />
+
+                                    <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Hãng / Loại" />
+                                    <TextBlock Grid.Row="6" Grid.Column="1">
+                                        <Run Text="{Binding Brand.BrandName}" />
+                                        <Run Text=" • " />
+                                        <Run Text="{Binding BikeType.Name}" />
+                                    </TextBlock>
+
+                                    <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Giá" />
+                                    <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding Price, StringFormat={}{0:N0}đ}" />
+
+                                    <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Số khung" />
+                                    <TextBlock Grid.Row="10" Grid.Column="1" Text="{Binding FrameNumber}" />
+
+                                    <TextBlock Grid.Row="12" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Sử dụng (tháng)" />
+                                    <TextBlock Grid.Row="12" Grid.Column="1" Text="{Binding UsageDuration}" />
+
+                                    <TextBlock Grid.Row="14" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Mô tả" />
+                                    <TextBlock Grid.Row="14" Grid.Column="1" Text="{Binding Description}" TextWrapping="Wrap" />
+                                </Grid>
+                            </Border>
+
+                            <Border Margin="0,16,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                <StackPanel>
+                                    <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Ảnh listing" />
+                                    <ScrollViewer Margin="0,12,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                        <ItemsControl ItemsSource="{Binding ListingImages}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Margin="0,0,10,0"
+                                                            Width="120"
+                                                            Height="80"
+                                                            Background="#FFF3F4F6"
+                                                            CornerRadius="10"
+                                                            ClipToBounds="True">
+                                                        <Image Source="{Binding ImageUrl, Converter={StaticResource ImageUrlToBitmapImageConverter}}"
+                                                               Stretch="UniformToFill" />
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                </StackPanel>
+                            </Border>
+
+                            <TextBlock Margin="0,16,0,0" FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Inspection Checklist" />
+
+                            <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="260" />
+                                        <ColumnDefinition Width="16" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="12" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="12" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="12" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="12" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Frame System" />
+                                    <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="FrameSystem" Content="Pass" IsChecked="True" x:Name="rbFramePass" />
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="FrameSystem" Content="Fail" />
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Brake System" />
+                                    <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal">
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="BrakeSystem" Content="Pass" IsChecked="True" x:Name="rbBrakePass" />
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="BrakeSystem" Content="Fail" />
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Drivetrain" />
+                                    <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal">
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="Drivetrain" Content="Pass" IsChecked="True" x:Name="rbDrivetrainPass" />
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="Drivetrain" Content="Fail" />
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Wheel Alignment" />
+                                    <StackPanel Grid.Row="6" Grid.Column="2" Orientation="Horizontal">
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="WheelAlignment" Content="Pass" IsChecked="True" x:Name="rbWheelAlignmentPass" />
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="WheelAlignment" Content="Fail" />
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Handlebar and Steering" />
+                                    <StackPanel Grid.Row="8" Grid.Column="2" Orientation="Horizontal">
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="HandlebarSteering" Content="Pass" IsChecked="True" x:Name="rbHandlebarSteeringPass" />
+                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="HandlebarSteering" Content="Fail" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <Grid Margin="0,16,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="16" />
+                                    <ColumnDefinition Width="380" />
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                    <StackPanel>
+                                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Notes" />
+                                        <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Ghi chú chi tiết cho báo cáo kiểm định" />
+
+                                        <TextBox Margin="0,12,0,0"
+                                                 x:Name="txtNotes"
+                                                 Height="180"
+                                                 Padding="10,8"
+                                                 TextWrapping="Wrap"
+                                                 AcceptsReturn="True"
+                                                 VerticalContentAlignment="Top"
+                                                 Text="" />
+
+                                        <StackPanel Margin="0,12,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <Button Margin="10,0,0,0" Content="Hoàn tất" x:Name="btnComplete" Click="btnComplete_Click" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                    <StackPanel>
+                                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Upload Report" />
+                                        <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Tải lên file PDF/ảnh báo cáo" />
+
+                                        <Border Margin="0,12,0,0"
+                                                Height="140"
+                                                Background="#FFF3F4F6"
+                                                BorderBrush="#FFE5E7EB"
+                                                BorderThickness="1"
+                                                CornerRadius="12"
+                                                Padding="12">
+                                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock FontWeight="SemiBold" Text="Kéo thả file vào đây" />
+                                                <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Hoặc bấm để chọn file" />
+                                                <Button Margin="0,10,0,0" Content="Chọn file" />
+                                            </StackPanel>
+                                        </Border>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Dispute Support">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="360" />
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                            <StackPanel>
+                                <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Dispute List" />
+                                <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Chọn một case để xem chi tiết" />
+
+                                <TextBox Margin="0,12,0,0" Text="Tìm theo mã / xe / người mua..." />
+
+                                <DataGrid Margin="0,12,0,0"
+                                          Height="520"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          CanUserDeleteRows="False"
+                                          CanUserResizeRows="False"
+                                          CanUserReorderColumns="False"
+                                          IsReadOnly="True"
+                                          SelectionMode="Single"
+                                          SelectionUnit="FullRow"
+                                          HeadersVisibility="Column"
+                                          GridLinesVisibility="None"
+                                          RowHeaderWidth="0"
+                                          BorderBrush="#FFE5E7EB"
+                                          BorderThickness="1"
+                                          Background="White"
+                                          RowBackground="White"
+                                          AlternatingRowBackground="#FFF9FAFB"
+                                          ItemsSource="{Binding Source={StaticResource DisputeListProvider}}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Mã" Width="120" Binding="{Binding XPath=@Code}" />
+                                        <DataGridTextColumn Header="Xe" Width="120" Binding="{Binding XPath=@Bike}" />
+                                        <DataGridTextColumn Header="Trạng thái" Width="80" Binding="{Binding XPath=@Status}" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Details Panel" />
+                            <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Thông tin xe, khiếu nại và kết luận inspector" />
+
+                            <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                <StackPanel>
+                                    <TextBlock FontWeight="SemiBold" Text="Bicycle Information" />
+                                    <Grid Margin="0,10,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="140" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="16" />
+                                            <ColumnDefinition Width="140" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="8" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Foreground="#FF6B7280" Text="Listing" />
+                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="Giant Defy Advanced 2 (2020)" />
+                                        <TextBlock Grid.Row="0" Grid.Column="3" Foreground="#FF6B7280" Text="Transaction" />
+                                        <TextBlock Grid.Row="0" Grid.Column="4" Text="TX-00421" />
+
+                                        <TextBlock Grid.Row="2" Grid.Column="0" Foreground="#FF6B7280" Text="Seller" />
+                                        <TextBlock Grid.Row="2" Grid.Column="1" Text="Nguyễn A" />
+                                        <TextBlock Grid.Row="2" Grid.Column="3" Foreground="#FF6B7280" Text="Buyer" />
+                                        <TextBlock Grid.Row="2" Grid.Column="4" Text="Trần B" />
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <Grid Margin="0,16,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="16" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                    <StackPanel>
+                                        <TextBlock FontWeight="SemiBold" Text="Buyer Complaint" />
+                                        <TextBlock Margin="0,10,0,0"
+                                                   TextWrapping="Wrap"
+                                                   Text="Người mua phản ánh phanh sau bị trượt, không đúng mô tả. Có dấu hiệu va đập nhẹ ở gióng." />
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                    <StackPanel>
+                                        <TextBlock FontWeight="SemiBold" Text="Seller Response" />
+                                        <TextBlock Margin="0,10,0,0"
+                                                   TextWrapping="Wrap"
+                                                   Text="Người bán cho biết xe được bảo dưỡng trước khi giao, có thể do vận chuyển làm lệch phanh." />
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+
+                            <Border Margin="0,16,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                <StackPanel>
+                                    <TextBlock FontWeight="SemiBold" Text="Inspector Conclusion" />
+                                    <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Ghi kết luận và đề xuất xử lý" />
+
+                                    <TextBox Margin="0,12,0,0"
+                                             Height="140"
+                                             Padding="10,8"
+                                             TextWrapping="Wrap"
+                                             AcceptsReturn="True"
+                                             VerticalContentAlignment="Top"
+                                             Text="Kiểm tra thực tế: phanh sau cần căn chỉnh, không có vết nứt khung. Đề xuất hỗ trợ phí bảo dưỡng phanh, giao dịch tiếp tục." />
+
+                                    <StackPanel Margin="0,12,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <Button Content="Yêu cầu thêm bằng chứng" />
+                                        <Button Margin="10,0,0,0" Content="Chốt kết luận" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
