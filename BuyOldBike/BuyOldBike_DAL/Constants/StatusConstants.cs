@@ -13,6 +13,8 @@ namespace BuyOldBike_DAL.Constants
             public const string Pending_Inspection = "Pending_Inspection";
             public const string Available = "Available";
             public const string Rejected = "Rejected";
+            public const string Hidden = "Hidden";
+            public const string Deleted = "Deleted";
         }
 
         public static class InspectionStatus

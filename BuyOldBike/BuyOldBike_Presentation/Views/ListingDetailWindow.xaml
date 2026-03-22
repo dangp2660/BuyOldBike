@@ -37,7 +37,8 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="160" />
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -59,42 +60,55 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
+                        <!-- Listing ID -->
                         <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Listing ID" />
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ListingBike.ListingId}" />
+                        <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding ListingBike.ListingId}" />
 
+                        <!-- Status -->
                         <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Trạng thái" />
-                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ListingBike.Status}" />
+                        <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding ListingBike.Status}" />
 
+                        <!-- Title -->
                         <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Tiêu đề" />
-                        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding ListingBike.Title}" />
+                        <TextBlock Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" x:Name="tbTitle" Text="{Binding ListingBike.Title}" />
+                        <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" x:Name="txtTitle_Edit" Visibility="Collapsed" Height="24" Margin="0,2,0,2"/>
 
-                        <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Người bán" />
-                        <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding ListingBike.Seller.Email}" />
-
-                        <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Hãng / Loại" />
-                        <TextBlock Grid.Row="8" Grid.Column="1">
+                        <!-- Brand / Type -->
+                        <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Hãng / Loại" />
+                        <TextBlock Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" x:Name="tbBrandType">
                             <Run Text="{Binding ListingBike.Brand.BrandName}" />
                             <Run Text=" • " />
                             <Run Text="{Binding ListingBike.BikeType.Name}" />
                         </TextBlock>
+                        <ComboBox Grid.Row="6" Grid.Column="1" x:Name="cbxBrand_Edit" Visibility="Collapsed" Margin="0,2,2,2" Height="24"/>
+                        <ComboBox Grid.Row="6" Grid.Column="2" x:Name="cbxType_Edit" Visibility="Collapsed" Margin="2,2,0,2" Height="24"/>
 
-                        <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Giá" />
-                        <TextBlock Grid.Row="10" Grid.Column="1" Text="{Binding ListingBike.Price, StringFormat={}{0:N0}đ}" />
+                        <!-- Price -->
+                        <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Giá" />
+                        <TextBlock Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" x:Name="tbPrice" Text="{Binding ListingBike.Price, StringFormat={}{0:N0}đ}" />
+                        <TextBox Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" x:Name="txtPrice_Edit" Visibility="Collapsed" Height="24" Margin="0,2,0,2"/>
 
-                        <TextBlock Grid.Row="12" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Số khung" />
-                        <TextBlock Grid.Row="12" Grid.Column="1" Text="{Binding ListingBike.FrameNumber}" />
+                        <!-- Frame Number -->
+                        <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Số khung" />
+                        <TextBlock Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" x:Name="tbFrame" Text="{Binding ListingBike.FrameNumber}" />
+                        <TextBox Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" x:Name="txtFrame_Edit" Visibility="Collapsed" Height="24" Margin="0,2,0,2"/>
 
-                        <TextBlock Grid.Row="14" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Sử dụng (tháng)" />
-                        <TextBlock Grid.Row="14" Grid.Column="1" Text="{Binding ListingBike.UsageDuration}" />
+                        <!-- Usage Duration -->
+                        <TextBlock Grid.Row="12" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Sử dụng (tháng)" />
+                        <TextBlock Grid.Row="12" Grid.Column="1" Grid.ColumnSpan="2" x:Name="tbUsage" Text="{Binding ListingBike.UsageDuration}" />
+                        <TextBox Grid.Row="12" Grid.Column="1" Grid.ColumnSpan="2" x:Name="txtUsage_Edit" Visibility="Collapsed" Height="24" Margin="0,2,0,2"/>
 
-                        <TextBlock Grid.Row="16" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Mô tả" />
-                        <TextBlock Grid.Row="16" Grid.Column="1" Text="{Binding ListingBike.Description}" TextWrapping="Wrap" />
+                        <!-- Description -->
+                        <TextBlock Grid.Row="14" Grid.Column="0" VerticalAlignment="Top" Foreground="#FF111827" Text="Mô tả" />
+                        <TextBlock Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="2" x:Name="tbDesc" Text="{Binding ListingBike.Description}" TextWrapping="Wrap" MinHeight="80"/>
+                        <TextBox Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="2" x:Name="txtDesc_Edit" Visibility="Collapsed" TextWrapping="Wrap" AcceptsReturn="True" MinHeight="80" Margin="0,2,0,2"/>
                     </Grid>
                 </Border>
 
                 <Border Margin="0,16,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                     <StackPanel>
                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Ảnh listing" />
+                        <Button x:Name="btnAddImage" Content="Thêm ảnh" Width="120" Height="30" Margin="0,8,0,0" Visibility="Collapsed" Click="BtnAddImage_Click" />
                         <ScrollViewer Margin="0,12,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
                             <ItemsControl ItemsSource="{Binding Images}">
                                 <ItemsControl.ItemsPanel>
@@ -127,8 +141,8 @@
                 BorderThickness="1,0,0,0"
                 Padding="16">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Height="40" MinWidth="120" Margin="0,0,10,0" Content="Đặt mua" />
-                <Button Height="40" MinWidth="120" Content="Đóng" Click="BtnClose_Click" />
+                <Button Height="40" MinWidth="120" Margin="0,0,10,0" Content="Đóng" Click="BtnClose_Click" />
+                <Button Height="40" MinWidth="120" Margin="0,0,10,0" Content="Lưu" Click="BtnSave_Click" x:Name="btnSave" Visibility="Collapsed" />
             </StackPanel>
         </Border>
     </Grid>

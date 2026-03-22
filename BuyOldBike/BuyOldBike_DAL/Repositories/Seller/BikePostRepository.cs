@@ -9,20 +9,14 @@ namespace BuyOldBike_DAL.Repositories.Seller
 {
     public class BikePostRepository
     {
-        private readonly BuyOldBikeContext _db;
-
-        public BikePostRepository()
-        {
-            _db = new BuyOldBikeContext();
-        }
-
         public void SaveFullListing(Listing listing, List<string> imageUrls, Inspection inspection)
         {
-            using var transaction = _db.Database.BeginTransaction();
+            using var db = new BuyOldBikeContext();
+            using var transaction = db.Database.BeginTransaction();
             try
             {
-                _db.Listings.Add(listing);
-                _db.SaveChanges();
+                db.Listings.Add(listing);
+                db.SaveChanges();
 
                 foreach (var url in imageUrls)
                 {
@@ -32,7 +26,7 @@ namespace BuyOldBike_DAL.Repositories.Seller
                         ListingId = listing.ListingId,
                         ImageUrl = url
                     };
-                    _db.ListingImages.Add(img);
+                    db.ListingImages.Add(img);
                 }
 
                 inspection.ListingId = listing.ListingId;
@@ -41,9 +35,9 @@ namespace BuyOldBike_DAL.Repositories.Seller
                 {
                     inspection.CreatedAt = DateTime.Now;
                 }
-                _db.Inspections.Add(inspection);
+                db.Inspections.Add(inspection);
 
-                _db.SaveChanges();
+                db.SaveChanges();
                 transaction.Commit();
             }
             catch
@@ -53,9 +47,83 @@ namespace BuyOldBike_DAL.Repositories.Seller
             }
         }
 
+        public void UpdateListing(Listing listing)
+        {
+            using var db = new BuyOldBikeContext();
+
+            var existing = db.Listings.Find(listing.ListingId);
+            if (existing == null) return;
+
+            existing.Title = listing.Title;
+            existing.Description = listing.Description;
+            existing.Price = listing.Price;
+            existing.BrandId = listing.BrandId;
+            existing.BikeTypeId = listing.BikeTypeId;
+            existing.FrameNumber = listing.FrameNumber;
+            existing.UsageDuration = listing.UsageDuration;
+            existing.Status = listing.Status ?? existing.Status;
+
+            db.SaveChanges();
+        }
+
+        public void HideListing(Guid listingId)
+        {
+            using var db = new BuyOldBikeContext();
+
+            var l = db.Listings.Find(listingId);
+            if (l == null) return;
+            l.Status = StatusConstants.ListingStatus.Hidden;
+
+            db.SaveChanges();
+        }
+
+        public void UnhideListing(Guid listingId)
+        {
+            using var db = new BuyOldBikeContext();
+
+            var l = db.Listings.Find(listingId);
+            if (l == null) return;
+            l.Status = StatusConstants.ListingStatus.Available;
+
+            db.SaveChanges();
+        }
+
+        public void AddListingImages(Guid listingId, List<string> imageUrls)
+        {
+            using var db = new BuyOldBikeContext();
+
+            var listing = db.Listings.Find(listingId);
+            if (listing == null) return;
+
+            foreach (var url in imageUrls)
+            {
+                db.ListingImages.Add(new ListingImage
+                {
+                    ImageId = Guid.NewGuid(),
+                    ListingId = listingId,
+                    ImageUrl = url
+                });
+            }
+
+            db.SaveChanges();
+        }
+
+        public void SoftDeleteListing(Guid listingId)
+        {
+            using var db = new BuyOldBikeContext();
+
+            var l = db.Listings.Find(listingId);
+            if (l == null) return;
+            l.Status = StatusConstants.ListingStatus.Deleted;
+
+            db.SaveChanges();
+        }
+
         public List<Inspection> GetPendingInspections()
         {
-            return _db.Inspections
+            using var db = new BuyOldBikeContext();
+
+            return db.Inspections
                 .Include(i => i.Listing)
                 .ThenInclude(l => l.Seller)
                 .Where(i => i.Status == StatusConstants.InspectionStatus.Pending)
@@ -66,7 +134,9 @@ namespace BuyOldBike_DAL.Repositories.Seller
         public void UpdateInspectionResult(Guid inspectionId, string result,
             string listingStatus, int overallScore, string? notes)
         {
-            Inspection inspection = _db.Inspections.Find(inspectionId);
+            using var db = new BuyOldBikeContext();
+
+            Inspection? inspection = db.Inspections.Find(inspectionId);
             if (inspection != null)
             {
                 inspection.Status = StatusConstants.InspectionStatus.Completed;
@@ -82,35 +152,40 @@ namespace BuyOldBike_DAL.Repositories.Seller
                     inspection.RejectReason = notes;
                 }
 
-                Listing listing = _db.Listings.Find(inspection.ListingId);
+                Listing? listing = db.Listings.Find(inspection.ListingId);
                 if (listing != null)
                 {
                     listing.Status = listingStatus;
                 }
 
-                _db.SaveChanges();
+                db.SaveChanges();
             }
         }
 
         public List<Listing> GetListingsBySellerId(Guid sellerId)
         {
-            return _db.Listings
+            using var db = new BuyOldBikeContext();
+
+            return db.Listings
                 .Include(l => l.Brand)
                 .Include(l => l.BikeType)
                 .Where(l => l.SellerId == sellerId)
+                .Where(l => l.Status != StatusConstants.ListingStatus.Deleted)
                 .OrderByDescending(l => l.CreatedAt)
                 .ToList();
         }
 
         private Guid EnsureInspectionLocationId(Guid inspectionLocationId)
         {
+            using var db = new BuyOldBikeContext();
+
             if (inspectionLocationId != Guid.Empty)
             {
-                var exists = _db.InspectionLocations.Any(x => x.InspectionLocationId == inspectionLocationId);
+                var exists = db.InspectionLocations.Any(x => x.InspectionLocationId == inspectionLocationId);
                 if (exists) return inspectionLocationId;
             }
 
-            var existing = _db.InspectionLocations
+            var existing = db.InspectionLocations
                 .OrderBy(x => x.Type)
                 .Select(x => x.InspectionLocationId)
                 .FirstOrDefault();
@@ -124,15 +199,16 @@ namespace BuyOldBike_DAL.Repositories.Seller
                 AddressLine = "Default",
                 City = "Default"
             };
-            _db.InspectionLocations.Add(location);
-            _db.SaveChanges();
+            db.InspectionLocations.Add(location);
+            db.SaveChanges();
             return location.InspectionLocationId;
         }
 
-
         public List<Listing> GetAvailableListings()
         {
-            return _db.Listings
+            using var db = new BuyOldBikeContext();
+
+            return db.Listings
                 .Include(l => l.Brand)
                 .Include(l => l.BikeType)
                 .Include(l => l.ListingImages)
@@ -143,7 +219,9 @@ namespace BuyOldBike_DAL.Repositories.Seller
 
         public Listing? GetListingDetailById(Guid listingId)
         {
-            return _db.Listings
+            using var db = new BuyOldBikeContext();
+
+            return db.Listings
                 .Include(l => l.Brand)
                 .Include(l => l.BikeType)
                 .Include(l => l.ListingImages)
