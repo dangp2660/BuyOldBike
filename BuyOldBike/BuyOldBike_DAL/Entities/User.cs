@@ -15,6 +15,13 @@ public partial class User
 
     public string Role { get; set; } = null!;
 
+    // Seller reputation/feedback fields
+    public double? SellerRating { get; set; } = 0;
+
+    public int? TotalReviews { get; set; } = 0;
+
+    public DateTime? LastReviewDate { get; set; }
+
     public virtual Address? Address { get; set; }
 
     public virtual ICollection<Inspection> Inspections { get; set; } = new List<Inspection>();
