@@ -1,6 +1,5 @@
 using BuyOldBike_DAL.Entities;
-using BuyOldBike_DAL.Repositories.Seller;
-using Microsoft.EntityFrameworkCore;
+using BuyOldBike_BLL.Services.BicycleListWindow;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -15,8 +14,8 @@ namespace BuyOldBike_Presentation.ViewModels
 
         public void Load(Guid listingId)
         {
-            BikePostRepository _bikeRepo = new();
-            ListingBike = _bikeRepo.GetListingDetailById(listingId);
+            var browseService = new ListingBrowseService();
+            ListingBike = browseService.GetListingDetailById(listingId);
 
             Images.Clear();
             if (ListingBike?.ListingImages == null) return;

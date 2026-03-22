@@ -36,5 +36,33 @@ namespace BuyOldBike_BLL.Services.Seller
         {
             return _bikePostRepo.GetListingsBySellerId(sellerId);
         }
+
+        // New: Update listing details (publish/edit)
+        public void UpdateListing(Listing listing)
+        {
+            _bikePostRepo.UpdateListing(listing);
+        }
+
+        // New: Hide listing
+        public void HideListing(Guid listingId)
+        {
+            _bikePostRepo.HideListing(listingId);
+        }
+
+        public void UnhideListing(Guid listingId)
+        {
+            _bikePostRepo.UnhideListing(listingId);
+        }
+
+        public void AddImagesToListing(Guid listingId, List<string> imageUrls)
+        {
+            _bikePostRepo.AddListingImages(listingId, imageUrls);
+        }
+
+        // New: Soft delete listing
+        public void DeleteListing(Guid listingId)
+        {
+            _bikePostRepo.SoftDeleteListing(listingId);
+        }
     }
 }

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BuyOldBike_Presentation.Converters"
         mc:Ignorable="d"
         Title="Khu vực Seller"
         Width="1200"
@@ -10,6 +11,11 @@
         MinWidth="1024"
         MinHeight="640"
         WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <local:HideShowConverter x:Key="HideShowConverter"/>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -131,7 +137,7 @@
                                     <RowDefinition Height="12" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="12" />
-                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition />
                                     <RowDefinition Height="12" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="12" />
@@ -156,13 +162,11 @@
                                 <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Text="Brand" />
                                 <ComboBox Grid.Row="7" Grid.Column="2" SelectedIndex="0" Name="cbxBrand"/>
 
-                                <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center" Text="Frame Size" />
-                                <ComboBox Grid.Row="9" Grid.Column="2" SelectedIndex="1" x:Name="cbxFrameSize">
-                                    <ComboBoxItem Content="50" />
-                                    <ComboBoxItem Content="52" />
-                                    <ComboBoxItem Content="54" />
-                                    <ComboBoxItem Content="56" />
-                                </ComboBox>
+                                <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center" Text="Bike Type" />
+                                <ComboBox Grid.Row="9" Grid.Column="2" SelectedIndex="0" Name="cbxBikeType"/>
+
+                                <TextBlock Grid.Row="11" Grid.Column="0" VerticalAlignment="Center" Text="Frame Number" />
+                                <TextBox Grid.Row="11" Grid.Column="2" x:Name="tbFrameNum" />
 
                                 <TextBlock Grid.Column="4" VerticalAlignment="Center" Text="Usage History" />
                                 <TextBox Grid.Row="0" Grid.Column="6" x:Name="txtUsage" />
@@ -280,9 +284,9 @@
                                                     <TextBlock Grid.Column="2" Text="{Binding Status}" />
                                                     <TextBlock Grid.Column="3" Text="{Binding Views}" />
                                                     <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Left">
-                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Edit" IsEnabled="{Binding IsPending}" />
-                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Delete" IsEnabled="{Binding IsPending}" />
-                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Hide" IsEnabled="{Binding IsPending}" />
+                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Edit" Click="BtnEditListing_Click" />
+                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Delete" Click="BtnDeleteListing_Click" />
+                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" IsEnabled="{Binding CanToggle}" Content="{Binding Status, Converter={StaticResource HideShowConverter}}" Click="BtnToggleHide_Click" />
                                                     </StackPanel>
                                                 </Grid>
                                             </Border>
@@ -321,53 +325,34 @@
 
                                 <Border Margin="0,12,0,0" BorderBrush="#FFE5E7EB" BorderThickness="0,1,0,0" />
 
-                                <Border Padding="10,12">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="2*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="2*" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="Nguyễn A" />
-                                        <TextBlock Grid.Column="1" Text="Giant TCR Advanced 2" />
-                                        <TextBlock Grid.Column="2" Text="15,000,000" />
-                                        <TextBlock Grid.Column="3" Text="Paid" />
-                                        <TextBlock Grid.Column="4" Text="Pending" />
-                                        <StackPanel Grid.Column="5" Orientation="Horizontal" HorizontalAlignment="Left">
-                                            <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Accept" />
-                                            <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Reject" />
-                                            <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Completed" />
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
-
-                                <Border BorderBrush="#FFE5E7EB" BorderThickness="0,1,0,0" />
-
-                                <Border Padding="10,12">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="2*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="2*" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="Trần B" />
-                                        <TextBlock Grid.Column="1" Text="Trek Domane AL 3" />
-                                        <TextBlock Grid.Column="2" Text="9,500,000" />
-                                        <TextBlock Grid.Column="3" Text="Unpaid" />
-                                        <TextBlock Grid.Column="4" Text="New" />
-                                        <StackPanel Grid.Column="5" Orientation="Horizontal" HorizontalAlignment="Left">
-                                            <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Accept" />
-                                            <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Reject" />
-                                            <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Completed" />
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
+                                <ItemsControl ItemsSource="{Binding SellerOrders}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Padding="10,12" BorderBrush="#FFE5E7EB" BorderThickness="0,0,0,1">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="2*" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="2*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0" Text="{Binding BuyerName}" />
+                                                    <TextBlock Grid.Column="1" Text="{Binding BicycleTitle}" />
+                                                    <TextBlock Grid.Column="2" Text="{Binding Price, StringFormat=N0}" />
+                                                    <TextBlock Grid.Column="3" Text="{Binding DepositStatus}" />
+                                                    <TextBlock Grid.Column="4" Text="{Binding OrderStatus}" />
+                                                    <StackPanel Grid.Column="5" Orientation="Horizontal" HorizontalAlignment="Left">
+                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Accept" Click="BtnAcceptOrder_Click" />
+                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Reject" Click="BtnRejectOrder_Click" />
+                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Completed" Click="BtnCompleteOrder_Click" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                             </StackPanel>
                         </Border>
                     </StackPanel>
