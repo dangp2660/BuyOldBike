@@ -1,5 +1,7 @@
 using BuyOldBike_DAL.Constants;
 using BuyOldBike_DAL.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 
 namespace BuyOldBike_DAL.Repositories.Payment
@@ -63,8 +65,7 @@ namespace BuyOldBike_DAL.Repositories.Payment
             {
                 Order order = _db.Orders.FirstOrDefault(o => o.OrderId == orderId);
                 if (order == null) throw new InvalidOperationException("Không tìm thấy đơn hàng.");
-                Entities.Payment payment = _db.Payments.FirstOrDefault(p => p.OrderId == orderId &&
-                p.PaymentType == StatusConstants.PaymentType.VN_Pay);
+                Entities.Payment payment = _db.Payments.FirstOrDefault(p => p.OrderId == orderId);
 
                 if(payment == null) throw new InvalidOperationException("Không tìm thấy giao dịch thanh toán.");
 
@@ -98,8 +99,7 @@ namespace BuyOldBike_DAL.Repositories.Payment
                 Order order = _db.Orders.FirstOrDefault(o => o.OrderId == orderId);
                 if (order == null) throw new InvalidOperationException("Không tìm thấy đơn hàng.");
 
-                Entities.Payment payment = _db.Payments.FirstOrDefault(p => p.OrderId == orderId &&
-                p.PaymentType == StatusConstants.PaymentType.VN_Pay);
+                Entities.Payment payment = _db.Payments.FirstOrDefault(p => p.OrderId == orderId);
 
                 if (payment == null) throw new InvalidOperationException("Không tìm thấy giao dịch thanh toán.");
 
@@ -139,5 +139,78 @@ namespace BuyOldBike_DAL.Repositories.Payment
                 StatusConstants.PaymentStatus.Expired);
         }
 
+
+        public void PayDepositWithWallet(Guid buyerId, Guid orderId)
+        {
+            var tx = _db.Database.BeginTransaction(IsolationLevel.Serializable);
+            try
+            {
+                var order = _db.Orders
+                    .Include(o => o.Listing)
+                    .Include(o => o.Payments)
+                    .FirstOrDefault(o => o.OrderId == orderId && o.BuyerId == buyerId);
+
+                if (order == null) throw new InvalidOperationException("Không tìm thấy đơn đặt cọc.");
+                if (!string.Equals(order.Status, StatusConstants.OrdersStatus.Deposit_Pending, StringComparison.Ordinal))
+                    throw new InvalidOperationException("Đơn đặt cọc không ở trạng thái chờ thanh toán.");
+
+                var payment = order.Payments?
+                    .OrderByDescending(p => p.CreatedAt)
+                    .FirstOrDefault();
+                if (payment == null) throw new InvalidOperationException("Không tìm thấy giao dịch thanh toán.");
+                if (!string.Equals(payment.Status, StatusConstants.PaymentStatus.Pending, StringComparison.Ordinal))
+                    throw new InvalidOperationException("Giao dịch không ở trạng thái chờ thanh toán.");
+
+                var amount = payment.Amount ?? order.TotalAmount ?? 0m;
+                if (amount <= 0) throw new InvalidOperationException("Số tiền không hợp lệ.");
+
+                var wallet = _db.UserWallets.FirstOrDefault(w => w.UserId == buyerId);
+                if (wallet == null)
+                {
+                    wallet = new UserWallet
+                    {
+                        WalletId = Guid.NewGuid(),
+                        UserId = buyerId,
+                        Balance = 0m,
+                        UpdatedAt = DateTime.Now
+                    };
+                    _db.UserWallets.Add(wallet);
+                    _db.SaveChanges();
+                }
+
+                if (wallet.Balance < amount) throw new InvalidOperationException("Số dư không đủ.");
+
+                wallet.Balance -= amount;
+                wallet.UpdatedAt = DateTime.Now;
+
+                var walletTxnId = Guid.NewGuid();
+                _db.WalletTransactions.Add(new WalletTransaction
+                {
+                    WalletTransactionId = walletTxnId,
+                    WalletId = wallet.WalletId,
+                    Amount = amount,
+                    Direction = "Debit",
+                    Type = "Deposit",
+                    OrderId = orderId,
+                    Note = $"Thanh toán đặt cọc {orderId.ToString("N")}",
+                    CreatedAt = DateTime.Now
+                });
+
+                order.Status = StatusConstants.OrdersStatus.Deposit_Paid;
+                payment.PaymentType = StatusConstants.PaymentType.Internal_Wallet;
+                payment.Status = StatusConstants.PaymentStatus.Success;
+                payment.ProviderTxnNo = walletTxnId.ToString("N");
+
+                if (order.Listing != null) order.Listing.Status = StatusConstants.ListingStatus.Reserved;
+
+                _db.SaveChanges();
+                tx.Commit();
+            }
+            catch
+            {
+                tx.Rollback();
+                throw;
+            }
+        }
     }
 }

@@ -42,6 +42,7 @@
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button Height="40" MinWidth="130" Content="Xem hồ sơ" />
+                    <Button Margin="12,0,0,0" Height="40" MinWidth="130" Content="Ví / Nạp tiền" Click="BtnOpenWallet_Click" />
                     <Button Margin="12,0,0,0" Height="40" MinWidth="130" Content="Đăng xuất" Click="BtnLogout_Click" />
                 </StackPanel>
             </Grid>
@@ -157,7 +158,7 @@
                                          Name="txtDecription"/>
 
                                 <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="Price" />
-                                <TextBox Grid.Row="5" Grid.Column="2" Margin="0,27,0,27" Name="txtPrice" />
+                                <TextBox Grid.Row="5" Grid.Column="2" Margin="0,27,0,27" Name="txtPrice" PreviewTextInput="txtPrice_PreviewTextInput" TextChanged="txtPrice_TextChanged" />
 
                                 <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Text="Brand" />
                                 <ComboBox Grid.Row="7" Grid.Column="2" SelectedIndex="0" Name="cbxBrand"/>
@@ -298,7 +299,7 @@
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-
+ 
             <TabItem Header="Seller Orders">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
@@ -357,6 +358,82 @@
                         </Border>
                     </StackPanel>
                 </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Ví">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0"
+                            Background="White"
+                            BorderBrush="#FFE5E7EB"
+                            BorderThickness="1"
+                            CornerRadius="14"
+                            Padding="16"
+                            Margin="0,0,0,12">
+                        <StackPanel>
+                            <TextBlock FontWeight="SemiBold" Text="Số dư ví" />
+                            <TextBlock Margin="0,8,0,0"
+                                       FontSize="26"
+                                       FontWeight="Bold"
+                                       Name="txtSellerWalletBalance"
+                                       Text="0đ" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="1"
+                            Background="White"
+                            BorderBrush="#FFE5E7EB"
+                            BorderThickness="1"
+                            CornerRadius="14"
+                            Padding="16"
+                            Margin="0,0,0,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="12" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0"
+                                     Height="34"
+                                     VerticalContentAlignment="Center"
+                                     Padding="10,0"
+                                     Name="txtSellerTopUpAmount"
+                                     PreviewTextInput="txtSellerTopUpAmount_PreviewTextInput"
+                                     TextChanged="txtSellerTopUpAmount_TextChanged"
+                                     Text="100000" />
+                            <Button Grid.Column="2"
+                                    Width="120"
+                                    Height="34"
+                                    Content="Nạp tiền"
+                                    Click="BtnSellerTopUp_Click" />
+                        </Grid>
+                    </Border>
+
+                    <DataGrid Grid.Row="2"
+                              Name="dgSellerWalletTransactions"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              IsReadOnly="True"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal"
+                              Background="White"
+                              BorderBrush="#FFE5E7EB"
+                              BorderThickness="1"
+                              RowHeight="36">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Thời gian" Binding="{Binding CreatedAt, StringFormat={}{0:yyyy-MM-dd HH:mm}}" Width="160" />
+                            <DataGridTextColumn Header="Loại" Binding="{Binding Type}" Width="120" />
+                            <DataGridTextColumn Header="Chiều" Binding="{Binding DirectionText}" Width="90" />
+                            <DataGridTextColumn Header="Số tiền" Binding="{Binding AmountText}" Width="120" />
+                            <DataGridTextColumn Header="Ghi chú" Binding="{Binding Note}" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
             </TabItem>
 
             <TabItem Header="Seller Reviews">

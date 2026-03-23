@@ -71,7 +71,7 @@ namespace BuyOldBike_Presentation.Payments
                 throw new InvalidOperationException("VnPay:ReturnUrl không hợp lệ.");
             }
 
-            var expectedPath = string.IsNullOrWhiteSpace(uri.AbsolutePath) ? "/" : uri.AbsolutePath;
+            var expectedPath = NormalizePath(string.IsNullOrWhiteSpace(uri.AbsolutePath) ? "/" : uri.AbsolutePath);
             var listener = new TcpListener(IPAddress.Loopback, uri.Port);
 
             try
@@ -104,7 +104,8 @@ namespace BuyOldBike_Presentation.Payments
                     throw new InvalidOperationException("Không đọc được URL trả về từ trình duyệt.");
                 }
 
-                if (!requestUri.AbsolutePath.StartsWith(expectedPath, StringComparison.OrdinalIgnoreCase))
+                var actualPath = NormalizePath(string.IsNullOrWhiteSpace(requestUri.AbsolutePath) ? "/" : requestUri.AbsolutePath);
+                if (!actualPath.StartsWith(expectedPath, StringComparison.OrdinalIgnoreCase))
                 {
                     throw new InvalidOperationException("URL trả về không khớp ReturnUrl.");
                 }
@@ -174,6 +175,13 @@ namespace BuyOldBike_Presentation.Payments
         {
             if (string.IsNullOrWhiteSpace(url)) return "";
             return url.EndsWith("/", StringComparison.Ordinal) ? url : url + "/";
+        }
+
+        private static string NormalizePath(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path)) return "/";
+            if (path.Length == 1 && path[0] == '/') return "/";
+            return path.TrimEnd('/');
         }
 
         private static Dictionary<string, string> ParseQuery(string? queryString)

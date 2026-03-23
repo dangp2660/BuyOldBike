@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,8 +14,14 @@ namespace BuyOldBike_BLL.Features.Payments.VnPay
         public string BuildPaymetUrl(VnPayOptions options, VnPayCreatePaymentRequest request)
         {
             long amount = ToVnPayAmount(request.AmountVnd);
-            var createDate = request.CreateDate.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture);
-            var expireDate = request.CreateDate.AddMinutes(15).ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+            var requestTime = request.CreateDate;
+            if (requestTime.Kind == DateTimeKind.Unspecified) requestTime = DateTime.SpecifyKind(requestTime, DateTimeKind.Local);
+            var gmt7 = GetGmt7TimeZone();
+            var createDateGmt7 = gmt7 == null ? requestTime : TimeZoneInfo.ConvertTime(requestTime, gmt7);
+            var expireDateGmt7 = createDateGmt7.AddMinutes(15);
+
+            var createDate = createDateGmt7.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+            var expireDate = expireDateGmt7.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture);
             var vnParam = new SortedDictionary<string, string>(StringComparer.Ordinal)
             {
                 ["vnp_Version"] = options.Version,
@@ -36,10 +43,17 @@ namespace BuyOldBike_BLL.Features.Payments.VnPay
                 vnParam["vnp_IpnUrl"] = options.IpnUrl;
             }
             var query = string.Join("&", vnParam
-                .OrderBy(x => x.Key)
+                .Where(x => !string.IsNullOrEmpty(x.Value))
                 .Select(x => $"{UrlEncode(x.Key)}={UrlEncode(x.Value)}"));
             var secureHash = ComputeHmacSha512(options.HashSecret, query);
             return $"{options.BaseUrl}?{query}&vnp_SecureHash={secureHash}";
+        }
+
+        private static TimeZoneInfo? GetGmt7TimeZone()
+        {
+            try { return TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time"); } catch { }
+            try { return TimeZoneInfo.FindSystemTimeZoneById("Asia/Ho_Chi_Minh"); } catch { }
+            return null;
         }
 
         public static long ToVnPayAmount(decimal amontVnd)
@@ -50,7 +64,8 @@ namespace BuyOldBike_BLL.Features.Payments.VnPay
 
         public static string ComputeHmacSha512(string key, string data)
         {
-            using var hmac = new HMACSHA512(Encoding.UTF8.GetBytes(key ?? ""));
+            var normalizedKey = (key ?? string.Empty).Trim();
+            using var hmac = new HMACSHA512(Encoding.UTF8.GetBytes(normalizedKey));
             var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(data ?? ""));
             var sb = new StringBuilder(hash.Length * 2);
             foreach (var item in hash) { sb.Append(item.ToString("x2")); }
@@ -59,28 +74,7 @@ namespace BuyOldBike_BLL.Features.Payments.VnPay
 
         public static string UrlEncode(string? value)
         {
-            var bytes = Encoding.UTF8.GetBytes(value ?? "");
-            var sb = new StringBuilder(bytes.Length * 3);
-            foreach (var b in bytes)
-            {
-                if ((b >= 'a' && b <= 'z') ||
-                    (b >= 'A' && b <= 'Z') ||
-                    (b >= '0' && b <= '9') ||
-                    b == '-' || b == '_' || b == '.' || b == '*')
-                {
-                    sb.Append((char)b);
-                }
-                else if (b == ' ')
-                {
-                    sb.Append('+');
-                }
-                else
-                {
-                    sb.Append('%');
-                    sb.Append(b.ToString("X2", CultureInfo.InvariantCulture));
-                }
-            }
-            return sb.ToString();
+            return WebUtility.UrlEncode(value ?? "");
         }
     }
 }

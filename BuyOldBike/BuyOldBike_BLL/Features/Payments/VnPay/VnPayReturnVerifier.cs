@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -19,6 +19,13 @@ namespace BuyOldBike_BLL.Features.Payments.VnPay
                 TransactionNo = Get(queryParameters, "vnp_TransactionNo")
             };
 
+            if (string.IsNullOrWhiteSpace(options.HashSecret))
+            {
+                result.IsValidSignature = false;
+                result.Message = "Thiếu VnPay:HashSecret.";
+                return result;
+            }
+
             if (long.TryParse(Get(queryParameters, "vnp_Amount"), NumberStyles.Integer, CultureInfo.InvariantCulture, out var amount))
                 result.Amount = amount;
 
@@ -32,10 +39,10 @@ namespace BuyOldBike_BLL.Features.Payments.VnPay
 
             var filtered = queryParameters
                 .Where(kvp =>
+                    !string.IsNullOrEmpty(kvp.Value) &&
                     !string.Equals(kvp.Key, "vnp_SecureHash", StringComparison.Ordinal) &&
                     !string.Equals(kvp.Key, "vnp_SecureHashType", StringComparison.Ordinal))
-                .OrderBy(kvp => kvp.Key, StringComparer.Ordinal)
-                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value, StringComparer.Ordinal);
+                .OrderBy(kvp => kvp.Key, StringComparer.Ordinal);
 
             var hashData = string.Join("&", filtered.Select(kvp => $"{VnPayRequestBuilder.UrlEncode(kvp.Key)}={VnPayRequestBuilder.UrlEncode(kvp.Value)}"));
             var computed = ComputeHmacSha512(options.HashSecret, hashData);
@@ -43,7 +50,10 @@ namespace BuyOldBike_BLL.Features.Payments.VnPay
             result.IsValidSignature = string.Equals(computed, secureHash, StringComparison.OrdinalIgnoreCase);
             if (!result.IsValidSignature)
             {
-                result.Message = "Chữ ký không hợp lệ.";
+                result.Message =
+                    $"Chữ ký không hợp lệ. " +
+                    $"expected={computed} actual={secureHash} " +
+                    $"data={Truncate(hashData, 512)}";
                 return result;
             }
 
@@ -62,11 +72,19 @@ namespace BuyOldBike_BLL.Features.Payments.VnPay
 
         private static string ComputeHmacSha512(string key, string data)
         {
-            using var hmac = new HMACSHA512(Encoding.UTF8.GetBytes(key));
+            var normalizedKey = (key ?? string.Empty).Trim();
+            using var hmac = new HMACSHA512(Encoding.UTF8.GetBytes(normalizedKey));
             var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(data));
             var sb = new StringBuilder(hash.Length * 2);
             foreach (var b in hash) sb.Append(b.ToString("x2"));
             return sb.ToString();
+        }
+
+        private static string Truncate(string? text, int maxLen)
+        {
+            if (string.IsNullOrEmpty(text) || maxLen <= 0) return string.Empty;
+            if (text.Length <= maxLen) return text;
+            return text.Substring(0, maxLen);
         }
     }
 }

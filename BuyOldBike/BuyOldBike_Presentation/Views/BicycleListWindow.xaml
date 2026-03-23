@@ -48,6 +48,27 @@
                             Height="40"
                             MinWidth="120"
                             Content="Bộ lọc" />
+                    <Border Margin="12,0,0,0"
+                            Background="White"
+                            BorderBrush="#E5E7EB"
+                            BorderThickness="1"
+                            CornerRadius="999"
+                            Padding="10,6"
+                            VerticalAlignment="Center"
+                            Name="walletBadge"
+                            Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Foreground="#6B7280" Text="Ví:" />
+                            <TextBlock Margin="6,0,0,0" FontWeight="SemiBold" Name="txtWalletBadge" Text="--" />
+                        </StackPanel>
+                    </Border>
+                    <Button Margin="12,0,0,0"
+                            Height="40"
+                            MinWidth="120"
+                            Content="Nạp tiền"
+                            Name="btnWallet"
+                            Visibility="Collapsed"
+                            Click="BtnWallet_Click" />
                     <Button Margin="12,0,0,0"
                             Height="40"
                             MinWidth="120"
@@ -67,6 +88,7 @@
                         <Button.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Hồ sơ eKYC" Click="MenuProfile_Click" />
+                                <MenuItem Header="Ví / Nạp tiền" Click="MenuWallet_Click" />
                                 <MenuItem Header="Đăng xuất" Click="MenuLogout_Click" />
                             </ContextMenu>
                         </Button.ContextMenu>

@@ -86,7 +86,7 @@
                         <!-- Price -->
                         <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Giá" />
                         <TextBlock Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" x:Name="tbPrice" Text="{Binding ListingBike.Price, StringFormat={}{0:N0}đ}" />
-                        <TextBox Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" x:Name="txtPrice_Edit" Visibility="Collapsed" Height="24" Margin="0,2,0,2"/>
+                        <TextBox Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" x:Name="txtPrice_Edit" Visibility="Collapsed" Height="24" Margin="0,2,0,2" PreviewTextInput="txtPrice_Edit_PreviewTextInput" TextChanged="txtPrice_Edit_TextChanged"/>
 
                         <!-- Frame Number -->
                         <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Số khung" />

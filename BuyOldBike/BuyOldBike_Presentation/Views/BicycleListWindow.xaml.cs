@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿using System;
+﻿﻿﻿﻿﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,14 +11,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using BuyOldBike_BLL.Features.Payments.Wallet;
 using BuyOldBike_Presentation.State;
 using BuyOldBike_Presentation.ViewModels;
 
 namespace BuyOldBike_Presentation.Views
 {
-    /// <summary>
-    /// Interaction logic for BicycleListWindow.xaml
-    /// </summary>
     public partial class BicycleListWindow : Window
     {
         private readonly BicycleListWindowViewModel _vm = new BicycleListWindowViewModel();
@@ -77,9 +75,19 @@ namespace BuyOldBike_Presentation.Views
             profileWindow.ShowDialog();
         }
 
+        private void MenuWallet_Click(object sender, RoutedEventArgs e)
+        {
+            OpenWallet();
+        }
+
         private void MenuLogout_Click(object sender, RoutedEventArgs e)
         {
             LogoutManager.Logout(this);
+        }
+
+        private void BtnWallet_Click(object sender, RoutedEventArgs e)
+        {
+            OpenWallet();
         }
 
         private void UpdateAuthUi()
@@ -89,11 +97,16 @@ namespace BuyOldBike_Presentation.Views
                 btnLogin.Visibility = Visibility.Collapsed;
                 btnProfile.Visibility = Visibility.Visible;
                 btnProfile.Content = GetProfileBadgeText();
+                walletBadge.Visibility = Visibility.Visible;
+                btnWallet.Visibility = Visibility.Visible;
+                RefreshWalletBadge();
                 return;
             }
 
             btnProfile.Visibility = Visibility.Collapsed;
             btnLogin.Visibility = Visibility.Visible;
+            walletBadge.Visibility = Visibility.Collapsed;
+            btnWallet.Visibility = Visibility.Collapsed;
         }
 
         private void TryLoadListings()
@@ -121,6 +134,35 @@ namespace BuyOldBike_Presentation.Views
             if (part.Length == 0) return "👤";
 
             return part.Substring(0, Math.Min(2, part.Length)).ToUpperInvariant();
+        }
+
+        private void RefreshWalletBadge()
+        {
+            try
+            {
+                if (!AppSession.IsAuthenticated || AppSession.CurrentUser == null)
+                {
+                    txtWalletBadge.Text = "--";
+                    return;
+                }
+
+                var walletService = new WalletService();
+                var balance = walletService.GetBalance(AppSession.CurrentUser.UserId);
+                txtWalletBadge.Text = $"{balance:N0}đ";
+            }
+            catch
+            {
+                txtWalletBadge.Text = "--";
+            }
+        }
+
+        private void OpenWallet()
+        {
+            if (!AppSession.IsAuthenticated) return;
+            var win = new WalletWindow();
+            win.Owner = this;
+            win.ShowDialog();
+            RefreshWalletBadge();
         }
 
         private void PrevPage_Click(object sender, RoutedEventArgs e)

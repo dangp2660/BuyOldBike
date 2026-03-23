@@ -1,4 +1,5 @@
 using BuyOldBike_BLL.Features.Payments;
+using BuyOldBike_BLL.Features.Payments.Wallet;
 using BuyOldBike_BLL.Services.Kyc;
 using BuyOldBike_DAL.Constants;
 using BuyOldBike_DAL.Entities;
@@ -7,8 +8,8 @@ using BuyOldBike_Presentation.State;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace BuyOldBike_Presentation.Views
@@ -84,41 +85,43 @@ namespace BuyOldBike_Presentation.Views
             var depositService = new DepositService();
             try
             {
-                var vnPay = VnPayOptionsLoader.LoadValidated();
-
-                var paymentUrl = depositService.BuildPaymentUrlForPendingDeposit(
-                    AppSession.CurrentUser.UserId,
-                    row.OrderId,
-                    vnPay,
-                    "127.0.0.1"
+                var amount = row.DepositAmount ?? 0m;
+                var confirm = MessageBox.Show(
+                    $"Thanh toán đặt cọc {amount:N0}đ bằng VNPay hay ví?\n\nYes: VNPay\nNo: Ví\nCancel: Hủy",
+                    "Xác nhận",
+                    MessageBoxButton.YesNoCancel,
+                    MessageBoxImage.Question
                 );
 
-                try
+                if (confirm == MessageBoxResult.Cancel) return;
+
+                if (confirm == MessageBoxResult.Yes)
                 {
-                    Clipboard.SetText(paymentUrl);
-                }
-                catch
-                {
+                    if (sender is FrameworkElement element) element.IsEnabled = false;
+
+                    var options = VnPayOptionsLoader.LoadValidated();
+                    var waitTask = VnPayReturnListener.WaitForReturnAsync(options.ReturnUrl, TimeSpan.FromMinutes(5));
+                    var paymentUrl = depositService.BuildPaymentUrlForPendingDeposit(
+                        AppSession.CurrentUser.UserId,
+                        row.OrderId,
+                        options,
+                        "127.0.0.1"
+                    );
+
+                    Process.Start(new ProcessStartInfo { FileName = paymentUrl, UseShellExecute = true });
+
+                    var query = await waitTask;
+                    var ok = depositService.ProcessVnPayReturn(options, query, out var message);
+                    MessageBox.Show(message, "VNPay", MessageBoxButton.OK, ok ? MessageBoxImage.Information : MessageBoxImage.Warning);
+                    return;
                 }
 
-                var waitTask = VnPayReturnListener.WaitForReturnAsync(vnPay.ReturnUrl, TimeSpan.FromMinutes(15));
-                Process.Start(new ProcessStartInfo(paymentUrl) { UseShellExecute = true });
-                var query = await waitTask;
-
-                depositService.ProcessVnPayReturn(vnPay, query, out var message);
-                MessageBox.Show(message);
+                depositService.PayPendingDepositWithWallet(AppSession.CurrentUser.UserId, row.OrderId);
+                MessageBox.Show("Thanh toán thành công.", "Ví", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (TimeoutException)
             {
-                try
-                {
-                    depositService.MarkDepositExpired(row.OrderId);
-                }
-                catch
-                {
-                }
-
-                MessageBox.Show("Hết thời gian chờ thanh toán. Vui lòng thử lại.");
+                MessageBox.Show("Hết thời gian chờ VNPay trả về.", "VNPay", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             catch (Exception ex)
             {
@@ -126,6 +129,7 @@ namespace BuyOldBike_Presentation.Views
             }
             finally
             {
+                if (sender is FrameworkElement element) element.IsEnabled = true;
                 LoadDepositOrders(AppSession.CurrentUser.UserId);
             }
         }
@@ -142,6 +146,7 @@ namespace BuyOldBike_Presentation.Views
             txtExpiry.Text = profile.ExpiryDate ?? "";
             txtVerifiedAt.Text = profile.VerifiedAt?.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss") ?? "";
         }
+
 
         private void LoadDepositOrders(Guid userId)
         {
@@ -165,7 +170,6 @@ namespace BuyOldBike_Presentation.Views
                 var rows = orders.Select(o =>
                 {
                     var payment = o.Payments?
-                        .Where(p => p.PaymentType == StatusConstants.PaymentType.VN_Pay)
                         .OrderByDescending(p => p.CreatedAt)
                         .FirstOrDefault();
 
@@ -198,6 +202,23 @@ namespace BuyOldBike_Presentation.Views
                 txtDepositOrdersStatus.Text = $"Lỗi tải đơn đặt cọc: {ex.Message}";
                 dgDepositOrders.ItemsSource = Array.Empty<DepositOrderRow>();
             }
+        }
+
+        private sealed class WalletTransactionRow
+        {
+            public DateTime CreatedAt { get; init; }
+            public string Type { get; init; } = "";
+            public string Direction { get; init; } = "";
+            public decimal Amount { get; init; }
+            public string Note { get; init; } = "";
+
+            public string DirectionText =>
+                string.Equals(Direction, "Credit", StringComparison.OrdinalIgnoreCase) ? "Cộng" :
+                string.Equals(Direction, "Debit", StringComparison.OrdinalIgnoreCase) ? "Trừ" : Direction;
+
+            public string AmountText =>
+                string.Equals(Direction, "Credit", StringComparison.OrdinalIgnoreCase) ? $"+{Amount:N0}đ" :
+                string.Equals(Direction, "Debit", StringComparison.OrdinalIgnoreCase) ? $"-{Amount:N0}đ" : $"{Amount:N0}đ";
         }
 
         private sealed class DepositOrderRow

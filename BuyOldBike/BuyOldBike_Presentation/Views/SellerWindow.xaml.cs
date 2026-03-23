@@ -1,8 +1,12 @@
-﻿using BuyOldBike_DAL.Constants;
+using BuyOldBike_DAL.Constants;
 using BuyOldBike_DAL.Entities;
+using BuyOldBike_BLL.Features.Payments;
+using BuyOldBike_BLL.Features.Payments.Wallet;
+using BuyOldBike_Presentation.Payments;
 using BuyOldBike_Presentation.State;
 using BuyOldBike_Presentation.ViewModels;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +14,9 @@ using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using System.IO;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Text.RegularExpressions;
+using System.Windows.Input;
 
 namespace BuyOldBike_Presentation.Views
 {
@@ -17,11 +24,15 @@ namespace BuyOldBike_Presentation.Views
     {
         private readonly SellerWindowViewModel _vm = new SellerWindowViewModel();
         private Guid? _editingListingId;
+        private bool _isPriceFormatting;
+        private bool _isSellerTopUpAmountFormatting;
 
         public SellerWindow()
         {
             InitializeComponent();
             DataContext = _vm;
+            DataObject.AddPastingHandler(txtPrice, TxtPrice_Pasting);
+            DataObject.AddPastingHandler(txtSellerTopUpAmount, TxtSellerTopUpAmount_Pasting);
             if (!RoleNavigator.EnsureRole(this, RoleConstants.Seller)) return;
             Load();
         }
@@ -43,7 +54,7 @@ namespace BuyOldBike_Presentation.Views
                 return;
             }
 
-            if (!decimal.TryParse(txtPrice.Text, out decimal price))
+            if (!TryParsePriceText(txtPrice.Text, out decimal price))
             {
                 MessageBox.Show("Giá không hợp lệ.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -88,6 +99,128 @@ namespace BuyOldBike_Presentation.Views
 
             ClearForm();
             LoadSellerListings();
+        }
+
+        private void txtPrice_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !Regex.IsMatch(e.Text, @"^\d+$");
+        }
+
+        private void txtPrice_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_isPriceFormatting) return;
+            _isPriceFormatting = true;
+            try
+            {
+                if (sender is not TextBox tb) return;
+
+                int caretIndex = tb.CaretIndex;
+                string beforeCaret = tb.Text.Substring(0, Math.Min(caretIndex, tb.Text.Length));
+                int digitsBeforeCaret = beforeCaret.Count(char.IsDigit);
+
+                string digits = ExtractDigits(tb.Text);
+                string formatted = digits.Length == 0 ? string.Empty : FormatDigitsAsVnThousands(digits);
+                if (tb.Text == formatted) return;
+
+                tb.Text = formatted;
+                tb.CaretIndex = MapDigitsToCaretIndex(formatted, digitsBeforeCaret);
+            }
+            finally
+            {
+                _isPriceFormatting = false;
+            }
+        }
+
+        private void txtSellerTopUpAmount_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !Regex.IsMatch(e.Text, @"^\d+$");
+        }
+
+        private void txtSellerTopUpAmount_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_isSellerTopUpAmountFormatting) return;
+            _isSellerTopUpAmountFormatting = true;
+            try
+            {
+                if (sender is not TextBox tb) return;
+
+                int caretIndex = tb.CaretIndex;
+                string beforeCaret = tb.Text.Substring(0, Math.Min(caretIndex, tb.Text.Length));
+                int digitsBeforeCaret = beforeCaret.Count(char.IsDigit);
+
+                string digits = ExtractDigits(tb.Text);
+                string formatted = digits.Length == 0 ? string.Empty : FormatDigitsAsVnThousands(digits);
+                if (tb.Text == formatted) return;
+
+                tb.Text = formatted;
+                tb.CaretIndex = MapDigitsToCaretIndex(formatted, digitsBeforeCaret);
+            }
+            finally
+            {
+                _isSellerTopUpAmountFormatting = false;
+            }
+        }
+
+        private void TxtSellerTopUpAmount_Pasting(object sender, DataObjectPastingEventArgs e)
+        {
+            if (!e.DataObject.GetDataPresent(DataFormats.Text))
+            {
+                e.CancelCommand();
+                return;
+            }
+
+            var text = e.DataObject.GetData(DataFormats.Text) as string ?? string.Empty;
+            if (ExtractDigits(text).Length == 0) e.CancelCommand();
+        }
+
+        private void TxtPrice_Pasting(object sender, DataObjectPastingEventArgs e)
+        {
+            if (!e.DataObject.GetDataPresent(DataFormats.Text))
+            {
+                e.CancelCommand();
+                return;
+            }
+
+            var text = e.DataObject.GetData(DataFormats.Text) as string ?? string.Empty;
+            if (ExtractDigits(text).Length == 0) e.CancelCommand();
+        }
+
+        private static string ExtractDigits(string? text)
+        {
+            if (string.IsNullOrEmpty(text)) return string.Empty;
+            return Regex.Replace(text, @"\D", string.Empty);
+        }
+
+        private static string FormatDigitsAsVnThousands(string digits)
+        {
+            return Regex.Replace(digits, @"\B(?=(\d{3})+(?!\d))", ".");
+        }
+
+        private static int MapDigitsToCaretIndex(string formatted, int digitsBeforeCaret)
+        {
+            if (digitsBeforeCaret <= 0) return 0;
+
+            int digitsSeen = 0;
+            for (int i = 0; i < formatted.Length; i++)
+            {
+                if (!char.IsDigit(formatted[i])) continue;
+                digitsSeen++;
+                if (digitsSeen == digitsBeforeCaret) return i + 1;
+            }
+
+            return formatted.Length;
+        }
+
+        private static bool TryParsePriceText(string? text, out decimal price)
+        {
+            string digits = ExtractDigits(text);
+            if (digits.Length == 0)
+            {
+                price = 0;
+                return false;
+            }
+
+            return decimal.TryParse(digits, NumberStyles.None, CultureInfo.InvariantCulture, out price);
         }
 
         private void SaveBitmapToFile(BitmapImage bmp, string path)
@@ -143,6 +276,15 @@ namespace BuyOldBike_Presentation.Views
             LogoutManager.Logout(this);
         }
 
+        private void BtnOpenWallet_Click(object sender, RoutedEventArgs e)
+        {
+            if (!AppSession.IsAuthenticated) return;
+            var win = new WalletWindow();
+            win.Owner = this;
+            win.ShowDialog();
+            LoadSellerWallet();
+        }
+
         public void Load()
         {
             BuyOldBikeContext db = new BuyOldBikeContext();
@@ -158,6 +300,7 @@ namespace BuyOldBike_Presentation.Views
             if (types.Any()) cbxBikeType.SelectedIndex = 0;
             LoadSellerListings();
             LoadSellerOrders();
+            LoadSellerWallet();
         }
 
         private void LoadSellerListings()
@@ -170,6 +313,34 @@ namespace BuyOldBike_Presentation.Views
         {
             if (AppSession.CurrentUser == null) return;
             _vm.LoadSellerOrders(AppSession.CurrentUser.UserId);
+        }
+
+        private void LoadSellerWallet()
+        {
+            if (AppSession.CurrentUser == null) return;
+            try
+            {
+                var walletService = new WalletService();
+                var balance = walletService.GetBalance(AppSession.CurrentUser.UserId);
+                txtSellerWalletBalance.Text = $"{balance:N0}đ";
+
+                var txns = walletService.GetRecentTransactions(AppSession.CurrentUser.UserId, 50);
+                dgSellerWalletTransactions.ItemsSource = txns
+                    .Select(t => new WalletTransactionRow
+                    {
+                        CreatedAt = t.CreatedAt,
+                        Type = t.Type ?? "",
+                        Direction = t.Direction ?? "",
+                        Amount = t.Amount,
+                        Note = t.Note ?? ""
+                    })
+                    .ToList();
+            }
+            catch
+            {
+                txtSellerWalletBalance.Text = "--";
+                dgSellerWalletTransactions.ItemsSource = Array.Empty<WalletTransactionRow>();
+            }
         }
 
         private void ClearForm()
@@ -281,5 +452,70 @@ namespace BuyOldBike_Presentation.Views
             MessageBox.Show("Đã đánh dấu hoàn thành.");
             LoadSellerOrders();
         }
+
+        private async void BtnSellerTopUp_Click(object sender, RoutedEventArgs e)
+        {
+            if (!AppSession.IsAuthenticated || AppSession.CurrentUser == null)
+            {
+                MessageBox.Show("Bạn cần đăng nhập để nạp tiền.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var digits = new string((txtSellerTopUpAmount.Text ?? "").Where(char.IsDigit).ToArray());
+            if (digits.Length == 0 || !decimal.TryParse(digits, NumberStyles.None, CultureInfo.InvariantCulture, out var amount) || amount <= 0)
+            {
+                MessageBox.Show("Số tiền nạp không hợp lệ.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                if (sender is Button btn) btn.IsEnabled = false;
+
+                var options = VnPayOptionsLoader.LoadValidated();
+                var topUpService = new WalletTopUpVnPayService();
+
+                var waitTask = VnPayReturnListener.WaitForReturnAsync(options.ReturnUrl, TimeSpan.FromMinutes(5));
+                var paymentUrl = topUpService.CreateTopUpPaymentUrl(AppSession.CurrentUser.UserId, amount, options, "127.0.0.1");
+
+                Process.Start(new ProcessStartInfo { FileName = paymentUrl, UseShellExecute = true });
+
+                var query = await waitTask;
+                var ok = topUpService.ProcessVnPayReturn(options, query, out var message);
+                LoadSellerWallet();
+
+                MessageBox.Show(message, "VNPay", MessageBoxButton.OK, ok ? MessageBoxImage.Information : MessageBoxImage.Warning);
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show("Hết thời gian chờ VNPay trả về.", "VNPay", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                if (sender is Button btn) btn.IsEnabled = true;
+            }
+        }
+
+        private sealed class WalletTransactionRow
+        {
+            public DateTime CreatedAt { get; init; }
+            public string Type { get; init; } = "";
+            public string Direction { get; init; } = "";
+            public decimal Amount { get; init; }
+            public string Note { get; init; } = "";
+
+            public string DirectionText =>
+                string.Equals(Direction, "Credit", StringComparison.OrdinalIgnoreCase) ? "Cộng" :
+                string.Equals(Direction, "Debit", StringComparison.OrdinalIgnoreCase) ? "Trừ" : Direction;
+
+            public string AmountText =>
+                string.Equals(Direction, "Credit", StringComparison.OrdinalIgnoreCase) ? $"+{Amount:N0}đ" :
+                string.Equals(Direction, "Debit", StringComparison.OrdinalIgnoreCase) ? $"-{Amount:N0}đ" : $"{Amount:N0}đ";
+        }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿﻿using BuyOldBike_BLL.Features.Payments.VnPay;
+﻿using BuyOldBike_BLL.Features.Payments.VnPay;
 using BuyOldBike_DAL.Constants;
 using BuyOldBike_DAL.Entities;
 using BuyOldBike_DAL.Repositories.Payment;
@@ -118,6 +118,11 @@ namespace BuyOldBike_BLL.Features.Payments
         public void MarkDepositExpired(Guid orderId)
         {
             _depositRepo.MaskDepositExpried(orderId);
+        }
+
+        public void PayPendingDepositWithWallet(Guid buyerId, Guid orderId)
+        {
+            _depositRepo.PayDepositWithWallet(buyerId, orderId);
         }
     }
 }

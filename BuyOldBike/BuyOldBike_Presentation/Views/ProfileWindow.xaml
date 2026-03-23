@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Hồ sơ eKYC"
+        Title="Profile"
         Width="960"
         Height="720"
         MinWidth="760"
@@ -12,12 +12,17 @@
         WindowStartupLocation="CenterOwner"
         Loaded="Window_Loaded">
     <Grid Background="#F9FAFB">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="34*"/>
+            <ColumnDefinition Width="201*"/>
+            <ColumnDefinition Width="725*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TabControl Grid.Row="0" Margin="24">
+        <TabControl Grid.Row="0" Margin="24,24,24,24" Grid.ColumnSpan="3">
             <TabItem Header="Hồ sơ eKYC">
                 <ScrollViewer VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Disabled"
@@ -182,11 +187,11 @@
         </TabControl>
 
         <Button Grid.Row="1"
-                Margin="24"
-                HorizontalAlignment="Right"
+                Margin="581,24,0,24"
+                HorizontalAlignment="Left"
                 Width="120"
                 Height="40"
                 Content="Đóng"
-                Click="Close_Click" />
+                Click="Close_Click" Grid.Column="2" />
     </Grid>
 </Window>

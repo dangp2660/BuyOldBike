@@ -5,10 +5,14 @@ using BuyOldBike_Presentation.ViewModels;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.Windows.Input;
 
 namespace BuyOldBike_Presentation.Views
 {
@@ -18,12 +22,14 @@ namespace BuyOldBike_Presentation.Views
         private readonly ListingService _listingService = new ListingService();
         private readonly Guid _listingId;
         private bool _isEditMode;
+        private bool _isPriceFormatting;
 
         public Action? OnSaved;
 
         public ListingDetailWindow(Guid listingId, bool editMode = false)
         {
             InitializeComponent();
+            DataObject.AddPastingHandler(txtPrice_Edit, TxtPriceEdit_Pasting);
             _listingId = listingId;
             _isEditMode = editMode;
 
@@ -66,7 +72,8 @@ namespace BuyOldBike_Presentation.Views
             // populate editable fields
             txtTitle_Edit.Text = _vm.ListingBike?.Title ?? string.Empty;
             txtDesc_Edit.Text = _vm.ListingBike?.Description ?? string.Empty;
-            txtPrice_Edit.Text = (_vm.ListingBike?.Price ?? 0).ToString();
+            var priceValue = _vm.ListingBike?.Price ?? 0m;
+            txtPrice_Edit.Text = FormatDigitsAsVnThousands(decimal.Truncate(priceValue).ToString(CultureInfo.InvariantCulture));
             txtFrame_Edit.Text = _vm.ListingBike?.FrameNumber ?? string.Empty;
             txtUsage_Edit.Text = _vm.ListingBike?.UsageDuration?.ToString() ?? string.Empty;
 
@@ -142,7 +149,7 @@ namespace BuyOldBike_Presentation.Views
             {
                 if (_vm.ListingBike == null) return;
 
-                if (!decimal.TryParse(txtPrice_Edit.Text, out decimal price))
+                if (!TryParsePriceText(txtPrice_Edit.Text, out decimal price))
                 {
                     MessageBox.Show("Giá không hợp lệ.");
                     return;
@@ -172,6 +179,86 @@ namespace BuyOldBike_Presentation.Views
             {
                 MessageBox.Show($"Lỗi lưu bài đăng: {ex.Message}");
             }
+        }
+
+        private void txtPrice_Edit_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !Regex.IsMatch(e.Text, @"^\d+$");
+        }
+
+        private void txtPrice_Edit_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_isPriceFormatting) return;
+            _isPriceFormatting = true;
+            try
+            {
+                if (sender is not TextBox tb) return;
+
+                int caretIndex = tb.CaretIndex;
+                string beforeCaret = tb.Text.Substring(0, Math.Min(caretIndex, tb.Text.Length));
+                int digitsBeforeCaret = beforeCaret.Count(char.IsDigit);
+
+                string digits = ExtractDigits(tb.Text);
+                string formatted = digits.Length == 0 ? string.Empty : FormatDigitsAsVnThousands(digits);
+                if (tb.Text == formatted) return;
+
+                tb.Text = formatted;
+                tb.CaretIndex = MapDigitsToCaretIndex(formatted, digitsBeforeCaret);
+            }
+            finally
+            {
+                _isPriceFormatting = false;
+            }
+        }
+
+        private void TxtPriceEdit_Pasting(object sender, DataObjectPastingEventArgs e)
+        {
+            if (!e.DataObject.GetDataPresent(DataFormats.Text))
+            {
+                e.CancelCommand();
+                return;
+            }
+
+            var text = e.DataObject.GetData(DataFormats.Text) as string ?? string.Empty;
+            if (ExtractDigits(text).Length == 0) e.CancelCommand();
+        }
+
+        private static string ExtractDigits(string? text)
+        {
+            if (string.IsNullOrEmpty(text)) return string.Empty;
+            return Regex.Replace(text, @"\D", string.Empty);
+        }
+
+        private static string FormatDigitsAsVnThousands(string digits)
+        {
+            return Regex.Replace(digits, @"\B(?=(\d{3})+(?!\d))", ".");
+        }
+
+        private static int MapDigitsToCaretIndex(string formatted, int digitsBeforeCaret)
+        {
+            if (digitsBeforeCaret <= 0) return 0;
+
+            int digitsSeen = 0;
+            for (int i = 0; i < formatted.Length; i++)
+            {
+                if (!char.IsDigit(formatted[i])) continue;
+                digitsSeen++;
+                if (digitsSeen == digitsBeforeCaret) return i + 1;
+            }
+
+            return formatted.Length;
+        }
+
+        private static bool TryParsePriceText(string? text, out decimal price)
+        {
+            string digits = ExtractDigits(text);
+            if (digits.Length == 0)
+            {
+                price = 0;
+                return false;
+            }
+
+            return decimal.TryParse(digits, NumberStyles.None, CultureInfo.InvariantCulture, out price);
         }
     }
 }
