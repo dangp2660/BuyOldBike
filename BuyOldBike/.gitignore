@@ -1,0 +1,7 @@
+# Build outputs
+**/bin/
+**/obj/
+
+# Local secrets
+BuyOldBike_Presentation/appsettings.local.json
+

@@ -1,9 +1,6 @@
 using BuyOldBike_DAL.Constants;
 using BuyOldBike_DAL.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace BuyOldBike_DAL.Repositories.Seller
 {

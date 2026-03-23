@@ -458,15 +458,28 @@ public partial class BuyOldBikeContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("datetime")
                 .HasColumnName("created_at");
+            entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.PaymentType)
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("payment_type");
+            entity.Property(e => e.ProviderTxnNo)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("provider_txn_no");
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("status");
+            entity.Property(e => e.TxnRef)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("txn_ref");
             entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.Order).WithMany(p => p.Payments)
+                .HasForeignKey(d => d.OrderId)
+                .HasConstraintName("FK_payments_orders_order_id");
 
             entity.HasOne(d => d.User).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.UserId)
