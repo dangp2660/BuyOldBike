@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace BuyOldBike_DAL.Entities;
 
@@ -40,6 +39,10 @@ public partial class BuyOldBikeContext : DbContext
 
     public virtual DbSet<Payment> Payments { get; set; }
 
+    public virtual DbSet<UserWallet> UserWallets { get; set; }
+
+    public virtual DbSet<WalletTransaction> WalletTransactions { get; set; }
+
     public virtual DbSet<ReturnRequest> ReturnRequests { get; set; }
 
     public virtual DbSet<ReturnRequestImage> ReturnRequestImages { get; set; }
@@ -52,21 +55,6 @@ public partial class BuyOldBikeContext : DbContext
     public virtual DbSet<FrameSize> FrameSizes { get; set; }
 
     public virtual DbSet<Message> Messages { get; set; }
-
-    private string GetConnectionString()
-    {
-        IConfiguration config = new ConfigurationBuilder()
-             .SetBasePath(AppContext.BaseDirectory)
-                    .AddJsonFile("appsettings.json", true, true)
-                    .Build();
-        var strConn = config["ConnectionStrings:DefaultConnection"];
-
-        return strConn;
-    }
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer(GetConnectionString());
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -283,10 +271,25 @@ public partial class BuyOldBikeContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("image_type");
+
             entity.Property(e => e.ImageUrl)
                 .HasMaxLength(500)
                 .IsUnicode(false)
                 .HasColumnName("image_url");
+
+            entity.Property(e => e.ImageData)
+                .HasColumnType("varbinary(max)")
+                .HasColumnName("image_data");
+
+            entity.Property(e => e.ContentType)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("content_type");
+
+            entity.Property(e => e.FileName)
+                .HasMaxLength(255)
+                .HasColumnName("file_name");
+
             entity.Property(e => e.KycId).HasColumnName("kyc_id");
 
             entity.HasOne(d => d.Kyc).WithMany(p => p.KycImages)
@@ -331,10 +334,6 @@ public partial class BuyOldBikeContext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false)
                 .HasColumnName("placeOfResidence");
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("status");
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.VerifiedAt)
                 .HasColumnType("datetime")
@@ -466,15 +465,28 @@ public partial class BuyOldBikeContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("datetime")
                 .HasColumnName("created_at");
+            entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.PaymentType)
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("payment_type");
+            entity.Property(e => e.ProviderTxnNo)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("provider_txn_no");
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("status");
+            entity.Property(e => e.TxnRef)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("txn_ref");
             entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.Order).WithMany(p => p.Payments)
+                .HasForeignKey(d => d.OrderId)
+                .HasConstraintName("FK_payments_orders_order_id");
 
             entity.HasOne(d => d.User).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.UserId)
@@ -580,6 +592,68 @@ public partial class BuyOldBikeContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<UserWallet>(entity =>
+        {
+            entity.HasKey(e => e.WalletId).HasName("PK__user_wal__C5B49B70D45C7A91");
+
+            entity.ToTable("user_wallets");
+
+            entity.HasIndex(e => e.UserId, "UQ__user_wal__B9BE370E6A9166A1").IsUnique();
+
+            entity.Property(e => e.WalletId)
+                .HasDefaultValueSql("(newid())")
+                .HasColumnName("wallet_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.Balance)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("balance");
+            entity.Property(e => e.UpdatedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("updated_at");
+
+            entity.HasOne(d => d.User).WithOne(p => p.Wallet)
+                .HasForeignKey<UserWallet>(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__user_wal__user___7B5B524B");
+        });
+
+        modelBuilder.Entity<WalletTransaction>(entity =>
+        {
+            entity.HasKey(e => e.WalletTransactionId).HasName("PK__wallet_t__C5A1E4D88C0AF0F1");
+
+            entity.ToTable("wallet_transactions");
+
+            entity.HasIndex(e => e.WalletId, "IX__wallet_t__wallet_id");
+
+            entity.Property(e => e.WalletTransactionId)
+                .HasDefaultValueSql("(newid())")
+                .HasColumnName("wallet_transaction_id");
+            entity.Property(e => e.WalletId).HasColumnName("wallet_id");
+            entity.Property(e => e.Amount)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("amount");
+            entity.Property(e => e.Direction)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("direction");
+            entity.Property(e => e.Type)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("type");
+            entity.Property(e => e.OrderId).HasColumnName("order_id");
+            entity.Property(e => e.Note)
+                .HasColumnType("text")
+                .HasColumnName("note");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("created_at");
+
+            entity.HasOne(d => d.Wallet).WithMany(p => p.WalletTransactions)
+                .HasForeignKey(d => d.WalletId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__wallet_t__wallet__00400204");
         });
 
         modelBuilder.Entity<User>(entity =>

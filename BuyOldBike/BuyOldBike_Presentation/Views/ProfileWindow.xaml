@@ -1,0 +1,197 @@
+<Window x:Class="BuyOldBike_Presentation.Views.ProfileWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Profile"
+        Width="960"
+        Height="720"
+        MinWidth="760"
+        MinHeight="560"
+        WindowStartupLocation="CenterOwner"
+        Loaded="Window_Loaded">
+    <Grid Background="#F9FAFB">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="34*"/>
+            <ColumnDefinition Width="201*"/>
+            <ColumnDefinition Width="725*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TabControl Grid.Row="0" Margin="24,24,24,24" Grid.ColumnSpan="3">
+            <TabItem Header="Hồ sơ eKYC">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
+                              Padding="0,0,0,8">
+                    <StackPanel>
+                        <TextBlock FontSize="24"
+                                   FontWeight="Bold"
+                                   Text="Hồ sơ eKYC" />
+                        <TextBlock Margin="0,6,0,0"
+                                   Foreground="#FF6B7280"
+                                   Name="txtStatus"
+                                   Text="Đang tải dữ liệu..." />
+
+                        <Border Margin="0,18,0,0"
+                                Background="White"
+                                BorderBrush="#FFE5E7EB"
+                                BorderThickness="1"
+                                CornerRadius="16"
+                                Padding="18">
+                            <StackPanel>
+                                <TextBlock FontWeight="SemiBold" Text="Tài khoản" />
+                                <Grid Margin="0,12,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="160" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Foreground="#FF6B7280" Text="Email" />
+                                    <TextBlock Grid.Row="0" Grid.Column="1" Name="txtEmail" />
+
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Số điện thoại" />
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,10,0,0" Name="txtPhone" />
+
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Vai trò" />
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" Name="txtRole" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Margin="0,14,0,0"
+                                Background="White"
+                                BorderBrush="#FFE5E7EB"
+                                BorderThickness="1"
+                                CornerRadius="16"
+                                Padding="18"
+                                Name="kycInfoSection">
+                            <StackPanel>
+                                <TextBlock FontWeight="SemiBold" Text="Thông tin CCCD (eKYC)" />
+                                <Grid Margin="0,12,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="160" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Foreground="#FF6B7280" Text="Số CCCD" />
+                                    <TextBlock Grid.Row="0" Grid.Column="1" Name="txtIdNumber" />
+
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Họ và tên" />
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,10,0,0" Name="txtFullName" />
+
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Ngày sinh" />
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" Name="txtDob" />
+
+                                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Giới tính" />
+                                    <TextBlock Grid.Row="3" Grid.Column="1" Margin="0,10,0,0" Name="txtGender" />
+
+                                    <TextBlock Grid.Row="4" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Quốc tịch" />
+                                    <TextBlock Grid.Row="4" Grid.Column="1" Margin="0,10,0,0" Name="txtNationality" />
+
+                                    <TextBlock Grid.Row="5" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Quê quán" />
+                                    <TextBlock Grid.Row="5" Grid.Column="1" Margin="0,10,0,0" Name="txtOrigin" TextWrapping="Wrap" />
+
+                                    <TextBlock Grid.Row="6" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Thường trú" />
+                                    <TextBlock Grid.Row="6" Grid.Column="1" Margin="0,10,0,0" Name="txtResidence" TextWrapping="Wrap" />
+
+                                    <TextBlock Grid.Row="7" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Hạn sử dụng" />
+                                    <TextBlock Grid.Row="7" Grid.Column="1" Margin="0,10,0,0" Name="txtExpiry" />
+
+                                    <TextBlock Grid.Row="8" Grid.Column="0" Margin="0,10,0,0" Foreground="#FF6B7280" Text="Xác thực lúc" />
+                                    <TextBlock Grid.Row="8" Grid.Column="1" Margin="0,10,0,0" Name="txtVerifiedAt" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Đơn đặt cọc">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   VerticalAlignment="Center"
+                                   Foreground="#FF6B7280"
+                                   Name="txtDepositOrdersStatus"
+                                   Text="Đang tải đơn đặt cọc..." />
+                        <Button Grid.Column="1"
+                                Width="120"
+                                Height="34"
+                                Content="Tải lại"
+                                Click="BtnRefreshOrders_Click" />
+                    </Grid>
+
+                    <DataGrid Grid.Row="1"
+                              Name="dgDepositOrders"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              IsReadOnly="True"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal"
+                              Background="White"
+                              BorderBrush="#FFE5E7EB"
+                              BorderThickness="1"
+                              RowHeight="36">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Mã" Binding="{Binding TxnRef}" Width="150" />
+                            <DataGridTextColumn Header="Tin đăng" Binding="{Binding ListingTitle}" Width="*" />
+                            <DataGridTextColumn Header="Tiền cọc" Binding="{Binding DepositAmount, StringFormat={}{0:N0}đ}" Width="120" />
+                            <DataGridTextColumn Header="Trạng thái" Binding="{Binding OrderStatusText}" Width="140" />
+                            <DataGridTextColumn Header="Thanh toán" Binding="{Binding PaymentStatusText}" Width="120" />
+                            <DataGridTextColumn Header="Tạo lúc" Binding="{Binding CreatedAt, StringFormat={}{0:yyyy-MM-dd HH:mm}}" Width="140" />
+                            <DataGridTextColumn Header="Tin đăng" Binding="{Binding ListingStatusText}" Width="120" />
+                            <DataGridTemplateColumn Header="Hành động" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Width="100"
+                                                Height="28"
+                                                Content="Thanh toán"
+                                                IsEnabled="{Binding CanPay}"
+                                                Click="BtnPayDeposit_Click" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <Button Grid.Row="1"
+                Margin="581,24,0,24"
+                HorizontalAlignment="Left"
+                Width="120"
+                Height="40"
+                Content="Đóng"
+                Click="Close_Click" Grid.Column="2" />
+    </Grid>
+</Window>

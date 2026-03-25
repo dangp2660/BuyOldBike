@@ -1,10 +1,7 @@
-<<<<<<< Updated upstream
-﻿using System;
-=======
 using BuyOldBike_DAL.Constants;
 using System;
->>>>>>> Stashed changes
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BuyOldBike_DAL.Entities;
 
@@ -21,6 +18,15 @@ public partial class User
     public string Role { get; set; } = null!;
     public string Status { get; set; } = StatusConstants.UserStatus.Active;
 
+    [NotMapped]
+    public double? SellerRating { get; set; } = 0;
+
+    [NotMapped]
+    public int? TotalReviews { get; set; } = 0;
+
+    [NotMapped]
+    public DateTime? LastReviewDate { get; set; }
+
     public virtual Address? Address { get; set; }
 
     public virtual ICollection<Inspection> Inspections { get; set; } = new List<Inspection>();
@@ -36,4 +42,6 @@ public partial class User
     public virtual ICollection<Review> ReviewBuyers { get; set; } = new List<Review>();
 
     public virtual ICollection<Review> ReviewSellers { get; set; } = new List<Review>();
+
+    public virtual UserWallet? Wallet { get; set; }
 }

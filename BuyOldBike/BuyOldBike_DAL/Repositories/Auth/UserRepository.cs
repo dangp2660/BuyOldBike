@@ -1,4 +1,4 @@
-    using BuyOldBike_DAL.Entities;
+using BuyOldBike_DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,8 +30,6 @@ namespace BuyOldBike_DAL.Repositories.Auth
 
             return _db.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
         }
-<<<<<<< Updated upstream
-=======
 
         public User? FindByEmail(string email)
         {
@@ -87,7 +85,6 @@ namespace BuyOldBike_DAL.Repositories.Auth
             user.Status = newStatus;
             return _db.SaveChanges() > 0;
         }
->>>>>>> Stashed changes
     }
 
 }

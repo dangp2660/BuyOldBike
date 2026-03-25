@@ -1,4 +1,5 @@
 using BuyOldBike_BLL.Services.Auth;
+using BuyOldBike_Presentation.State;
 using System.Windows;
 
 namespace BuyOldBike_Presentation.Views
@@ -27,17 +28,23 @@ namespace BuyOldBike_Presentation.Views
             }
 
             LoginService loginService = new LoginService();
-            bool isAuthenticated = loginService.Login(email, password);
-            if (!isAuthenticated)
+            var user = loginService.LoginAndGetUser(email, password);
+            if (user == null)
             {
                 MessageBox.Show("Invalid email or password. Please try again.", "Login Failed", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
-                BicycleListWindow bicycleListWindow = new BicycleListWindow();
-                bicycleListWindow.Show();
-                this.Close();
+                AppSession.SetCurrentUser(user);
+                RoleNavigator.NavigateToHome(this);
             }
+        }
+
+        private void OpenRegister_Click(object sender, RoutedEventArgs e)
+        {
+            var registerWindow = new RegisterWindow();
+            registerWindow.Show();
+            Close();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace BuyOldBike_DAL.Entities;
@@ -20,6 +20,8 @@ public partial class Order
     public virtual User? Buyer { get; set; }
 
     public virtual Listing? Listing { get; set; }
+
+    public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
     public virtual ICollection<ReturnRequest> ReturnRequests { get; set; } = new List<ReturnRequest>();
 

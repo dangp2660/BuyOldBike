@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "BuyOldBike_IpnApi": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:51025;http://localhost:51026"
+    }
+  }
+}
