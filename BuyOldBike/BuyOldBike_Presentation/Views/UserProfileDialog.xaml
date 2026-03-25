@@ -1,0 +1,53 @@
+﻿<Window x:Class="BuyOldBike_Presentation.Views.UserProfileDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Hồ sơ người dùng"
+        Width="460" Height="340"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" FontSize="18" FontWeight="SemiBold"
+                   Text="Chi tiết hồ sơ"/>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="140"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="12"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="12"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="12"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Foreground="#FF6B7280" Text="User ID"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" x:Name="TxtUserId"/>
+
+            <TextBlock Grid.Row="2" Foreground="#FF6B7280" Text="Email"/>
+            <TextBlock Grid.Row="2" Grid.Column="1"
+                       x:Name="TxtEmail" FontWeight="SemiBold"/>
+
+            <TextBlock Grid.Row="4" Foreground="#FF6B7280" Text="Số điện thoại"/>
+            <TextBlock Grid.Row="4" Grid.Column="1" x:Name="TxtPhone"/>
+
+            <TextBlock Grid.Row="6" Foreground="#FF6B7280" Text="Vai trò"/>
+            <TextBlock Grid.Row="6" Grid.Column="1" x:Name="TxtRole"/>
+        </Grid>
+
+        <Button Grid.Row="4" HorizontalAlignment="Right"
+                Width="100" Height="36"
+                Content="Đóng" Click="BtnClose_Click"/>
+    </Grid>
+</Window>

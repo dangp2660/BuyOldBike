@@ -1,4 +1,9 @@
+<<<<<<< Updated upstream
 ﻿using System;
+=======
+using BuyOldBike_DAL.Constants;
+using System;
+>>>>>>> Stashed changes
 using System.Collections.Generic;
 
 namespace BuyOldBike_DAL.Entities;
@@ -14,6 +19,7 @@ public partial class User
     public string? Password { get; set; }
 
     public string Role { get; set; } = null!;
+    public string Status { get; set; } = StatusConstants.UserStatus.Active;
 
     public virtual Address? Address { get; set; }
 

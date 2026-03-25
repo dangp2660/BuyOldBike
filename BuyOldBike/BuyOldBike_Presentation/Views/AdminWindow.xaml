@@ -1,0 +1,512 @@
+<Window x:Class="BuyOldBike_Presentation.Views.AdminWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Khu vực Admin"
+        Width="1280"
+        Height="820"
+        MinWidth="1100"
+        MinHeight="680"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <XmlDataProvider x:Key="AdminUsersProvider" XPath="/Items/Item">
+            <x:XData>
+                <Items xmlns="">
+                    <Item Name="Nguyễn Văn A" Email="a.nguyen@example.com" Role="Seller" Status="Active" />
+                    <Item Name="Trần Thị B" Email="b.tran@example.com" Role="Buyer" Status="Active" />
+                    <Item Name="Lê Văn C" Email="c.le@example.com" Role="Inspector" Status="Suspended" />
+                    <Item Name="Phạm D" Email="d.pham@example.com" Role="Seller" Status="Active" />
+                </Items>
+            </x:XData>
+        </XmlDataProvider>
+
+        <XmlDataProvider x:Key="ModerationListingsProvider" XPath="/Items/Item">
+            <x:XData>
+                <Items xmlns="">
+                    <Item Title="Giant TCR 2021 - Like new" Seller="Nguyễn Văn A" DatePosted="12/03/2026" Status="Pending" />
+                    <Item Title="Trek Domane SL5" Seller="Phạm D" DatePosted="10/03/2026" Status="Pending" />
+                    <Item Title="Specialized Allez" Seller="Lê Văn C" DatePosted="09/03/2026" Status="Flagged" />
+                </Items>
+            </x:XData>
+        </XmlDataProvider>
+
+        <XmlDataProvider x:Key="TransactionsProvider" XPath="/Items/Item">
+            <x:XData>
+                <Items xmlns="">
+                    <Item TxId="TX-00421" Buyer="Trần Thị B" Seller="Nguyễn Văn A" Amount="15,000,000" Status="Completed" Date="08/03/2026" />
+                    <Item TxId="TX-00435" Buyer="Đỗ E" Seller="Phạm D" Amount="9,800,000" Status="Processing" Date="12/03/2026" />
+                    <Item TxId="TX-00440" Buyer="Hồ F" Seller="Lê Văn C" Amount="6,500,000" Status="Disputed" Date="13/03/2026" />
+                </Items>
+            </x:XData>
+        </XmlDataProvider>
+
+        <XmlDataProvider x:Key="BicycleCategoriesProvider" XPath="/Items/Item">
+            <x:XData>
+                <Items xmlns="">
+                    <Item Name="Road" />
+                    <Item Name="MTB" />
+                    <Item Name="Hybrid" />
+                    <Item Name="City" />
+                </Items>
+            </x:XData>
+        </XmlDataProvider>
+
+        <XmlDataProvider x:Key="BrandsProvider" XPath="/Items/Item">
+            <x:XData>
+                <Items xmlns="">
+                    <Item Name="Giant" />
+                    <Item Name="Trek" />
+                    <Item Name="Specialized" />
+                    <Item Name="Cannondale" />
+                </Items>
+            </x:XData>
+        </XmlDataProvider>
+
+        <XmlDataProvider x:Key="FrameSizesProvider" XPath="/Items/Item">
+            <x:XData>
+                <Items xmlns="">
+                    <Item Name="48" />
+                    <Item Name="50" />
+                    <Item Name="52" />
+                    <Item Name="54" />
+                    <Item Name="56" />
+                </Items>
+            </x:XData>
+        </XmlDataProvider>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Background="White"
+                BorderBrush="#FFE5E7EB"
+                BorderThickness="0,0,0,1"
+                Padding="16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <TextBlock FontSize="18" FontWeight="SemiBold" Text="Admin Center" />
+                    <TextBlock Margin="0,4,0,0"
+                               Foreground="#FF6B7280"
+                               Text="Quản trị người dùng, bài đăng, danh mục và giao dịch" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Height="40" MinWidth="130" Content="Xem hồ sơ" />
+                    <Button Margin="12,0,0,0" Height="40" MinWidth="130" Content="Đăng xuất" Click="BtnLogout_Click" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <TabControl Grid.Row="1" Margin="16" Background="{x:Null}" 
+                    x:Name="MainTabControl" 
+                    SelectionChanged="TabControl_SelectionChanged">
+            <TabItem Header="Dashboard">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Tổng quan hệ thống" />
+
+                        <Grid Margin="0,12,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="16" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Row="0" Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                <StackPanel>
+                                    <TextBlock Foreground="#FF6B7280" Text="Total Users" />
+                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="1,248" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Tổng số người dùng" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                <StackPanel>
+                                    <TextBlock Foreground="#FF6B7280" Text="Active Listings" />
+                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="312" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Bài đăng đang hoạt động" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Row="2" Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                <StackPanel>
+                                    <TextBlock Foreground="#FF6B7280" Text="Total Transactions" />
+                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="842" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Tổng số giao dịch" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Row="2" Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                <StackPanel>
+                                    <TextBlock Foreground="#FF6B7280" Text="System Revenue" />
+                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="128,500,000" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Doanh thu hệ thống (VND)" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <Border Margin="0,16,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                            <StackPanel>
+                                <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Hoạt động gần đây" />
+                                <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Một số sự kiện mẫu để minh hoạ" />
+
+                                <ListBox Margin="0,12,0,0">
+                                    <ListBoxItem Content="12/03 - 3 listing mới đang chờ duyệt" />
+                                    <ListBoxItem Content="13/03 - 1 giao dịch chuyển sang trạng thái Disputed" />
+                                    <ListBoxItem Content="13/03 - 2 user bị suspend do vi phạm" />
+                                </ListBox>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="User Management" x:Name="TabUserManagement">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="User Management" />
+
+                        <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="16" />
+                                        <ColumnDefinition Width="220" />
+                                        <ColumnDefinition Width="12" />
+                                        <ColumnDefinition Width="140" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBox Grid.Column="0" x:Name="TxtSearch" Text="Tìm theo tên / email..." />
+                                    <ComboBox Grid.Column="2" x:Name="CmbRole" SelectedIndex="0">
+                                        <ComboBoxItem Content="All roles" Tag="All roles"/>
+                                        <ComboBoxItem Content="Buyer" Tag="Buyer"/>
+                                        <ComboBoxItem Content="Seller" Tag="Seller" />
+                                        <ComboBoxItem Content="Inspector" Tag="Inspector"/>
+                                        <ComboBoxItem Content="Admin" Tag="Admin"/>
+                                    </ComboBox>
+                                    <ComboBox Grid.Column="4" 
+                                              x:Name="CmbStatus"
+                                              SelectedIndex="0"
+                                              SelectionChanged="CmbStatus_Changed">
+                                        <ComboBoxItem Content="All status" Tag="All status" />
+                                        <ComboBoxItem Content="Active"  Tag="Active"/>
+                                        <ComboBoxItem Content="Suspended" Tag="Suspended" />
+                                    </ComboBox>
+                                    <Button Grid.Column="6" Height="36"
+                                            Content="Tìm kiếm"
+                                            Click="BtnSearch_Click"/>
+                                </Grid>
+
+                                <DataGrid x:Name="DgUsers" 
+                                          Margin="0,12,0,0"
+                                          Height="480"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          CanUserDeleteRows="False"
+                                          CanUserResizeRows="False"
+                                          CanUserReorderColumns="False"
+                                          IsReadOnly="True"
+                                          SelectionMode="Single"
+                                          SelectionUnit="FullRow"
+                                          HeadersVisibility="Column"
+                                          GridLinesVisibility="None"
+                                          RowHeaderWidth="0"
+                                          BorderBrush="#FFE5E7EB"
+                                          BorderThickness="1"
+                                          Background="White"
+                                          RowBackground="White"
+                                          AlternatingRowBackground="#FFF9FAFB"
+                                          ItemsSource="{Binding}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="User Name" Width="220" Binding="{Binding Name}" />
+                                        <DataGridTextColumn Header="Email" Width="260" Binding="{Binding Email}" />
+                                        <DataGridTextColumn Header="PhoneNumber" Width="120" Binding="{Binding PhoneNumber}" />
+                                        <DataGridTextColumn Header="Role" Width="120" Binding="{Binding Role}" />
+                                        <DataGridTextColumn Header="Status" Width="120" Binding="{Binding Status}" />
+                                        <DataGridTemplateColumn Header="Actions" Width="260">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                        <Button Height="28" Padding="10,4" Content="Suspend" Click="BtnSuspend_Click" />
+                                                        <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Activate" Click="BtnActivate_Click"/>
+                                                        <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="View Profile" Click="BtnViewProfile_Click" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Listing Moderation" x:Name="TabListingModeration">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Listing Moderation" />
+
+                        <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="16" />
+                                        <ColumnDefinition Width="180" />
+                                        <ColumnDefinition Width="12" />
+                                        <ColumnDefinition Width="160" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBox Grid.Column="0"
+                                             x:Name="TxtListingSearch"
+                                             Text="Tìm theo tiêu đề / seller..." />
+                                    <ComboBox Grid.Column="2" 
+                                              x:Name="CmbListingStatus"
+                                              SelectedIndex="0">
+                                        <ComboBoxItem Content="All status" Tag="All status" />
+                                        <ComboBoxItem Content="Pending" Tag="Pending"/>
+                                        <ComboBoxItem Content="Approved" Tag="Available"/>
+                                        <ComboBoxItem Content="Rejected" Tag="Rejected" />
+                                    </ComboBox>
+                                    <Button Grid.Column="4" Content="Tìm kiếm" Click="BtnListingSearch_Click" />
+                                </Grid>
+
+                                <DataGrid x:Name="DgListings" 
+                                          Margin="0,12,0,0"
+                                          Height="480"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          CanUserDeleteRows="False"
+                                          CanUserResizeRows="False"
+                                          CanUserReorderColumns="False"
+                                          IsReadOnly="True"
+                                          SelectionMode="Single"
+                                          SelectionUnit="FullRow"
+                                          HeadersVisibility="Column"
+                                          GridLinesVisibility="None"
+                                          RowHeaderWidth="0"
+                                          BorderBrush="#FFE5E7EB"
+                                          BorderThickness="1"
+                                          Background="White"
+                                          RowBackground="White"
+                                          AlternatingRowBackground="#FFF9FAFB"
+                                          ItemsSource="{Binding}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Listing Title" Width="340" Binding="{Binding Title}" />
+                                        <DataGridTextColumn Header="Seller" Width="180" Binding="{Binding Seller}" />
+                                        <DataGridTextColumn Header="Date Posted" Width="140" Binding="{Binding DatePosted}" />
+                                        <DataGridTextColumn Header="Status" Width="120" Binding="{Binding Status}" />
+                                        <DataGridTemplateColumn Header="Buttons" Width="240">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                        <Button Height="28" Padding="10,4" Content="Approve" Click="BtnApproveListing_Click" />
+                                                        <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Reject" Click="BtnRejectListing_Click" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Category Management" x:Name="TabCategoryManagement">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Category Management" />
+
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Bicycle Categories" />
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                            <Button Height="28" Padding="10,4" Content="Add" Click="BtnAddType_Click"/>
+                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Edit" Click="BtnEditType_Click" />
+                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Delete" Click="BtnDeleteType_Click" />
+                                        </StackPanel>
+                                    </Grid>
+                                    <TextBox x:Name="TxtTypeInput"
+                                             Margin="0,10,0,8"/>
+                                    <ListBox x:Name="LbTypes" 
+                                             Margin="0,12,0,0" 
+                                             Height="420" 
+                                             ItemsSource="{Binding Types}" 
+                                             DisplayMemberPath= "Name" 
+                                             SelectionChanged= "LbTypes_SelectionChanged"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Brands" />
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                            <Button Height="28" Padding="10,4" Content="Add" Click="BtnAddBrand_Click" />
+                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Edit" Click="BtnEditBrand_Click" />
+                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Delete"  Click="BtnDeleteBrand_Click" />
+                                        </StackPanel>
+                                    </Grid>
+                                    <TextBox x:Name="TxtBrandInput"
+                                             Margin="0,10,0,8"/>
+                                    <ListBox x:Name="LbBrands" 
+                                             Margin="0,12,0,0" 
+                                             Height="420" 
+                                             ItemsSource="{Binding Brands}"
+                                             DisplayMemberPath="BrandName"
+                                             SelectionChanged="LbBrands_SelectionChanged"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="4" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Frame Sizes" />
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                            <Button Height="28" Padding="10,4" Content="Add" Click="BtnAddFrameSize_Click" />
+                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Edit" Click="BtnEditFrameSize_Click" />
+                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Delete" Click="BtnDeleteFrameSize_Click" />
+                                        </StackPanel>
+                                    </Grid>
+                                    <TextBox x:Name="TxtFrameSizeInput"
+                                             Margin="0,10,0,8"/>
+                                    <ListBox x:Name="LbFrameSizes"
+                                             Margin="0,12,0,0" 
+                                             Height="420" 
+                                             ItemsSource="{Binding FrameSizes}"
+                                             DisplayMemberPath="SizeValue"
+                                             SelectionChanged="LbFrameSizes_SelectionChanged"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Transaction Management" x:Name="TabTransactionManagement">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Transaction Management" />
+
+                        <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="16" />
+                                        <ColumnDefinition Width="200" />
+                                        <ColumnDefinition Width="12" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="12" />
+                                        <ColumnDefinition Width="100" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBox Grid.Column="0" x:Name="TxtTransactionSearch" Text="Tìm theo transaction / buyer / seller..." />
+                                    <ComboBox Grid.Column="2"  x:Name="CmbTransactionStatus" SelectedIndex="0">
+                                        <ComboBoxItem Content="All status" />
+                                        <ComboBoxItem Content="Completed" />
+                                        <ComboBoxItem Content="Processing" />
+                                        <ComboBoxItem Content="Disputed" />
+                                        <ComboBoxItem Content="Refunded" />
+                                    </ComboBox>
+                                    <Button Grid.Column="4" Height="36"
+                                            Content="Tìm kiếm"
+                                            Click="BtnTransactionSearch_Click"/>
+                                    <Button Grid.Column="6" 
+                                            Height="36" 
+                                            Content="Export" 
+                                            Click="BtnTransactionExport_Click" />
+                                </Grid>
+
+                                <DataGrid x:Name="DgTransactions"
+                                          Margin="0,12,0,0"
+                                          Height="480"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          CanUserDeleteRows="False"
+                                          CanUserResizeRows="False"
+                                          CanUserReorderColumns="False"
+                                          IsReadOnly="True"
+                                          SelectionMode="Single"
+                                          SelectionUnit="FullRow"
+                                          HeadersVisibility="Column"
+                                          GridLinesVisibility="None"
+                                          RowHeaderWidth="0"
+                                          BorderBrush="#FFE5E7EB"
+                                          BorderThickness="1"
+                                          Background="White"
+                                          RowBackground="White"
+                                          AlternatingRowBackground="#FFF9FAFB"
+                                          ItemsSource="{Binding Source={StaticResource TransactionsProvider}}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Transaction ID" Width="130" Binding="{Binding OrderId}" />
+                                        <DataGridTextColumn Header="Buyer" Width="160" Binding="{Binding Buyer.Email}" />
+                                        <DataGridTextColumn Header="Seller" Width="160" Binding="{Binding Listing.Seller.Email}" />
+                                        <DataGridTextColumn Header="Amount" Width="130" Binding="{Binding TotalAmount}" />
+                                        <DataGridTextColumn Header="Status" Width="120" Binding="{Binding Status}" />
+                                        <DataGridTextColumn Header="Date" Width="120" Binding="{Binding CreatedAt}" />
+                                        <DataGridTemplateColumn Header="Actions" Width="*">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Left"
+                                                    Margin="4,0">
+                                                        <Button Height="28" Padding="10,4"
+                                                    Content="View Detail"
+                                                    Click="BtnViewOrderDetail_Click"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

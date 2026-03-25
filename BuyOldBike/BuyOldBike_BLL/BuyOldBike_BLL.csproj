@@ -10,4 +10,12 @@
     <ProjectReference Include="..\BuyOldBike_DAL\BuyOldBike_DAL.csproj" />
   </ItemGroup>
 
+<<<<<<< Updated upstream
+=======
+  <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
+    <PackageReference Include="Tesseract" Version="5.2.0" />
+  </ItemGroup>
+
+>>>>>>> Stashed changes
 </Project>
