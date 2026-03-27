@@ -513,6 +513,168 @@
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
+            <TabItem Header="Messages" x:Name="TabMessages">
+                <Grid Margin="0,12,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="280"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Danh sách cuộc hội thoại -->
+                    <Border Grid.Column="0" Background="White"
+                BorderBrush="#FFE5E7EB" BorderThickness="1"
+                CornerRadius="14">
+                        <StackPanel>
+                            <Border Padding="16,12" BorderBrush="#FFE5E7EB"
+                        BorderThickness="0,0,0,1">
+                                <Grid>
+                                    <TextBlock FontSize="15" FontWeight="SemiBold"
+                                   Text="Tin nhắn" VerticalAlignment="Center"/>
+                                    <Button HorizontalAlignment="Right"
+                                Height="28" Padding="10,4"
+                                Content="Refresh"
+                                Click="BtnRefreshConversations_Click"/>
+                                </Grid>
+                            </Border>
+
+                            <ListBox x:Name="LbConversations"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         SelectionChanged="LbConversations_SelectionChanged">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="12,10" BorderBrush="#FFE5E7EB"
+                                    BorderThickness="0,0,0,1">
+                                            <StackPanel>
+                                                <TextBlock FontWeight="SemiBold"
+                                               Text="{Binding Sender.Email}"
+                                               TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Foreground="#FF6B7280"
+                                               FontSize="12"
+                                               Margin="0,4,0,0"
+                                               Text="{Binding Listing.Title}"
+                                               TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Foreground="#FF9CA3AF"
+                                               FontSize="11"
+                                               Margin="0,2,0,0"
+                                               Text="{Binding Content}"
+                                               TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Foreground="#FF9CA3AF"
+                                               FontSize="10"
+                                               Margin="0,2,0,0"
+                                               Text="{Binding SentAt,
+                                                   StringFormat={}{0:dd/MM HH:mm}}"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Khung chat -->
+                    <Border Grid.Column="2" Background="White"
+                BorderBrush="#FFE5E7EB" BorderThickness="1"
+                CornerRadius="14">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Header -->
+                            <Border Grid.Row="0" Padding="16,12"
+                        BorderBrush="#FFE5E7EB"
+                        BorderThickness="0,0,0,1">
+                                <TextBlock x:Name="TxtChatHeader"
+                               FontSize="15" FontWeight="SemiBold"
+                               Text="Chọn một cuộc hội thoại"/>
+                            </Border>
+
+                            <!-- Tin nhắn -->
+                            <ScrollViewer x:Name="SellerChatScroll"
+                              Grid.Row="1"
+                              Margin="16"
+                              VerticalScrollBarVisibility="Auto">
+                                <ItemsControl x:Name="IcSellerMessages">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,4">
+                                                <Border
+                                                    MaxWidth="400"
+                                                    Background="#FF3B82F6"
+                                                    CornerRadius="12,12,0,12"
+                                                    Padding="10,8">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsMine}" Value="False">
+                                                                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                                                                    <Setter Property="Background" Value="#FFF3F4F6"/>
+                                                                    <Setter Property="CornerRadius" Value="12,12,12,0"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding Content}"
+                                                       Foreground="White"
+                                                       TextWrapping="Wrap">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsMine}" Value="False">
+                                                                            <Setter Property="Foreground" Value="#FF111827"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                        <TextBlock Text="{Binding SentAt,
+                                                           StringFormat={}{0:HH:mm dd/MM}}"
+                                                       FontSize="10"
+                                                       HorizontalAlignment="Right"
+                                                       Margin="0,4,0,0"
+                                                       Foreground="#FFbfdbfe"/>
+                                                    </StackPanel>
+                                                </Border>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+
+                            <!-- Input -->
+                            <Grid Grid.Row="2" Margin="16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="12"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="8"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0"
+                             x:Name="TxtSellerChatInput"
+                             Height="36"
+                             VerticalContentAlignment="Center"
+                             Padding="10,0"/>
+
+                                <Button Grid.Column="2" Height="36"
+                            Content="Gửi"
+                            Click="BtnSellerSendChat_Click"/>
+
+                                <Button Grid.Column="4" Height="36"
+                            Content="Refresh"
+                            Click="BtnRefreshSellerChat_Click"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

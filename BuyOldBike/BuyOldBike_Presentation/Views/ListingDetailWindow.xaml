@@ -130,17 +130,119 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </ScrollViewer>
+                        <Border x:Name="ChatPanel"
+                                Margin="0,16,0,0"
+                                Background="White"
+                                BorderBrush="#FFE5E7EB"
+                                BorderThickness="1"
+                                CornerRadius="14"
+                                Padding="16"
+                                Visibility="Collapsed">
+                            <StackPanel>
+                                <TextBlock FontSize="16" FontWeight="SemiBold"
+                                       Foreground="#FF111827" Text="Chat với Seller"/>
+                                <!-- Danh sách tin nhắn -->
+                                <ScrollViewer x:Name="ChatScrollViewer"
+                                          Height="280"
+                                          Margin="0,12,0,0"
+                                          VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl x:Name="IcMessages"
+                                          ItemsSource="{Binding Messages,
+                                          ElementName=ChatPanelControl}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,4,0,4">
+                                                    <!-- Tin nhắn của mình — căn phải -->
+                                                    <Border x:Name="Bubble"
+                                                            MaxWidth="420"
+                                                            Padding="10,8"
+                                                            Background="#FF3B82F6"
+                                                            CornerRadius="12,12,0,12">
+                                                        <Border.Style>
+                                                            <Style TargetType="Border">
+                                                                <!-- mặc định: tin nhắn của mình -->
+                                                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                                                                <Style.Triggers>
+                                                                    <!-- tin nhắn người khác -->
+                                                                    <DataTrigger Binding="{Binding IsMine}" Value="False">
+                                                                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                                                                        <Setter Property="Background" Value="#FFF3F4F6"/>
+                                                                        <Setter Property="CornerRadius" Value="12,12,12,0"/>
+                                                                    </DataTrigger>
+
+                                                                </Style.Triggers>
+
+                                                            </Style>
+                                                        </Border.Style>
+
+                                                        <StackPanel>
+                                                            <TextBlock Text="{Binding Content}"
+                                                                       TextWrapping="Wrap">
+                                                                <TextBlock.Style>
+                                                                    <Style TargetType="TextBlock">
+                                                                        <Setter Property="Foreground" Value="White"/>
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding IsMine}" Value="False">
+                                                                                <Setter Property="Foreground" Value="#FF111827"/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </TextBlock.Style>
+                                                            </TextBlock>
+                                                            <TextBlock Text="{Binding SentAt, StringFormat={}{0:HH:mm dd/MM}}"
+                                                                       FontSize="10"
+                                                                       HorizontalAlignment="Right"
+                                                                       Margin="0,4,0,0"/>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+
+                                <!-- Input -->
+                                <Grid Margin="0,12,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="12"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="8"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBox Grid.Column="0"
+                                             x:Name="TxtChatInput"
+                                             Height="36"
+                                             VerticalContentAlignment="Center"
+                                             Text="{Binding InputText,
+                                                 ElementName=ChatPanelControl,
+                                                 UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Button Grid.Column="2" Height="36" Width="80"
+                                            Content="Gửi"
+                                            Click="BtnSendChat_Click"/>
+                                    <Button Grid.Column="4" Height="36" Width="80"
+                                            Content="Refresh"
+                                            Click="BtnRefreshChat_Click"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
                 </Border>
             </StackPanel>
         </ScrollViewer>
-
         <Border Grid.Row="2"
                 Background="White"
                 BorderBrush="#FFE5E7EB"
                 BorderThickness="1,0,0,0"
                 Padding="16">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="BtnContact"
+                        Height="40" MinWidth="120"
+                        Margin="0,0,10,0"
+                        Content="💬 Liên hệ Seller"
+                        Click="BtnContact_Click"
+                        Visibility="Collapsed"/>
                 <Button Height="40" MinWidth="120" Margin="0,0,10,0" Content="Đóng" Click="BtnClose_Click" />
                 <Button Height="40" MinWidth="120" Margin="0,0,10,0" Content="Lưu" Click="BtnSave_Click" x:Name="btnSave" Visibility="Collapsed" />
             </StackPanel>

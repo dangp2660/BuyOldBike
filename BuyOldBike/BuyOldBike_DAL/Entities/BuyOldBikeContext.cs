@@ -52,6 +52,9 @@ public partial class BuyOldBikeContext : DbContext
     public virtual DbSet<Type> Types { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<FrameSize> FrameSizes { get; set; }
+
+    public virtual DbSet<Message> Messages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

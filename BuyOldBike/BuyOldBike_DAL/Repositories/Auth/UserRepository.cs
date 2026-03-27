@@ -1,4 +1,4 @@
-    using BuyOldBike_DAL.Entities;
+using BuyOldBike_DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,5 +47,45 @@ namespace BuyOldBike_DAL.Repositories.Auth
             return _db.SaveChanges() > 0;
         }
 
+        //ADMIN
+        public List<User> GetFilteredUsers(string? searchTerm, string? role)
+        {
+            var query = _db.Users.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                var lower = searchTerm.ToLower();
+                query = query.Where(u =>
+                    u.Email.ToLower().Contains(lower) ||
+                    u.PhoneNumber.Contains(searchTerm));
+            }
+
+            if (!string.IsNullOrWhiteSpace(role) && role != "All roles")
+                query = query.Where(u => u.Role == role);
+
+            return query.OrderBy(u => u.Email).ToList();
+        }
+
+        public User? GetById(Guid userId)
+        {
+            return _db.Users.FirstOrDefault(u => u.UserId == userId);
+        }
+
+        public bool UpdateRole(Guid userId, string newRole)
+        {
+            var user = _db.Users.FirstOrDefault(u => u.UserId == userId);
+            if (user == null) return false;
+            user.Role = newRole;
+            return _db.SaveChanges() > 0;
+        }
+        public bool UpdateStatus(Guid userId, string newStatus)
+        {
+            var user = _db.Users.FirstOrDefault(u => u.UserId == userId);
+            if (user == null) return false;
+            user.Status = newStatus;
+            return _db.SaveChanges() > 0;
+        }
     }
+
 }
+

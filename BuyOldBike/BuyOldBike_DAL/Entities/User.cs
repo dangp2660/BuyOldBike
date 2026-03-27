@@ -1,3 +1,4 @@
+using BuyOldBike_DAL.Constants;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,6 +16,7 @@ public partial class User
     public string? Password { get; set; }
 
     public string Role { get; set; } = null!;
+    public string Status { get; set; } = StatusConstants.UserStatus.Active;
 
     [NotMapped]
     public double? SellerRating { get; set; } = 0;

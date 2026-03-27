@@ -54,5 +54,10 @@ namespace BuyOldBike_DAL.Constants
             public const string Passed = "Passed";
             public const string Failed = "Failed";
         }
+        public static class UserStatus
+        {
+            public const string Active = "Active";
+            public const string Suspended = "Suspended";
+        }
     }
 }

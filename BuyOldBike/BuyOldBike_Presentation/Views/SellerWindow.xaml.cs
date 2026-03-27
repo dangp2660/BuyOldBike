@@ -26,6 +26,7 @@ namespace BuyOldBike_Presentation.Views
         private Guid? _editingListingId;
         private bool _isPriceFormatting;
         private bool _isSellerTopUpAmountFormatting;
+        private SellerChatViewModel? _chatVm;
 
         public SellerWindow()
         {
@@ -35,6 +36,12 @@ namespace BuyOldBike_Presentation.Views
             DataObject.AddPastingHandler(txtSellerTopUpAmount, TxtSellerTopUpAmount_Pasting);
             if (!RoleNavigator.EnsureRole(this, RoleConstants.Seller)) return;
             Load();
+            var currentUser = AppSession.CurrentUser;
+            if (currentUser != null)
+            {
+                _chatVm = new SellerChatViewModel(currentUser.UserId);
+                LbConversations.ItemsSource = _chatVm.Conversations;
+            }
         }
 
         private void btnPublish_Click(object sender, RoutedEventArgs e)
@@ -517,5 +524,47 @@ namespace BuyOldBike_Presentation.Views
                 string.Equals(Direction, "Debit", StringComparison.OrdinalIgnoreCase) ? $"-{Amount:N0}đ" : $"{Amount:N0}đ";
         }
 
+        //chat
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.Source is not TabControl) return;
+            if (TabMessages.IsSelected)
+                _chatVm?.LoadConversations();
+        }
+        private void LbConversations_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_chatVm == null) return;
+            if (LbConversations.SelectedItem is not Message selected) return;
+
+            _chatVm.SelectedConversation = selected;
+            IcSellerMessages.ItemsSource = _chatVm.CurrentMessages;
+
+            // Cập nhật header
+            var buyerEmail = selected.SenderId == _chatVm.SellerId
+                ? selected.Receiver?.Email
+                : selected.Sender?.Email;
+            TxtChatHeader.Text = $"{buyerEmail} — {selected.Listing?.Title}";
+
+            SellerChatScroll.ScrollToBottom();
+        }
+        private void BtnRefreshConversations_Click(object sender, RoutedEventArgs e)
+        {
+            _chatVm?.LoadConversations();
+        }
+
+        private void BtnSellerSendChat_Click(object sender, RoutedEventArgs e)
+        {
+            if (_chatVm == null) return;
+            _chatVm.InputText = TxtSellerChatInput.Text;
+            _chatVm.Send();
+            TxtSellerChatInput.Text = string.Empty;
+            SellerChatScroll.ScrollToBottom();
+        }
+
+        private void BtnRefreshSellerChat_Click(object sender, RoutedEventArgs e)
+        {
+            _chatVm?.Refresh();
+            SellerChatScroll.ScrollToBottom();
+        }
     }
 }
