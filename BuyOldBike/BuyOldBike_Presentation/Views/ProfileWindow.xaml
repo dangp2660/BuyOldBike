@@ -160,36 +160,61 @@
                               Background="White"
                               BorderBrush="#FFE5E7EB"
                               BorderThickness="1"
-                              RowHeight="36">
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              MinRowHeight="36">
+                        <DataGrid.Resources>
+                            <Style x:Key="DepositOrdersWrapText" TargetType="TextBlock">
+                                <Setter Property="TextWrapping" Value="Wrap" />
+                                <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                                <Setter Property="MaxWidth" Value="520" />
+                            </Style>
+                        </DataGrid.Resources>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Mã" Binding="{Binding TxnRef}" Width="150" />
-                            <DataGridTextColumn Header="Tin đăng" Binding="{Binding ListingTitle}" Width="*" />
-                            <DataGridTextColumn Header="Tiền cọc" Binding="{Binding DepositAmount, StringFormat={}{0:N0}đ}" Width="120" />
-                            <DataGridTextColumn Header="Trạng thái" Binding="{Binding OrderStatusText}" Width="140" />
-                            <DataGridTextColumn Header="Thanh toán" Binding="{Binding PaymentStatusText}" Width="120" />
-                            <DataGridTextColumn Header="Tạo lúc" Binding="{Binding CreatedAt, StringFormat={}{0:yyyy-MM-dd HH:mm}}" Width="140" />
-                            <DataGridTextColumn Header="Tin đăng" Binding="{Binding ListingStatusText}" Width="120" />
-                            <DataGridTemplateColumn Header="Hành động" Width="120">
+                            <DataGridTextColumn Header="Mã" Binding="{Binding TxnRef}" Width="140">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource DepositOrdersWrapText}">
+                                        <Setter Property="ToolTip" Value="{Binding TxnRef}" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTemplateColumn Header="Tin đăng" Width="2*" MinWidth="260">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource DepositOrdersWrapText}"
+                                                   Text="{Binding ListingTitle}"
+                                                   ToolTip="{Binding ListingTitle}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Tiền cọc" Binding="{Binding DepositAmount, StringFormat={}{0:N0}đ}" Width="120" />
+                            <DataGridTextColumn Header="Trạng thái" Binding="{Binding OrderStatusText}" Width="130" />
+                            <DataGridTextColumn Header="Thanh toán" Binding="{Binding PaymentStatusText}" Width="120" />
+                            <DataGridTextColumn Header="Tạo lúc" Binding="{Binding CreatedAt, StringFormat={}{0:yyyy-MM-dd HH:mm}}" Width="150" />
+                            <DataGridTextColumn Header="TT tin" Binding="{Binding ListingStatusText}" Width="110" />
+                            <DataGridTemplateColumn Header="Hành động" Width="Auto" MinWidth="260">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <WrapPanel Orientation="Horizontal">
                                             <Button Width="80"
                                                     Height="28"
+                                                    Margin="0,0,6,6"
                                                     Content="Mua xe"
                                                     Visibility="{Binding CanBuyVisibility}"
                                                     Click="BtnBuyBike_Click" />
                                             <Button Width="80"
                                                     Height="28"
+                                                    Margin="0,0,6,6"
                                                     Content="Hoàn cọc"
                                                     Visibility="{Binding CanRefundVisibility}"
                                                     Click="BtnRefundDeposit_Click" />
                                             <Button Width="80"
                                                     Height="28"
-                                                    Margin="4,0,0,0"
+                                                    Margin="0,0,6,6"
                                                     Content="Khiếu nại"
                                                     Visibility="{Binding CanBuyVisibility}"
                                                     Click="BtnDispute_Click" />
-                                        </StackPanel>
+                                        </WrapPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

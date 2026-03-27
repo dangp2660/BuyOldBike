@@ -41,6 +41,12 @@ namespace BuyOldBike_DAL.Repositories.Seller
             var tx = _db.Database.BeginTransaction(IsolationLevel.Serializable);
             try
             {
+                var alreadyBought = _db.Orders.Any(o =>
+                    o.ListingId == listingId &&
+                    o.BuyerId == buyerId &&
+                    (o.Status == StatusConstants.OrdersStatus.Paid || o.Status == StatusConstants.OrdersStatus.Completed));
+                if (alreadyBought) throw new InvalidOperationException("Đơn hàng đã được thanh toán trước đó.");
+
                 var listing = _db.Listings.FirstOrDefault(l => l.ListingId == listingId);
                 if (listing == null) throw new InvalidOperationException("Không tìm thấy listing.");
                 if (listing.Status != StatusConstants.ListingStatus.Available && listing.Status != StatusConstants.ListingStatus.Reserved)
@@ -56,25 +62,34 @@ namespace BuyOldBike_DAL.Repositories.Seller
 
                 if (listing.Price == null || listing.Price <= 0)
                     throw new InvalidOperationException("Giá listing không hợp lệ.");
+                if (listing.SellerId == null) throw new InvalidOperationException("Listing thiếu thông tin người bán.");
 
-                decimal amount = listing.Price.Value;
+                var totalPrice = listing.Price.Value;
+                decimal depositAmount = 0m;
 
                 // If user already paid deposit, subtract the deposit amount
                 var depositOrder = _db.Orders.FirstOrDefault(o => o.ListingId == listingId && o.BuyerId == buyerId && o.Status == StatusConstants.OrdersStatus.Deposit_Paid);
                 if (depositOrder != null && depositOrder.TotalAmount.HasValue)
                 {
-                    amount -= depositOrder.TotalAmount.Value;
+                    depositAmount = depositOrder.TotalAmount.Value;
                 }
 
+                var amount = totalPrice - depositAmount;
+                if (amount < 0) amount = 0m;
+
                 // Check wallet
-                var wallet = _db.UserWallets.FirstOrDefault(w => w.UserId == buyerId);
-                if (wallet == null || wallet.Balance < amount)
-                    throw new InvalidOperationException("Số dư ví không đủ để mua xe.");
+                UserWallet? wallet = null;
+                if (amount > 0)
+                {
+                    wallet = _db.UserWallets.FirstOrDefault(w => w.UserId == buyerId);
+                    if (wallet == null || wallet.Balance < amount)
+                        throw new InvalidOperationException("Số dư ví không đủ để mua xe.");
+                }
 
                 // Deduct balance
                 if (amount > 0)
                 {
-                    wallet.Balance -= amount;
+                    wallet!.Balance -= amount;
                     wallet.UpdatedAt = DateTime.Now;
                 }
 
@@ -84,7 +99,7 @@ namespace BuyOldBike_DAL.Repositories.Seller
                     OrderId = Guid.NewGuid(),
                     BuyerId = buyerId,
                     ListingId = listingId,
-                    Status = StatusConstants.OrdersStatus.Paid,
+                    Status = StatusConstants.OrdersStatus.Completed,
                     TotalAmount = amount,
                     CreatedAt = DateTime.Now,
                 };
@@ -111,7 +126,7 @@ namespace BuyOldBike_DAL.Repositories.Seller
                     _db.WalletTransactions.Add(new WalletTransaction
                     {
                         WalletTransactionId = walletTxnId,
-                        WalletId = wallet.WalletId,
+                        WalletId = wallet!.WalletId,
                         Amount = amount,
                         Direction = "Debit",
                         Type = "BuyBike",
@@ -120,6 +135,40 @@ namespace BuyOldBike_DAL.Repositories.Seller
                         CreatedAt = DateTime.Now
                     });
                 }
+
+                if (depositOrder != null)
+                {
+                    depositOrder.Status = StatusConstants.OrdersStatus.Deposit_Completed;
+                }
+
+                var sellerId = listing.SellerId.Value;
+                var sellerWallet = _db.UserWallets.FirstOrDefault(w => w.UserId == sellerId);
+                if (sellerWallet == null)
+                {
+                    sellerWallet = new UserWallet
+                    {
+                        WalletId = Guid.NewGuid(),
+                        UserId = sellerId,
+                        Balance = 0m,
+                        UpdatedAt = DateTime.Now
+                    };
+                    _db.UserWallets.Add(sellerWallet);
+                    _db.SaveChanges();
+                }
+
+                sellerWallet.Balance += totalPrice;
+                sellerWallet.UpdatedAt = DateTime.Now;
+                _db.WalletTransactions.Add(new WalletTransaction
+                {
+                    WalletTransactionId = Guid.NewGuid(),
+                    WalletId = sellerWallet.WalletId,
+                    Amount = totalPrice,
+                    Direction = "Credit",
+                    Type = "SellBike",
+                    OrderId = order.OrderId,
+                    Note = $"Doanh thu bán xe {listingId.ToString("N")}",
+                    CreatedAt = DateTime.Now
+                });
 
                 // Update listing status
                 listing.Status = StatusConstants.ListingStatus.Sold;

@@ -99,12 +99,13 @@ namespace BuyOldBike_DAL.Repositories.Feedback
                 BuyerId = buyerId,
                 SellerId = sellerId,
                 Rating = rating,
-                Description = description,
+                Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
                 CreatedAt = DateTime.UtcNow
             };
 
             _db.Reviews.Add(review);
             _db.SaveChanges();
+            RecalculateSellerProfile(sellerId);
             return review;
         }
 
@@ -117,8 +118,9 @@ namespace BuyOldBike_DAL.Repositories.Feedback
             if (review == null) return;
 
             review.Rating = rating;
-            review.Description = description;
+            review.Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim();
             _db.SaveChanges();
+            if (review.SellerId.HasValue) RecalculateSellerProfile(review.SellerId.Value);
         }
 
         /// <summary>
@@ -129,10 +131,39 @@ namespace BuyOldBike_DAL.Repositories.Feedback
             var review = _db.Reviews.Find(reviewId);
             if (review != null)
             {
+                var sellerId = review.SellerId;
                 _db.Reviews.Remove(review);
                 _db.SaveChanges();
+                if (sellerId.HasValue) RecalculateSellerProfile(sellerId.Value);
             }
         }
+
+        private void RecalculateSellerProfile(Guid sellerId)
+        {
+            var q = _db.Reviews
+                .Where(r => r.SellerId == sellerId && r.Rating.HasValue)
+                .Select(r => r.Rating!.Value);
+
+            var total = q.Count();
+            var avg = total == 0 ? 0 : Math.Round(q.Average(), 2);
+
+            var profile = _db.SellerProfiles.Find(sellerId);
+            if (profile == null)
+            {
+                profile = new SellerProfile
+                {
+                    SellerId = sellerId
+                };
+                _db.SellerProfiles.Add(profile);
+            }
+
+            profile.SellerRating = avg;
+            profile.TotalReviews = total;
+            profile.LastReviewDate = DateTime.UtcNow;
+            _db.SaveChanges();
+        }
+
+        /// <summary>
 
         /// <summary>
         /// Get reviews by buyer

@@ -1,4 +1,4 @@
-﻿using BuyOldBike_DAL.Entities;
+using BuyOldBike_DAL.Entities;
 using BuyOldBike_DAL.Repositories.Seller;
 
 
@@ -21,6 +21,11 @@ namespace BuyOldBike_BLL.Services.BicycleListWindow
         public Listing? GetListingDetailById(Guid listingId)
         {
             return _repo.GetListingDetailById(listingId);
+        }
+
+        public void IncrementListingViews(Guid listingId)
+        {
+            _repo.IncrementListingViews(listingId);
         }
     }
 }

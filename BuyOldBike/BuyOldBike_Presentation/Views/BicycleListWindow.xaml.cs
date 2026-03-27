@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿using System;
+﻿﻿﻿﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -163,6 +163,11 @@ namespace BuyOldBike_Presentation.Views
             win.Owner = this;
             win.ShowDialog();
             RefreshWalletBadge();
+        }
+
+        private void Search_Click(object sender, RoutedEventArgs e)
+        {
+            _vm.ApplyFilters();
         }
 
         private void PrevPage_Click(object sender, RoutedEventArgs e)

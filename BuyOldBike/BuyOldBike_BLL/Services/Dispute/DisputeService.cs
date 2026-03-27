@@ -9,7 +9,7 @@ namespace BuyOldBike_BLL.Services.Dispute
 {
     public class DisputeService
     {
-        public ReturnRequest CreateDispute(Guid orderId, string reason, string detail)
+        public ReturnRequest CreateDispute(Guid orderId, string reason, string detail, IEnumerable<string> imageUrls)
         {
             var db = new BuyOldBikeContext();
             var order = db.Orders.FirstOrDefault(o => o.OrderId == orderId);
@@ -18,6 +18,17 @@ namespace BuyOldBike_BLL.Services.Dispute
             if (order.Status != StatusConstants.OrdersStatus.Deposit_Paid)
             {
                 throw new InvalidOperationException("Chỉ có thể khiếu nại đối với đơn hàng đã đặt cọc.");
+            }
+
+            var normalizedImageUrls = (imageUrls ?? Enumerable.Empty<string>())
+                .Where(u => !string.IsNullOrWhiteSpace(u))
+                .Select(u => u.Trim())
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            if (normalizedImageUrls.Count == 0)
+            {
+                throw new InvalidOperationException("Khiếu nại cần có ít nhất 1 ảnh bằng chứng.");
             }
 
             var request = new ReturnRequest
@@ -30,11 +41,69 @@ namespace BuyOldBike_BLL.Services.Dispute
                 CreatedAt = DateTime.Now
             };
 
+            foreach (var url in normalizedImageUrls)
+            {
+                request.ReturnRequestImages.Add(new ReturnRequestImage
+                {
+                    ImageId = Guid.NewGuid(),
+                    ReturnRequestId = request.ReturnRequestId,
+                    ImageUrl = url,
+                    UploaderRole = RoleConstants.Buyer,
+                    CreatedAt = DateTime.Now
+                });
+            }
+
             db.ReturnRequests.Add(request);
             order.Status = StatusConstants.OrdersStatus.Disputed;
 
             db.SaveChanges();
             return request;
+        }
+
+        public void AddInspectorImages(Guid returnRequestId, IEnumerable<string> imageUrls)
+        {
+            using var db = new BuyOldBikeContext();
+            var request = db.ReturnRequests
+                .Include(r => r.ReturnRequestImages)
+                .FirstOrDefault(r => r.ReturnRequestId == returnRequestId);
+
+            if (request == null) throw new InvalidOperationException("Không tìm thấy yêu cầu khiếu nại.");
+            if (request.Status != StatusConstants.ReturnRequestStatus.Pending)
+            {
+                throw new InvalidOperationException("Chỉ có thể thêm ảnh khi khiếu nại đang ở trạng thái Pending.");
+            }
+
+            var normalizedImageUrls = (imageUrls ?? Enumerable.Empty<string>())
+                .Where(u => !string.IsNullOrWhiteSpace(u))
+                .Select(u => u.Trim())
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            if (normalizedImageUrls.Count == 0)
+            {
+                throw new InvalidOperationException("Vui lòng chọn ít nhất 1 ảnh.");
+            }
+
+            var existingUrls = request.ReturnRequestImages
+                .Where(i => string.Equals(i.UploaderRole?.Trim(), RoleConstants.Inspector, StringComparison.OrdinalIgnoreCase))
+                .Select(i => i.ImageUrl)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var url in normalizedImageUrls)
+            {
+                if (existingUrls.Contains(url)) continue;
+
+                request.ReturnRequestImages.Add(new ReturnRequestImage
+                {
+                    ImageId = Guid.NewGuid(),
+                    ReturnRequestId = request.ReturnRequestId,
+                    ImageUrl = url,
+                    UploaderRole = RoleConstants.Inspector,
+                    CreatedAt = DateTime.Now
+                });
+            }
+
+            db.SaveChanges();
         }
 
         public List<ReturnRequest> GetAllPendingDisputes()
@@ -43,9 +112,66 @@ namespace BuyOldBike_BLL.Services.Dispute
             return db.ReturnRequests
                 .Include(r => r.Order)
                 .ThenInclude(o => o.Listing)
+                .Include(r => r.ReturnRequestImages)
                 .Where(r => r.Status == StatusConstants.ReturnRequestStatus.Pending)
                 .OrderByDescending(r => r.CreatedAt)
                 .ToList();
+        }
+
+        public DisputeImageResult GetDisputeImagesForInspector(Guid returnRequestId)
+        {
+            using var db = new BuyOldBikeContext();
+
+            var images = db.ReturnRequestImages
+                .AsNoTracking()
+                .Where(i => i.ReturnRequestId == returnRequestId)
+                .OrderByDescending(i => i.CreatedAt)
+                .ToList();
+
+            var buyerImages = images
+                .Where(i => string.Equals(i.UploaderRole?.Trim(), RoleConstants.Buyer, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            var inspectorDisputeUrls = images
+                .Where(i => !string.Equals(i.UploaderRole?.Trim(), RoleConstants.Buyer, StringComparison.OrdinalIgnoreCase))
+                .Select(i => i.ImageUrl)
+                .ToList();
+
+            var request = db.ReturnRequests
+                .Include(r => r.Order!)
+                    .ThenInclude(o => o.Listing!)
+                        .ThenInclude(l => l.Inspections)
+                .AsNoTracking()
+                .FirstOrDefault(r => r.ReturnRequestId == returnRequestId);
+
+            var listing = request?.Order?.Listing;
+            var inspection = listing?.Inspections?
+                .OrderByDescending(i => i.CreatedAt)
+                .FirstOrDefault(i => i.Status == StatusConstants.InspectionStatus.Completed)
+                ?? listing?.Inspections?.OrderByDescending(i => i.CreatedAt).FirstOrDefault();
+
+            var inspectionUrls = inspection == null
+                ? new List<string>()
+                : db.InspectionImages
+                    .AsNoTracking()
+                    .Where(x => x.InspectionId == inspection.InspectionId)
+                    .OrderByDescending(x => x.CreatedAt)
+                    .Select(x => x.ImageUrl)
+                    .ToList();
+
+            var combinedUrls = inspectionUrls
+                .Concat(inspectorDisputeUrls)
+                .Where(u => !string.IsNullOrWhiteSpace(u))
+                .Select(u => u.Trim())
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .Select(u => new ImageUrlItem { ImageUrl = u })
+                .ToList();
+
+            return new DisputeImageResult
+            {
+                BuyerImages = buyerImages,
+                InspectorImages = combinedUrls
+            };
         }
 
         public void ResolveDispute(Guid returnRequestId, decimal refundPercentage)

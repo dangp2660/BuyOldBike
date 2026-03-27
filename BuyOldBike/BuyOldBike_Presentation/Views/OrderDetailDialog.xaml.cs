@@ -1,4 +1,5 @@
-﻿using BuyOldBike_DAL.Entities;
+using BuyOldBike_DAL.Entities;
+using BuyOldBike_BLL.Services.Feedback;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,16 @@ namespace BuyOldBike_Presentation.Views
             TxtBuyer.Text = order.Buyer?.Email ?? "N/A";
             TxtListing.Text = order.Listing?.Title ?? "N/A";
             TxtSeller.Text = order.Listing?.Seller?.Email ?? "N/A";
+            var sellerId = order.Listing?.SellerId;
+            if (sellerId.HasValue)
+            {
+                var rating = new ReviewService().GetSellerAverageRating(sellerId.Value);
+                TxtSellerRating.Text = $"{rating:0.00}/5";
+            }
+            else
+            {
+                TxtSellerRating.Text = "N/A";
+            }
             TxtAmount.Text = order.TotalAmount.HasValue
                 ? $"{order.TotalAmount:N0} ₫"
                 : "N/A";

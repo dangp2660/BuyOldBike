@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace BuyOldBike_DAL.Entities;
@@ -28,6 +28,8 @@ public partial class Listing
     public DateTime? CreatedAt { get; set; }
 
     public string? ListingUrl { get; set; }
+
+    public int Views { get; set; }
 
     public virtual Type? BikeType { get; set; }
 

@@ -24,7 +24,9 @@ namespace BuyOldBike_DAL.Constants
         {
             public const string Deposit_Pending = "Deposit_Pending";
             public const string Deposit_Paid = "Deposit_Paid";
+            public const string Deposit_Completed = "Deposit_Completed";
             public const string Paid = "Paid";
+            public const string Completed = "Completed";
             public const string Deposit_Failed = "Deposit_Failed";
             public const string Deposit_Expired = "Deposit_Expired";
             public const string Disputed = "Disputed";

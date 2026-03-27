@@ -1,3 +1,4 @@
+using BuyOldBike_BLL.Services.BicycleListWindow;
 using BuyOldBike_BLL.Services.Seller;
 using BuyOldBike_DAL.Entities;
 using BuyOldBike_Presentation.State;
@@ -42,6 +43,20 @@ namespace BuyOldBike_Presentation.Views
                 return;
             }
 
+            if (!_isEditMode && AppSession.CurrentUser?.Role == "Buyer")
+            {
+                var currentUserId = AppSession.CurrentUser?.UserId;
+                if (currentUserId == null || _vm.ListingBike.SellerId != currentUserId)
+                {
+                    try
+                    {
+                        new ListingBrowseService().IncrementListingViews(listingId);
+                        _vm.ListingBike.Views += 1;
+                    }
+                    catch { }
+                }
+            }
+
             DataContext = _vm;
             SetupChat();
 
@@ -61,9 +76,10 @@ namespace BuyOldBike_Presentation.Views
 
             if (_vm.ListingBike == null) return;
 
-            // Cannot buy/deposit own listing
-            if (AppSession.CurrentUser != null && _vm.ListingBike.SellerId == AppSession.CurrentUser.UserId)
-                return;
+            var currentUser = AppSession.CurrentUser;
+            if (currentUser == null) return;
+            if (currentUser.Role != "Buyer") return;
+            if (_vm.ListingBike.SellerId == currentUser.UserId) return;
 
             if (_vm.ListingBike.Status == BuyOldBike_DAL.Constants.StatusConstants.ListingStatus.Available)
             {
@@ -120,59 +136,11 @@ namespace BuyOldBike_Presentation.Views
             _chatVm?.LoadMessages();
             ChatScrollViewer.ScrollToBottom();
         }
-        private void SetupChat()
-        {
-            var currentUser = AppSession.CurrentUser;
-            if (currentUser == null) return;
-
-            // Chỉ hiện chat với Buyer
-            if (currentUser.Role != "Buyer") return;
-
-            var sellerId = _vm.ListingBike?.SellerId;
-            if (sellerId == null) return;
-
-            // Không cho chat với chính mình
-            if (currentUser.UserId == sellerId) return;
-
-            _chatVm = new ChatViewModel(
-                _listingId,
-                currentUser.UserId,
-                sellerId.Value);
-
-            // Hiện panel và nút
-            ChatPanel.Visibility = Visibility.Visible;
-            BtnContact.Visibility = Visibility.Visible;
-
-            IcMessages.ItemsSource = _chatVm.Messages;
-            TxtChatInput.DataContext = _chatVm;
-
-            _chatVm.LoadMessages();
-        }
-        private void BtnContact_Click(object sender, RoutedEventArgs e)
-        {
-            // Toggle hiện/ẩn chat panel
-            ChatPanel.Visibility = ChatPanel.Visibility == Visibility.Visible
-                ? Visibility.Collapsed
-                : Visibility.Visible;
-        }
-        private void BtnSendChat_Click(object sender, RoutedEventArgs e)
-        {
-            if (_chatVm == null) return;
-            _chatVm.InputText = TxtChatInput.Text;
-            _chatVm.Send();
-            TxtChatInput.Text = string.Empty;
-
-            // Scroll xuống cuối
-            ChatScrollViewer.ScrollToBottom();
-        }
-        private void BtnRefreshChat_Click(object sender, RoutedEventArgs e)
-        {
-            _chatVm?.LoadMessages();
-            ChatScrollViewer.ScrollToBottom();
-        }
 
         private void EnterEditMode()
         {
+            if (btnDeposit != null) btnDeposit.Visibility = Visibility.Collapsed;
+
             // Show editable controls
             tbTitle.Visibility = Visibility.Collapsed;
             tbDesc.Visibility = Visibility.Collapsed;
@@ -184,7 +152,7 @@ namespace BuyOldBike_Presentation.Views
             txtTitle_Edit.Visibility = Visibility.Visible;
             txtDesc_Edit.Visibility = Visibility.Visible;
             txtPrice_Edit.Visibility = Visibility.Visible;
-            txtFrame_Edit.Visibility = Visibility.Visible;
+            cbxFrame_Edit.Visibility = Visibility.Visible;
             txtUsage_Edit.Visibility = Visibility.Visible;
             cbxBrand_Edit.Visibility = Visibility.Visible;
             cbxType_Edit.Visibility = Visibility.Visible;
@@ -196,10 +164,19 @@ namespace BuyOldBike_Presentation.Views
             txtDesc_Edit.Text = _vm.ListingBike?.Description ?? string.Empty;
             var priceValue = _vm.ListingBike?.Price ?? 0m;
             txtPrice_Edit.Text = FormatDigitsAsVnThousands(decimal.Truncate(priceValue).ToString(CultureInfo.InvariantCulture));
-            txtFrame_Edit.Text = _vm.ListingBike?.FrameNumber ?? string.Empty;
             txtUsage_Edit.Text = _vm.ListingBike?.UsageDuration?.ToString() ?? string.Empty;
+            var frameValue = (_vm.ListingBike?.FrameNumber ?? string.Empty).Trim();
+            for (int i = 0; i < cbxFrame_Edit.Items.Count; i++)
+            {
+                if (cbxFrame_Edit.Items[i] is not ComboBoxItem item) continue;
+                if (string.Equals(item.Content?.ToString(), frameValue, StringComparison.OrdinalIgnoreCase))
+                {
+                    cbxFrame_Edit.SelectedIndex = i;
+                    break;
+                }
+            }
 
-            var db = new BuyOldBike_DAL.Entities.BuyOldBikeContext();
+            var db = new BuyOldBikeContext();
 
             // load brands into cbxBrand_Edit
             var brands = db.Brands.ToList();
@@ -233,11 +210,11 @@ namespace BuyOldBike_Presentation.Views
             if (dialog.ShowDialog() != true) return;
 
             var paths = new List<string>();
+            var previews = new List<BitmapImage>();
             foreach (var f in dialog.FileNames)
             {
                 try
                 {
-                    // copy to temp and add
                     string dest = Path.Combine(Path.GetTempPath(), $"postimg_{Guid.NewGuid()}{Path.GetExtension(f)}");
                     File.Copy(f, dest, true);
                     paths.Add(dest);
@@ -248,15 +225,27 @@ namespace BuyOldBike_Presentation.Views
                     bmp.UriSource = new Uri(dest);
                     bmp.EndInit();
                     bmp.Freeze();
-                    _vm.Images.Add(bmp);
+                    previews.Add(bmp);
                 }
                 catch { }
             }
 
             if (paths.Any())
             {
-                _listingService.AddImagesToListing(_listingId, paths);
-                MessageBox.Show($"Đã thêm {paths.Count} ảnh.");
+                try
+                {
+                    _listingService.AddImagesToListing(_listingId, paths);
+                    foreach (var bmp in previews) _vm.Images.Add(bmp);
+                    MessageBox.Show($"Đã thêm {paths.Count} ảnh.");
+                }
+                catch (Exception ex)
+                {
+                    foreach (var p in paths)
+                    {
+                        try { File.Delete(p); } catch { }
+                    }
+                    MessageBox.Show(ex.Message, "Không thể thêm ảnh", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
         }
 
@@ -280,7 +269,7 @@ namespace BuyOldBike_Presentation.Views
                 _vm.ListingBike.Title = txtTitle_Edit.Text.Trim();
                 _vm.ListingBike.Description = txtDesc_Edit.Text.Trim();
                 _vm.ListingBike.Price = price;
-                _vm.ListingBike.FrameNumber = txtFrame_Edit.Text.Trim();
+                _vm.ListingBike.FrameNumber = (cbxFrame_Edit.SelectedItem as ComboBoxItem)?.Content?.ToString();
                 if (int.TryParse(txtUsage_Edit.Text, out int months)) _vm.ListingBike.UsageDuration = months;
                 if (cbxBrand_Edit.SelectedValue is int bid) _vm.ListingBike.BrandId = bid;
                 if (cbxType_Edit.SelectedValue is int tid) _vm.ListingBike.BikeTypeId = tid;

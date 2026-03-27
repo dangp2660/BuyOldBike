@@ -41,7 +41,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="5★" Width="30" Foreground="#F59E0B" FontWeight="Bold" />
                         <Border Grid.Column="1" Margin="10,0" Background="#E5E7EB">
-                            <Border Background="#10B981" x:Name="Rating5Bar" Width="80%" HorizontalAlignment="Left" />
+                            <Border Background="#10B981" x:Name="Rating5Bar" Width="0" HorizontalAlignment="Left" />
                         </Border>
                         <TextBlock Grid.Column="2" x:Name="Rating5Count" Text="0" Width="30" TextAlignment="Right" />
                     </Grid>
@@ -54,7 +54,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="4★" Width="30" Foreground="#F59E0B" FontWeight="Bold" />
                         <Border Grid.Column="1" Margin="10,0" Background="#E5E7EB">
-                            <Border Background="#10B981" x:Name="Rating4Bar" Width="50%" HorizontalAlignment="Left" />
+                            <Border Background="#10B981" x:Name="Rating4Bar" Width="0" HorizontalAlignment="Left" />
                         </Border>
                         <TextBlock Grid.Column="2" x:Name="Rating4Count" Text="0" Width="30" TextAlignment="Right" />
                     </Grid>
@@ -67,7 +67,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="3★" Width="30" Foreground="#F59E0B" FontWeight="Bold" />
                         <Border Grid.Column="1" Margin="10,0" Background="#E5E7EB">
-                            <Border Background="#10B981" x:Name="Rating3Bar" Width="30%" HorizontalAlignment="Left" />
+                            <Border Background="#10B981" x:Name="Rating3Bar" Width="0" HorizontalAlignment="Left" />
                         </Border>
                         <TextBlock Grid.Column="2" x:Name="Rating3Count" Text="0" Width="30" TextAlignment="Right" />
                     </Grid>
@@ -80,7 +80,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="2★" Width="30" Foreground="#F59E0B" FontWeight="Bold" />
                         <Border Grid.Column="1" Margin="10,0" Background="#E5E7EB">
-                            <Border Background="#10B981" x:Name="Rating2Bar" Width="10%" HorizontalAlignment="Left" />
+                            <Border Background="#10B981" x:Name="Rating2Bar" Width="0" HorizontalAlignment="Left" />
                         </Border>
                         <TextBlock Grid.Column="2" x:Name="Rating2Count" Text="0" Width="30" TextAlignment="Right" />
                     </Grid>
@@ -93,7 +93,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="1★" Width="30" Foreground="#F59E0B" FontWeight="Bold" />
                         <Border Grid.Column="1" Margin="10,0" Background="#E5E7EB">
-                            <Border Background="#10B981" x:Name="Rating1Bar" Width="5%" HorizontalAlignment="Left" />
+                            <Border Background="#10B981" x:Name="Rating1Bar" Width="0" HorizontalAlignment="Left" />
                         </Border>
                         <TextBlock Grid.Column="2" x:Name="Rating1Count" Text="0" Width="30" TextAlignment="Right" />
                     </Grid>

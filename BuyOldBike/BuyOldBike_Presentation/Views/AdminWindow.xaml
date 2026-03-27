@@ -108,7 +108,7 @@
         <TabControl Grid.Row="1" Margin="16" Background="{x:Null}" x:Name="MainTabControl" SelectionChanged="TabControl_SelectionChanged">
 
            
-            <TabItem Header="Dashboard">
+                <TabItem Header="Dashboard">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <StackPanel>
                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Tổng quan hệ thống" />
@@ -267,18 +267,19 @@
                                         <ColumnDefinition Width="160" />
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBox Grid.Column="0" Text="Tìm theo tiêu đề / seller..." />
-                                    <ComboBox Grid.Column="2" SelectedIndex="0">
-                                        <ComboBoxItem Content="All status" />
-                                        <ComboBoxItem Content="Pending" />
-                                        <ComboBoxItem Content="Approved" />
-                                        <ComboBoxItem Content="Rejected" />
-                                        <ComboBoxItem Content="Flagged" />
+                                    <TextBox Grid.Column="0" x:Name="TxtListingSearch" />
+                                    <ComboBox Grid.Column="2" x:Name="CmbListingStatus" SelectedIndex="0">
+                                        <ComboBoxItem Content="All status" Tag="All status" />
+                                        <ComboBoxItem Content="Pending" Tag="Pending" />
+                                        <ComboBoxItem Content="Approved" Tag="Approved" />
+                                        <ComboBoxItem Content="Rejected" Tag="Rejected" />
+                                        <ComboBoxItem Content="Flagged" Tag="Flagged" />
                                     </ComboBox>
-                                    <Button Grid.Column="4" Content="Làm mới" />
+                                    <Button Grid.Column="4" Content="Tìm kiếm" Click="BtnListingSearch_Click" />
                                 </Grid>
 
-                                <DataGrid Margin="0,12,0,0"
+                                <DataGrid x:Name="DgListings"
+                                          Margin="0,12,0,0"
                                           Height="480"
                                           AutoGenerateColumns="False"
                                           CanUserAddRows="False"
@@ -306,8 +307,8 @@
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                                        <Button Height="28" Padding="10,4" Content="Approve" />
-                                                        <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Reject" />
+                                                        <Button Height="28" Padding="10,4" Content="Approve" Click="BtnApproveListing_Click" />
+                                                        <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Reject" Click="BtnRejectListing_Click" />
                                                         <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Remove" />
                                                     </StackPanel>
                                                 </DataTemplate>
@@ -344,15 +345,20 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Bicycle Categories" />
                                         <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                            <Button Height="28" Padding="10,4" Content="Add" />
-                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Edit" />
-                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Delete" />
+                                            <Button Height="28" Padding="10,4" Content="Add" Click="BtnAddType_Click" />
+                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Edit" Click="BtnEditType_Click" />
+                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Delete" Click="BtnDeleteType_Click" />
                                         </StackPanel>
                                     </Grid>
-                                    <ListBox Margin="0,12,0,0" Height="420" ItemsSource="{Binding Source={StaticResource BicycleCategoriesProvider}}">
+                                    <TextBox x:Name="TxtTypeInput" Margin="0,12,0,0" />
+                                    <ListBox x:Name="LbTypes"
+                                             Margin="0,12,0,0"
+                                             Height="420"
+                                             ItemsSource="{Binding Types}"
+                                             SelectionChanged="LbTypes_SelectionChanged">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding XPath=@Name}" />
+                                                <TextBlock Text="{Binding Name}" />
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
                                     </ListBox>
@@ -368,15 +374,20 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Brands" />
                                         <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                            <Button Height="28" Padding="10,4" Content="Add" />
-                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Edit" />
-                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Delete" />
+                                            <Button Height="28" Padding="10,4" Content="Add" Click="BtnAddBrand_Click" />
+                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Edit" Click="BtnEditBrand_Click" />
+                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Delete" Click="BtnDeleteBrand_Click" />
                                         </StackPanel>
                                     </Grid>
-                                    <ListBox Margin="0,12,0,0" Height="420" ItemsSource="{Binding Source={StaticResource BrandsProvider}}">
+                                    <TextBox x:Name="TxtBrandInput" Margin="0,12,0,0" />
+                                    <ListBox x:Name="LbBrands"
+                                             Margin="0,12,0,0"
+                                             Height="420"
+                                             ItemsSource="{Binding Brands}"
+                                             SelectionChanged="LbBrands_SelectionChanged">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding XPath=@Name}" />
+                                                <TextBlock Text="{Binding BrandName}" />
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
                                     </ListBox>
@@ -392,15 +403,20 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Frame Sizes" />
                                         <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                            <Button Height="28" Padding="10,4" Content="Add" />
-                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Edit" />
-                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Delete" />
+                                            <Button Height="28" Padding="10,4" Content="Add" Click="BtnAddFrameSize_Click" />
+                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Edit" Click="BtnEditFrameSize_Click" />
+                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Delete" Click="BtnDeleteFrameSize_Click" />
                                         </StackPanel>
                                     </Grid>
-                                    <ListBox Margin="0,12,0,0" Height="420" ItemsSource="{Binding Source={StaticResource FrameSizesProvider}}">
+                                    <TextBox x:Name="TxtFrameSizeInput" Margin="0,12,0,0" />
+                                    <ListBox x:Name="LbFrameSizes"
+                                             Margin="0,12,0,0"
+                                             Height="420"
+                                             ItemsSource="{Binding FrameSizes}"
+                                             SelectionChanged="LbFrameSizes_SelectionChanged">
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding XPath=@Name}" />
+                                                <TextBlock Text="{Binding SizeValue}" />
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
                                     </ListBox>
@@ -427,18 +443,22 @@
                                         <ColumnDefinition Width="140" />
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBox Grid.Column="0" Text="Tìm theo transaction / buyer / seller..." />
-                                    <ComboBox Grid.Column="2" SelectedIndex="0">
-                                        <ComboBoxItem Content="All status" />
-                                        <ComboBoxItem Content="Completed" />
-                                        <ComboBoxItem Content="Processing" />
-                                        <ComboBoxItem Content="Disputed" />
-                                        <ComboBoxItem Content="Refunded" />
+                                    <TextBox Grid.Column="0" x:Name="TxtTransactionSearch" />
+                                    <ComboBox Grid.Column="2" x:Name="CmbTransactionStatus" SelectedIndex="0">
+                                        <ComboBoxItem Content="All status" Tag="All status" />
+                                        <ComboBoxItem Content="Completed" Tag="Completed" />
+                                        <ComboBoxItem Content="Processing" Tag="Processing" />
+                                        <ComboBoxItem Content="Disputed" Tag="Disputed" />
+                                        <ComboBoxItem Content="Refunded" Tag="Refunded" />
                                     </ComboBox>
-                                    <Button Grid.Column="4" Content="Export" />
+                                    <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <Button Height="28" Padding="10,4" Content="Tìm" Click="BtnTransactionSearch_Click" />
+                                        <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Export" Click="BtnTransactionExport_Click" />
+                                    </StackPanel>
                                 </Grid>
 
-                                <DataGrid Margin="0,12,0,0"
+                                <DataGrid x:Name="DgTransactions"
+                                          Margin="0,12,0,0"
                                           Height="480"
                                           AutoGenerateColumns="False"
                                           CanUserAddRows="False"

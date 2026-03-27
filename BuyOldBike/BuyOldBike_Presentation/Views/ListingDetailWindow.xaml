@@ -88,10 +88,15 @@
                         <TextBlock Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" x:Name="tbPrice" Text="{Binding ListingBike.Price, StringFormat={}{0:N0}đ}" />
                         <TextBox Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" x:Name="txtPrice_Edit" Visibility="Collapsed" Height="24" Margin="0,2,0,2" PreviewTextInput="txtPrice_Edit_PreviewTextInput" TextChanged="txtPrice_Edit_TextChanged"/>
 
-                        <!-- Frame Number -->
-                        <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Số khung" />
+                        <!-- Frame -->
+                        <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Kích cỡ khung" />
                         <TextBlock Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" x:Name="tbFrame" Text="{Binding ListingBike.FrameNumber}" />
-                        <TextBox Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" x:Name="txtFrame_Edit" Visibility="Collapsed" Height="24" Margin="0,2,0,2"/>
+                        <ComboBox Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" x:Name="cbxFrame_Edit" Visibility="Collapsed" Height="24" Margin="0,2,0,2" SelectedIndex="0">
+                            <ComboBoxItem Content="S" />
+                            <ComboBoxItem Content="M" />
+                            <ComboBoxItem Content="L" />
+                            <ComboBoxItem Content="XL" />
+                        </ComboBox>
 
                         <!-- Usage Duration -->
                         <TextBlock Grid.Row="12" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Sử dụng (tháng)" />
@@ -102,6 +107,9 @@
                         <TextBlock Grid.Row="14" Grid.Column="0" VerticalAlignment="Top" Foreground="#FF111827" Text="Mô tả" />
                         <TextBlock Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="2" x:Name="tbDesc" Text="{Binding ListingBike.Description}" TextWrapping="Wrap" MinHeight="80"/>
                         <TextBox Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="2" x:Name="txtDesc_Edit" Visibility="Collapsed" TextWrapping="Wrap" AcceptsReturn="True" MinHeight="80" Margin="0,2,0,2"/>
+
+                        <TextBlock Grid.Row="16" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Độ uy tín Seller" />
+                        <TextBlock Grid.Row="16" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding SellerReputation, StringFormat={}{0:0.00}/5}" />
                     </Grid>
                 </Border>
 

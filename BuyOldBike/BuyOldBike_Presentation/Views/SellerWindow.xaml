@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BuyOldBike_Presentation.Converters"
+        xmlns:controls="clr-namespace:BuyOldBike_Presentation.Controls"
         mc:Ignorable="d"
         Title="Khu vực Seller"
         Width="1200"
@@ -48,7 +49,7 @@
             </Grid>
         </Border>
 
-        <TabControl Grid.Row="1" Margin="16" Background="{x:Null}">
+        <TabControl Grid.Row="1" Margin="16" Background="{x:Null}" SelectionChanged="TabControl_SelectionChanged">
             <TabItem Header="Dashboard">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <StackPanel>
@@ -69,7 +70,7 @@
                             <Border Grid.Row="0" Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
                                     <TextBlock Foreground="#FF6B7280" Text="Total Listings" />
-                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="12" />
+                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="{Binding TotalListingsCount}" />
                                     <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Số bài đăng đã tạo" />
                                 </StackPanel>
                             </Border>
@@ -77,7 +78,7 @@
                             <Border Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
                                     <TextBlock Foreground="#FF6B7280" Text="Active Listings" />
-                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="7" />
+                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="{Binding ActiveListingsCount}" />
                                     <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Đang hiển thị cho người mua" />
                                 </StackPanel>
                             </Border>
@@ -85,28 +86,16 @@
                             <Border Grid.Row="2" Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
                                     <TextBlock Foreground="#FF6B7280" Text="Pending Orders" />
-                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="3" />
+                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="{Binding PendingOrdersCount}" />
                                     <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Đơn chờ phản hồi" />
                                 </StackPanel>
                             </Border>
 
                             <Border Grid.Row="2" Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
-                                    <TextBlock Foreground="#FF6B7280" Text="Recent Messages" />
-                                    <StackPanel Margin="0,10,0,0">
-                                        <Border Background="#FFF3F4F6" CornerRadius="10" Padding="10">
-                                            <StackPanel>
-                                                <TextBlock FontWeight="SemiBold" Text="Nguyễn A" />
-                                                <TextBlock Foreground="#FF6B7280" Text="Xe còn không bạn? Mình xin thêm ảnh..." />
-                                            </StackPanel>
-                                        </Border>
-                                        <Border Margin="0,10,0,0" Background="#FFF3F4F6" CornerRadius="10" Padding="10">
-                                            <StackPanel>
-                                                <TextBlock FontWeight="SemiBold" Text="Trần B" />
-                                                <TextBlock Foreground="#FF6B7280" Text="Cho mình hỏi size frame 54 có vừa 1m75 không?" />
-                                            </StackPanel>
-                                        </Border>
-                                    </StackPanel>
+                                    <TextBlock Foreground="#FF6B7280" Text="Unread Messages" />
+                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="{Binding UnreadMessageCount}" />
+                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Tin nhắn chưa đọc (xem tab Messages)" />
                                 </StackPanel>
                             </Border>
                         </Grid>
@@ -166,11 +155,16 @@
                                 <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center" Text="Bike Type" />
                                 <ComboBox Grid.Row="9" Grid.Column="2" SelectedIndex="0" Name="cbxBikeType"/>
 
-                                <TextBlock Grid.Row="11" Grid.Column="0" VerticalAlignment="Center" Text="Frame Number" />
-                                <TextBox Grid.Row="11" Grid.Column="2" x:Name="tbFrameNum" />
+                                <TextBlock Grid.Row="11" Grid.Column="0" VerticalAlignment="Center" Text="Frame" />
+                                <ComboBox Grid.Row="11" Grid.Column="2" x:Name="cbxFrame" SelectedIndex="0">
+                                    <ComboBoxItem Content="S" />
+                                    <ComboBoxItem Content="M" />
+                                    <ComboBoxItem Content="L" />
+                                    <ComboBoxItem Content="XL" />
+                                </ComboBox>
 
                                 <TextBlock Grid.Column="4" VerticalAlignment="Center" Text="Usage History" />
-                                <TextBox Grid.Row="0" Grid.Column="6" x:Name="txtUsage" />
+                                <TextBox Grid.Row="0" Grid.Column="6" x:Name="txtUsage" PreviewTextInput="txtUsage_PreviewTextInput" />
 
                                 <TextBlock Grid.Row="3" Grid.Column="4" VerticalAlignment="Center" Text="Upload Images" />
                                 <Border Grid.Row="2" Grid.Column="6"
@@ -219,20 +213,6 @@
                                     </StackPanel>
                                 </Border>
 
-                                <TextBlock Grid.Row="5" Grid.Column="4" VerticalAlignment="Center" Text="Upload Video" />
-                                <Border Grid.Row="5" Grid.Column="6"
-                                        Height="90"
-                                        Background="#FFF3F4F6"
-                                        BorderBrush="#FFE5E7EB"
-                                        BorderThickness="1"
-                                        CornerRadius="12"
-                                        Padding="10">
-                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <TextBlock FontWeight="SemiBold" Text="Video (tuỳ chọn)" />
-                                        <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Định dạng .mp4, tối đa 50MB" />
-                                        <Button Margin="0,10,0,0" Content="Chọn video" />
-                                    </StackPanel>
-                                </Border>
 
                                 <StackPanel Grid.Row="15" Grid.Column="6" Orientation="Horizontal" HorizontalAlignment="Left" Margin="68,0,0,0">
                                     <Button MinWidth="120" Height="40" Content="Cancel" Name="btnCancel" Click="btnCancel_Click" />
@@ -285,8 +265,8 @@
                                                     <TextBlock Grid.Column="2" Text="{Binding Status}" />
                                                     <TextBlock Grid.Column="3" Text="{Binding Views}" />
                                                     <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Left">
-                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Edit" Click="BtnEditListing_Click" />
-                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Delete" Click="BtnDeleteListing_Click" />
+                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" IsEnabled="{Binding IsPending}" Content="Edit" Click="BtnEditListing_Click" />
+                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" IsEnabled="{Binding IsAvailable}" Content="Delete" Click="BtnDeleteListing_Click" />
                                                         <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" IsEnabled="{Binding CanToggle}" Content="{Binding Status, Converter={StaticResource HideShowConverter}}" Click="BtnToggleHide_Click" />
                                                     </StackPanel>
                                                 </Grid>
@@ -306,24 +286,20 @@
                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Đơn hàng của tôi" />
 
                         <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
-                            <StackPanel>
+                            <StackPanel Grid.IsSharedSizeScope="True">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="2*" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="3*" />
-                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="2*" SharedSizeGroup="SellerOrders_Buyer" />
+                                        <ColumnDefinition Width="2*" SharedSizeGroup="SellerOrders_Bicycle" />
+                                        <ColumnDefinition Width="1.2*" SharedSizeGroup="SellerOrders_Price" />
+                                        <ColumnDefinition Width="1.4*" SharedSizeGroup="SellerOrders_Status" />
+                                        <ColumnDefinition Width="3*" SharedSizeGroup="SellerOrders_Delivery" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" FontWeight="SemiBold" Text="Buyer" />
-                                    <TextBlock Grid.Column="1" FontWeight="SemiBold" Text="Bicycle" />
-                                    <TextBlock Grid.Column="2" FontWeight="SemiBold" Text="Price" />
-                                    <TextBlock Grid.Column="3" FontWeight="SemiBold" Text="Deposit Status" />
-                                    <TextBlock Grid.Column="4" FontWeight="SemiBold" Text="Order Status" />
-                                    <TextBlock Grid.Column="5" FontWeight="SemiBold" Text="Delivery" />
-                                    <TextBlock Grid.Column="6" FontWeight="SemiBold" Text="Actions" />
+                                    <TextBlock Grid.Column="0" Margin="0,0,12,0" FontWeight="SemiBold" Text="Buyer" />
+                                    <TextBlock Grid.Column="1" Margin="0,0,12,0" FontWeight="SemiBold" Text="Bicycle" />
+                                    <TextBlock Grid.Column="2" Margin="0,0,12,0" FontWeight="SemiBold" Text="Price" />
+                                    <TextBlock Grid.Column="3" Margin="0,0,12,0" FontWeight="SemiBold" Text="Order Status" />
+                                    <TextBlock Grid.Column="4" FontWeight="SemiBold" Text="Delivery" />
                                 </Grid>
 
                                 <Border Margin="0,12,0,0" BorderBrush="#FFE5E7EB" BorderThickness="0,1,0,0" />
@@ -334,25 +310,34 @@
                                             <Border Padding="10,12" BorderBrush="#FFE5E7EB" BorderThickness="0,0,0,1">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*" />
-                                                        <ColumnDefinition Width="2*" />
-                                                        <ColumnDefinition Width="*" />
-                                                        <ColumnDefinition Width="*" />
-                                                        <ColumnDefinition Width="*" />
-                                                        <ColumnDefinition Width="3*" />
-                                                        <ColumnDefinition Width="2*" />
+                                                        <ColumnDefinition Width="2*" SharedSizeGroup="SellerOrders_Buyer" />
+                                                        <ColumnDefinition Width="2*" SharedSizeGroup="SellerOrders_Bicycle" />
+                                                        <ColumnDefinition Width="1.2*" SharedSizeGroup="SellerOrders_Price" />
+                                                        <ColumnDefinition Width="1.4*" SharedSizeGroup="SellerOrders_Status" />
+                                                        <ColumnDefinition Width="3*" SharedSizeGroup="SellerOrders_Delivery" />
                                                     </Grid.ColumnDefinitions>
-                                                    <TextBlock Grid.Column="0" Text="{Binding BuyerName}" />
-                                                    <TextBlock Grid.Column="1" Text="{Binding BicycleTitle}" />
-                                                    <TextBlock Grid.Column="2" Text="{Binding Price, StringFormat=N0}" />
-                                                    <TextBlock Grid.Column="3" Text="{Binding DepositStatus}" />
-                                                    <TextBlock Grid.Column="4" Text="{Binding OrderStatus}" />
-                                                    <TextBlock Grid.Column="5" Text="{Binding DeliveryInfo}" TextWrapping="Wrap" />
-                                                    <StackPanel Grid.Column="6" Orientation="Horizontal" HorizontalAlignment="Left">
-                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Accept" Click="BtnAcceptOrder_Click" />
-                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Reject" Click="BtnRejectOrder_Click" />
-                                                        <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Completed" Click="BtnCompleteOrder_Click" />
-                                                    </StackPanel>
+                                                    <TextBlock Grid.Column="0"
+                                                               Margin="0,0,12,0"
+                                                               Text="{Binding BuyerName}"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               ToolTip="{Binding BuyerName}" />
+                                                    <TextBlock Grid.Column="1"
+                                                               Margin="0,0,12,0"
+                                                               Text="{Binding BicycleTitle}"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               ToolTip="{Binding BicycleTitle}" />
+                                                    <TextBlock Grid.Column="2"
+                                                               Margin="0,0,12,0"
+                                                               Text="{Binding Price, StringFormat=N0}" />
+                                                    <TextBlock Grid.Column="3"
+                                                               Margin="0,0,12,0"
+                                                               Text="{Binding OrderStatus}"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               ToolTip="{Binding OrderStatus}" />
+                                                    <TextBlock Grid.Column="4"
+                                                               Text="{Binding DeliveryInfo}"
+                                                               TextWrapping="Wrap"
+                                                               ToolTip="{Binding DeliveryInfo}" />
                                                 </Grid>
                                             </Border>
                                         </DataTemplate>
@@ -428,93 +413,31 @@
                               Background="White"
                               BorderBrush="#FFE5E7EB"
                               BorderThickness="1"
-                              RowHeight="36">
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Thời gian" Binding="{Binding CreatedAt, StringFormat={}{0:yyyy-MM-dd HH:mm}}" Width="160" />
                             <DataGridTextColumn Header="Loại" Binding="{Binding Type}" Width="120" />
                             <DataGridTextColumn Header="Chiều" Binding="{Binding DirectionText}" Width="90" />
                             <DataGridTextColumn Header="Số tiền" Binding="{Binding AmountText}" Width="120" />
-                            <DataGridTextColumn Header="Ghi chú" Binding="{Binding Note}" Width="*" />
+                            <DataGridTemplateColumn Header="Ghi chú" Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Note}"
+                                                   TextWrapping="Wrap"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   ToolTip="{Binding Note}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Seller Reviews">
+            <TabItem Header="Seller Reviews" x:Name="TabSellerReviews">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                    <StackPanel>
-                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Đánh giá" />
-
-                        <Grid Margin="0,12,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="16" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                            <Border Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
-                                <StackPanel>
-                                    <TextBlock Foreground="#FF6B7280" Text="Average Rating" />
-                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="4.6" />
-                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Trên thang 5" />
-                                </StackPanel>
-                            </Border>
-
-                            <Border Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
-                                <StackPanel>
-                                    <TextBlock Foreground="#FF6B7280" Text="Total Reviews" />
-                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="18" />
-                                    <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Tổng lượt đánh giá" />
-                                </StackPanel>
-                            </Border>
-                        </Grid>
-
-                        <Border Margin="0,16,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
-                            <StackPanel>
-                                <TextBlock FontWeight="SemiBold" Text="Danh sách reviews" />
-                                <Border Margin="0,12,0,0" Background="#FFF3F4F6" CornerRadius="12" Padding="12">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="2*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="4*" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" FontWeight="SemiBold" Text="Buyer Name" />
-                                        <TextBlock Grid.Column="1" FontWeight="SemiBold" Text="Rating" />
-                                        <TextBlock Grid.Column="2" FontWeight="SemiBold" Text="Comment" />
-                                    </Grid>
-                                </Border>
-
-                                <Border Margin="0,10,0,0" BorderBrush="#FFE5E7EB" BorderThickness="0,1,0,0" />
-                                <Border Padding="12,10">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="2*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="4*" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="Nguyễn A" />
-                                        <TextBlock Grid.Column="1" Text="5" />
-                                        <TextBlock Grid.Column="2" Text="Giao dịch nhanh, mô tả đúng, xe rất đẹp." />
-                                    </Grid>
-                                </Border>
-
-                                <Border BorderBrush="#FFE5E7EB" BorderThickness="0,1,0,0" />
-                                <Border Padding="12,10">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="2*" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="4*" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="Trần B" />
-                                        <TextBlock Grid.Column="1" Text="4" />
-                                        <TextBlock Grid.Column="2" Text="Tư vấn nhiệt tình, giao hàng đúng hẹn." />
-                                    </Grid>
-                                </Border>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
+                    <controls:SellerReviewsControl x:Name="SellerReviewsControl" />
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Messages" x:Name="TabMessages">

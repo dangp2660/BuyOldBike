@@ -34,5 +34,25 @@ namespace BuyOldBike_BLL.Services.Seller
 
             _bikePostRepository.UpdateInspectionResult(inspectionId, result, listingStatus, overallScore, notes);
         }
+
+        public void ProcessInspection(Guid inspectionId, bool isPassed, int overallScore, string? notes,
+            IReadOnlyDictionary<string, bool> componentResults)
+        {
+            ProcessInspection(inspectionId, isPassed, overallScore, notes, componentResults, Enumerable.Empty<string>());
+        }
+
+        public void ProcessInspection(Guid inspectionId, bool isPassed, int overallScore, string? notes,
+            IReadOnlyDictionary<string, bool> componentResults, IEnumerable<string> reportImageUrls)
+        {
+            string result = isPassed ? StatusConstants.InspectionResult.Passed : StatusConstants.InspectionResult.Failed;
+            string listingStatus = isPassed ? StatusConstants.ListingStatus.Available : StatusConstants.ListingStatus.Rejected;
+
+            _bikePostRepository.UpdateInspectionResult(inspectionId, result, listingStatus, overallScore, notes, componentResults, reportImageUrls);
+        }
+
+        public List<InspectionImage> GetInspectionImages(Guid inspectionId)
+        {
+            return _bikePostRepository.GetInspectionImages(inspectionId);
+        }
     }
 }

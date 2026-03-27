@@ -20,7 +20,7 @@ namespace BuyOldBike_BLL.Features.Feedback
         {
             if (string.IsNullOrWhiteSpace(description))
             {
-                _errors.Add("Description cannot be empty");
+                return this;
             }
             else if (description.Length < 10)
             {

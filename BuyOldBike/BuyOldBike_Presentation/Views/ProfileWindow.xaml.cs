@@ -270,9 +270,10 @@ namespace BuyOldBike_Presentation.Views
                 if (result != MessageBoxResult.Yes) return;
 
                 var orderService = new BuyOldBike_BLL.Services.Seller.OrderService();
-                orderService.BuyBikeWithWallet(AppSession.CurrentUser.UserId, row.ListingId.Value);
+                var order = orderService.BuyBikeWithWallet(AppSession.CurrentUser.UserId, row.ListingId.Value);
 
                 MessageBox.Show("Mua xe thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                TryOpenSubmitReview(order.OrderId, row.ListingId);
                 LoadDepositOrders(AppSession.CurrentUser.UserId);
             }
             catch (Exception ex)
@@ -333,7 +334,48 @@ namespace BuyOldBike_Presentation.Views
             window.Owner = this;
             if (window.ShowDialog() == true)
             {
+                TryOpenSubmitReview(row.OrderId, row.ListingId);
                 LoadDepositOrders(AppSession.CurrentUser.UserId);
+            }
+        }
+
+        private void TryOpenSubmitReview(Guid orderId, Guid? listingId)
+        {
+            try
+            {
+                if (AppSession.CurrentUser == null) return;
+
+                using var db = new BuyOldBikeContext();
+                Listing? listing = null;
+                if (listingId.HasValue)
+                {
+                    listing = db.Listings
+                        .AsNoTracking()
+                        .Include(l => l.Seller)
+                        .FirstOrDefault(l => l.ListingId == listingId.Value);
+                }
+                else
+                {
+                    var order = db.Orders
+                        .AsNoTracking()
+                        .Include(o => o.Listing)
+                            .ThenInclude(l => l.Seller)
+                        .FirstOrDefault(o => o.OrderId == orderId);
+                    listing = order?.Listing;
+                }
+
+                var sellerId = listing?.SellerId;
+                if (sellerId == null) return;
+
+                var sellerName = listing?.Seller?.Email ?? "Seller";
+                var reviewWindow = new SubmitReviewWindow(orderId, AppSession.CurrentUser.UserId, sellerId.Value, sellerName)
+                {
+                    Owner = this
+                };
+                reviewWindow.ShowDialog();
+            }
+            catch
+            {
             }
         }
     }

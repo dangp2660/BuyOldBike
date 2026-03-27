@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace BuyOldBike_DAL.Entities;
@@ -28,6 +28,8 @@ public partial class Inspection
     public DateTime CreatedAt { get; set; }
 
     public virtual InspectionLocation InspectionLocation { get; set; } = null!;
+
+    public virtual ICollection<InspectionImage> InspectionImages { get; set; } = new List<InspectionImage>();
 
     public virtual ICollection<InspectionScore> InspectionScores { get; set; } = new List<InspectionScore>();
 

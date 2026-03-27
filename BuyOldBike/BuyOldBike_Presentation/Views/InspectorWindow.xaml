@@ -13,35 +13,6 @@
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <converters:ImageUrlToBitmapImageConverter x:Key="ImageUrlToBitmapImageConverter" />
-
-        <XmlDataProvider x:Key="PendingInspectionsProvider" XPath="/Items/Item">
-            <x:XData>
-                <Items xmlns="">
-                    <Item Code="INSP-00012" Bike="Giant TCR 2021" Seller="Nguyễn A" Appointment="10:30 14/03" Status="Pending" />
-                    <Item Code="INSP-00013" Bike="Trek Emonda" Seller="Trần B" Appointment="15:00 16/03" Status="Pending" />
-                    <Item Code="INSP-00014" Bike="Specialized Allez" Seller="Lê C" Appointment="09:00 18/03" Status="Pending" />
-                </Items>
-            </x:XData>
-        </XmlDataProvider>
-
-        <XmlDataProvider x:Key="RecentDisputesProvider" XPath="/Items/Item">
-            <x:XData>
-                <Items xmlns="">
-                    <Item Code="DSP-00007" Bike="Giant Defy" Severity="High" Status="Open" />
-                    <Item Code="DSP-00008" Bike="Trek Domane" Severity="Medium" Status="Open" />
-                </Items>
-            </x:XData>
-        </XmlDataProvider>
-
-        <XmlDataProvider x:Key="DisputeListProvider" XPath="/Items/Item">
-            <x:XData>
-                <Items xmlns="">
-                    <Item Code="DSP-00007" Bike="Giant Defy" Status="Open" />
-                    <Item Code="DSP-00008" Bike="Trek Domane" Status="Open" />
-                    <Item Code="DSP-00009" Bike="Specialized Roubaix" Status="Closed" />
-                </Items>
-            </x:XData>
-        </XmlDataProvider>
     </Window.Resources>
 
     <Grid>
@@ -93,7 +64,7 @@
                             <Border Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
                                     <TextBlock Foreground="#FF6B7280" Text="Pending Inspections" />
-                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="5" />
+                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="{Binding PendingInspectionCount}" />
                                     <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Đơn kiểm định đang chờ xử lý" />
                                 </StackPanel>
                             </Border>
@@ -101,7 +72,7 @@
                             <Border Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
                                     <TextBlock Foreground="#FF6B7280" Text="Completed Inspections" />
-                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="18" />
+                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="{Binding CompletedInspectionCountLast30Days}" />
                                     <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Đã hoàn tất trong 30 ngày" />
                                 </StackPanel>
                             </Border>
@@ -109,7 +80,7 @@
                             <Border Grid.Column="4" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
                                     <TextBlock Foreground="#FF6B7280" Text="Dispute Cases" />
-                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="2" />
+                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="{Binding PendingDisputeCount}" />
                                     <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Tranh chấp cần kết luận" />
                                 </StackPanel>
                             </Border>
@@ -180,12 +151,14 @@
                                               Background="White"
                                               RowBackground="White"
                                               AlternatingRowBackground="#FFF9FAFB"
-                                              ItemsSource="{Binding Source={StaticResource RecentDisputesProvider}}">
+                                              x:Name="dgRecentDisputes"
+                                              SelectionChanged="dgRecentDisputes_SelectionChanged"
+                                              ItemsSource="{Binding RecentDisputes}">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Header="Mã" Width="90" Binding="{Binding XPath=@Code}" />
-                                            <DataGridTextColumn Header="Xe" Width="220" Binding="{Binding XPath=@Bike}" />
-                                            <DataGridTextColumn Header="Mức độ" Width="110" Binding="{Binding XPath=@Severity}" />
-                                            <DataGridTextColumn Header="Trạng thái" Width="120" Binding="{Binding XPath=@Status}" />
+                                            <DataGridTextColumn Header="Mã" Width="190" Binding="{Binding ReturnRequestId}" />
+                                            <DataGridTextColumn Header="Xe" Width="200" Binding="{Binding Order.Listing.Title}" />
+                                            <DataGridTextColumn Header="Lý do" Width="180" Binding="{Binding Reason}" />
+                                            <DataGridTextColumn Header="Trạng thái" Width="120" Binding="{Binding Status}" />
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </StackPanel>
@@ -341,8 +314,6 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="12" />
                                         <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="12" />
-                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
                                     <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Frame System" />
@@ -363,14 +334,8 @@
                                         <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="Drivetrain" Content="Fail" />
                                     </StackPanel>
 
-                                    <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Wheel Alignment" />
+                                    <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Handlebar and Steering" />
                                     <StackPanel Grid.Row="6" Grid.Column="2" Orientation="Horizontal">
-                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="WheelAlignment" Content="Pass" IsChecked="True" x:Name="rbWheelAlignmentPass" />
-                                        <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="WheelAlignment" Content="Fail" />
-                                    </StackPanel>
-
-                                    <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF111827" Text="Handlebar and Steering" />
-                                    <StackPanel Grid.Row="8" Grid.Column="2" Orientation="Horizontal">
                                         <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="HandlebarSteering" Content="Pass" IsChecked="True" x:Name="rbHandlebarSteeringPass" />
                                         <RadioButton Margin="0,0,8,0" VerticalAlignment="Center" GroupName="HandlebarSteering" Content="Fail" />
                                     </StackPanel>
@@ -409,19 +374,58 @@
                                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Upload Report" />
                                         <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Tải lên file PDF/ảnh báo cáo" />
 
-                                        <Border Margin="0,12,0,0"
-                                                Height="140"
-                                                Background="#FFF3F4F6"
-                                                BorderBrush="#FFE5E7EB"
-                                                BorderThickness="1"
-                                                CornerRadius="12"
-                                                Padding="12">
-                                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                <TextBlock FontWeight="SemiBold" Text="Kéo thả file vào đây" />
-                                                <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Hoặc bấm để chọn file" />
-                                                <Button Margin="0,10,0,0" Content="Chọn file" />
-                                            </StackPanel>
-                                        </Border>
+                                        <TextBlock Margin="0,12,0,0" FontWeight="SemiBold" Text="Ảnh báo cáo đã tải lên" />
+                                        <ScrollViewer Margin="0,12,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                            <ItemsControl x:Name="icInspectionReportImages">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border Margin="0,0,10,0"
+                                                                Width="120"
+                                                                Height="80"
+                                                                Background="#FFF3F4F6"
+                                                                CornerRadius="10"
+                                                                ClipToBounds="True">
+                                                            <Image Source="{Binding ImageUrl, Converter={StaticResource ImageUrlToBitmapImageConverter}}"
+                                                                   Stretch="UniformToFill" />
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+
+                                        <StackPanel Margin="0,14,0,0" Orientation="Horizontal">
+                                            <Button x:Name="btnSelectInspectionReportImages" Content="Chọn ảnh" Click="BtnSelectInspectionReportImages_Click" />
+                                            <Button x:Name="btnClearInspectionReportSelection" Margin="10,0,0,0" Content="Xóa chọn" Click="BtnClearInspectionReportSelection_Click" />
+                                        </StackPanel>
+
+                                        <TextBlock Margin="0,14,0,0" FontWeight="SemiBold" Text="Ảnh chuẩn bị tải lên" />
+                                        <ScrollViewer Margin="0,12,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                            <ItemsControl x:Name="icInspectionSelectedReportPreviews">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border Margin="0,0,10,0"
+                                                                Width="120"
+                                                                Height="80"
+                                                                Background="#FFF3F4F6"
+                                                                CornerRadius="10"
+                                                                ClipToBounds="True">
+                                                            <Image Source="{Binding ., Converter={StaticResource ImageUrlToBitmapImageConverter}}"
+                                                                   Stretch="UniformToFill" />
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
                                     </StackPanel>
                                 </Border>
                             </Grid>
@@ -430,7 +434,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Dispute Support">
+            <TabItem Header="Dispute Support" x:Name="tabDisputeSupport">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -475,7 +479,7 @@
                             </StackPanel>
                         </Border>
 
-                        <StackPanel Grid.Column="2">
+                        <StackPanel Grid.Column="2" x:Name="pnlDisputeDetails">
                             <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Details Panel" />
                             <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Thông tin xe, khiếu nại và kết luận inspector" />
 
@@ -497,15 +501,58 @@
                                         </Grid.RowDefinitions>
 
                                         <TextBlock Grid.Row="0" Grid.Column="0" Foreground="#FF6B7280" Text="Listing" />
-                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="Giant Defy Advanced 2 (2020)" />
-                                        <TextBlock Grid.Row="0" Grid.Column="3" Foreground="#FF6B7280" Text="Transaction" />
-                                        <TextBlock Grid.Row="0" Grid.Column="4" Text="TX-00421" />
+                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ListingTitle}" />
+                                        <TextBlock Grid.Row="0" Grid.Column="3" Foreground="#FF6B7280" Text="Order" />
+                                        <TextBlock Grid.Row="0" Grid.Column="4" Text="{Binding OrderId}" />
 
                                         <TextBlock Grid.Row="2" Grid.Column="0" Foreground="#FF6B7280" Text="Seller" />
-                                        <TextBlock Grid.Row="2" Grid.Column="1" Text="Nguyễn A" />
+                                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SellerName}" />
                                         <TextBlock Grid.Row="2" Grid.Column="3" Foreground="#FF6B7280" Text="Buyer" />
-                                        <TextBlock Grid.Row="2" Grid.Column="4" Text="Trần B" />
+                                        <TextBlock Grid.Row="2" Grid.Column="4" Text="{Binding BuyerName}" />
                                     </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Margin="0,16,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                <StackPanel>
+                                    <TextBlock FontWeight="SemiBold" Text="Kết quả kiểm định" />
+                                    <Grid Margin="0,10,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="140" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="16" />
+                                            <ColumnDefinition Width="140" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="8" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Foreground="#FF6B7280" Text="Result" />
+                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding InspectionResultText}" />
+                                        <TextBlock Grid.Row="0" Grid.Column="3" Foreground="#FF6B7280" Text="Overall" />
+                                        <TextBlock Grid.Row="0" Grid.Column="4" Text="{Binding InspectionOverallText}" />
+
+                                        <TextBlock Grid.Row="2" Grid.Column="0" Foreground="#FF6B7280" Text="Note" />
+                                        <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding InspectionNoteText}" TextWrapping="Wrap" />
+                                    </Grid>
+
+                                    <ItemsControl Margin="0,12,0,0" ItemsSource="{Binding ComponentResults}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,0,0,8">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="260" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0" Text="{Binding ComponentName}" />
+                                                    <TextBlock Grid.Column="1" Text="{Binding ResultText}" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
                                 </StackPanel>
                             </Border>
 
@@ -523,6 +570,92 @@
                                                    TextWrapping="Wrap"
                                                    x:Name="txtDisputeDetail"
                                                    Text="Chọn một đơn để xem chi tiết" />
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                                    <StackPanel>
+                                        <TextBlock FontWeight="SemiBold" Text="Ảnh bằng chứng (Buyer)" />
+                                        <ScrollViewer Margin="0,12,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                            <ItemsControl x:Name="icBuyerDisputeImages">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border Margin="0,0,10,0"
+                                                                Width="120"
+                                                                Height="80"
+                                                                Background="#FFF3F4F6"
+                                                                CornerRadius="10"
+                                                                ClipToBounds="True">
+                                                            <Image Source="{Binding ImageUrl, Converter={StaticResource ImageUrlToBitmapImageConverter}}"
+                                                                   Stretch="UniformToFill" />
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+
+                                        <TextBlock Margin="0,14,0,0" FontWeight="SemiBold" Text="Ảnh kiểm định (Inspector)" />
+                                        <ScrollViewer Margin="0,12,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                            <ItemsControl x:Name="icInspectorDisputeImages">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border Margin="0,0,10,0"
+                                                                Width="120"
+                                                                Height="80"
+                                                                Background="#FFF3F4F6"
+                                                                CornerRadius="10"
+                                                                ClipToBounds="True">
+                                                            <Image Source="{Binding ImageUrl, Converter={StaticResource ImageUrlToBitmapImageConverter}}"
+                                                                   Stretch="UniformToFill" />
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+
+                                        <TextBlock Margin="0,14,0,0" FontWeight="SemiBold" Text="Ghi chú kiểm định (Inspector)" />
+                                        <Border Margin="0,8,0,0" Background="#FFF9FAFB" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="10" Padding="10">
+                                            <TextBlock Text="{Binding InspectionNoteText}" TextWrapping="Wrap" />
+                                        </Border>
+
+                                        <StackPanel Margin="0,14,0,0" Orientation="Horizontal">
+                                            <Button x:Name="btnSelectInspectorImages" Content="Chọn ảnh" Click="BtnSelectInspectorImages_Click" />
+                                            <Button x:Name="btnUploadInspectorImages" Margin="10,0,0,0" Content="Tải lên" Click="BtnUploadInspectorImages_Click" />
+                                            <Button x:Name="btnClearInspectorImages" Margin="10,0,0,0" Content="Xóa chọn" Click="BtnClearInspectorSelection_Click" />
+                                        </StackPanel>
+
+                                        <ScrollViewer Margin="0,12,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                            <ItemsControl x:Name="icInspectorSelectedPreviews">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border Margin="0,0,10,0"
+                                                                Width="120"
+                                                                Height="80"
+                                                                Background="#FFF3F4F6"
+                                                                CornerRadius="10"
+                                                                ClipToBounds="True">
+                                                            <Image Source="{Binding ., Converter={StaticResource ImageUrlToBitmapImageConverter}}"
+                                                                   Stretch="UniformToFill" />
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
                                     </StackPanel>
                                 </Border>
                             </Grid>

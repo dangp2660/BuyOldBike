@@ -5,24 +5,95 @@ using BuyOldBike_DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using BuyOldBike_Presentation.State;
+using BuyOldBike_Presentation.Services;
+using Microsoft.Win32;
+using System.Runtime.CompilerServices;
 
 namespace BuyOldBike_Presentation.Views
 {
-    public partial class InspectorWindow : Window
+    public partial class InspectorWindow : Window, INotifyPropertyChanged
     {
         private readonly InspectionService _inspectionService = new InspectionService();
         private readonly DisputeService _disputeService = new DisputeService();
-        private bool _isSyncingSelection;
+        private readonly LocalMediaService _mediaService = new LocalMediaService("Uploads");
+        private bool _isSyncingInspectionSelection;
+        private bool _isSyncingDisputeSelection;
+        private readonly List<string> _selectedInspectorImagePaths = [];
+        private readonly List<string> _selectedInspectionReportImagePaths = [];
+        private static readonly string[] DefaultComponentNames =
+        [
+            "Frame System",
+            "Brake System",
+            "Drivetrain",
+            "Handlebar and Steering"
+        ];
+
+        private int _pendingInspectionCount;
+        public int PendingInspectionCount
+        {
+            get => _pendingInspectionCount;
+            private set
+            {
+                if (_pendingInspectionCount == value) return;
+                _pendingInspectionCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _completedInspectionCountLast30Days;
+        public int CompletedInspectionCountLast30Days
+        {
+            get => _completedInspectionCountLast30Days;
+            private set
+            {
+                if (_completedInspectionCountLast30Days == value) return;
+                _completedInspectionCountLast30Days = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _pendingDisputeCount;
+        public int PendingDisputeCount
+        {
+            get => _pendingDisputeCount;
+            private set
+            {
+                if (_pendingDisputeCount == value) return;
+                _pendingDisputeCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private List<ReturnRequest> _recentDisputes = [];
+        public List<ReturnRequest> RecentDisputes
+        {
+            get => _recentDisputes;
+            private set
+            {
+                if (ReferenceEquals(_recentDisputes, value)) return;
+                _recentDisputes = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public InspectorWindow()
         {
             InitializeComponent();
             if (!RoleNavigator.EnsureRole(this, RoleConstants.Inspector)) return;
+            DataContext = this;
             LoadData();
+            SetInspectorUploadEnabled(false);
         }
 
         private void LoadData()
@@ -35,6 +106,16 @@ namespace BuyOldBike_Presentation.Views
 
                 var disputes = _disputeService.GetAllPendingDisputes();
                 dgDisputeList.ItemsSource = disputes;
+
+                PendingInspectionCount = pendingInspections.Count;
+                PendingDisputeCount = disputes.Count;
+                RecentDisputes = disputes.Take(10).ToList();
+
+                var fromDate = DateTime.Now.AddDays(-30);
+                using var db = new BuyOldBikeContext();
+                CompletedInspectionCountLast30Days = db.Inspections
+                    .AsNoTracking()
+                    .Count(i => i.Status == StatusConstants.InspectionStatus.Completed && i.CreatedAt >= fromDate);
             }
             catch (Exception ex)
             {
@@ -60,11 +141,11 @@ namespace BuyOldBike_Presentation.Views
 
         private void SelectInspection(Inspection inspection, bool switchToInspectionTab)
         {
-            if (_isSyncingSelection) return;
+            if (_isSyncingInspectionSelection) return;
 
             try
             {
-                _isSyncingSelection = true;
+                _isSyncingInspectionSelection = true;
 
                 if (!ReferenceEquals(dgPendingInspections.SelectedItem, inspection))
                 {
@@ -78,14 +159,56 @@ namespace BuyOldBike_Presentation.Views
             }
             finally
             {
-                _isSyncingSelection = false;
+                _isSyncingInspectionSelection = false;
             }
 
             LoadListingDetails(inspection.ListingId);
+            ReloadInspectionReportImages(inspection.InspectionId);
+            ClearInspectionReportSelection();
 
             if (switchToInspectionTab)
             {
                 tabInspector.SelectedItem = tabInspection;
+            }
+        }
+
+        private void dgRecentDisputes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgRecentDisputes.SelectedItem is not ReturnRequest request) return;
+            SelectDispute(request, true);
+        }
+
+        private void SelectDispute(ReturnRequest request, bool switchToDisputeTab)
+        {
+            if (_isSyncingDisputeSelection) return;
+
+            try
+            {
+                _isSyncingDisputeSelection = true;
+
+                var disputeItem = (dgDisputeList.ItemsSource as IEnumerable<ReturnRequest>)
+                    ?.FirstOrDefault(r => r.ReturnRequestId == request.ReturnRequestId)
+                    ?? request;
+
+                if (!ReferenceEquals(dgDisputeList.SelectedItem, disputeItem))
+                {
+                    dgDisputeList.SelectedItem = disputeItem;
+                }
+
+                var recentItem = RecentDisputes.FirstOrDefault(r => r.ReturnRequestId == request.ReturnRequestId);
+                if (recentItem != null && !ReferenceEquals(dgRecentDisputes.SelectedItem, recentItem))
+                {
+                    dgRecentDisputes.SelectedItem = recentItem;
+                }
+            }
+            finally
+            {
+                _isSyncingDisputeSelection = false;
+            }
+
+            if (switchToDisputeTab)
+            {
+                tabInspector.SelectedItem = tabDisputeSupport;
             }
         }
 
@@ -110,6 +233,34 @@ namespace BuyOldBike_Presentation.Views
             }
         }
 
+        private void ReloadInspectionReportImages(Guid inspectionId)
+        {
+            icInspectionReportImages.ItemsSource = _inspectionService.GetInspectionImages(inspectionId);
+        }
+
+        private void ClearInspectionReportSelection()
+        {
+            _selectedInspectionReportImagePaths.Clear();
+            icInspectionSelectedReportPreviews.ItemsSource = new List<string>();
+        }
+
+        private void ResetInspectionForm()
+        {
+            txtNotes.Text = string.Empty;
+
+            rbFramePass.IsChecked = true;
+            rbBrakePass.IsChecked = true;
+            rbDrivetrainPass.IsChecked = true;
+            rbHandlebarSteeringPass.IsChecked = true;
+
+            ClearInspectionReportSelection();
+            icInspectionReportImages.ItemsSource = new List<InspectionImage>();
+
+            pnlInspectionDetails.DataContext = null;
+            dgPendingInspections.SelectedItem = null;
+            dgInspectionQueue.SelectedItem = null;
+        }
+
         private void btnComplete_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -126,17 +277,33 @@ namespace BuyOldBike_Presentation.Views
                 if (rbFramePass.IsChecked == true) passCount++;
                 if (rbBrakePass.IsChecked == true) passCount++;
                 if (rbDrivetrainPass.IsChecked == true) passCount++;
-                if (rbWheelAlignmentPass.IsChecked == true) passCount++;
                 if (rbHandlebarSteeringPass.IsChecked == true) passCount++;
 
-                bool isPassed = passCount >= 4;
+                var componentResults = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Frame System"] = rbFramePass.IsChecked == true,
+                    ["Brake System"] = rbBrakePass.IsChecked == true,
+                    ["Drivetrain"] = rbDrivetrainPass.IsChecked == true,
+                    ["Handlebar and Steering"] = rbHandlebarSteeringPass.IsChecked == true
+                };
+
+                bool isPassed = passCount >= 3;
                 string? notes = txtNotes.Text;
 
-                _inspectionService.ProcessInspection(selectedInspection.InspectionId, isPassed, passCount, notes);
+                var reportUrls = _selectedInspectionReportImagePaths
+                    .Select(_mediaService.SaveImage)
+                    .Where(u => !string.IsNullOrWhiteSpace(u))
+                    .ToList();
+
+                _inspectionService.ProcessInspection(selectedInspection.InspectionId, isPassed, passCount, notes, componentResults, reportUrls);
+
+                ReloadInspectionReportImages(selectedInspection.InspectionId);
+                ClearInspectionReportSelection();
 
                 MessageBox.Show("Đã cập nhật kết quả kiểm định thành công!");
                 
                 LoadData();
+                ResetInspectionForm();
             }
             catch (Exception ex)
             {
@@ -148,12 +315,149 @@ namespace BuyOldBike_Presentation.Views
         {
             if (dgDisputeList.SelectedItem is ReturnRequest request)
             {
+                var recentItem = RecentDisputes.FirstOrDefault(r => r.ReturnRequestId == request.ReturnRequestId);
+                if (!_isSyncingDisputeSelection && recentItem != null)
+                {
+                    try
+                    {
+                        _isSyncingDisputeSelection = true;
+                        dgRecentDisputes.SelectedItem = recentItem;
+                    }
+                    finally
+                    {
+                        _isSyncingDisputeSelection = false;
+                    }
+                }
+
                 txtDisputeDetail.Text = request.Detail;
+                ReloadDisputeImages(request.ReturnRequestId);
+                LoadDisputeDetails(request.ReturnRequestId);
+                SetInspectorUploadEnabled(true);
             }
             else
             {
                 txtDisputeDetail.Text = "Chọn một đơn để xem chi tiết";
+                icBuyerDisputeImages.ItemsSource = new List<ReturnRequestImage>();
+                icInspectorDisputeImages.ItemsSource = new List<ReturnRequestImage>();
+                icInspectorSelectedPreviews.ItemsSource = new List<string>();
+                _selectedInspectorImagePaths.Clear();
+                pnlDisputeDetails.DataContext = null;
+                SetInspectorUploadEnabled(false);
             }
+        }
+
+        private void ReloadDisputeImages(Guid returnRequestId)
+        {
+            var result = _disputeService.GetDisputeImagesForInspector(returnRequestId);
+            icBuyerDisputeImages.ItemsSource = result.BuyerImages;
+            icInspectorDisputeImages.ItemsSource = result.InspectorImages;
+        }
+
+        private void SetInspectorUploadEnabled(bool enabled)
+        {
+            btnSelectInspectorImages.IsEnabled = enabled;
+            btnUploadInspectorImages.IsEnabled = enabled;
+            btnClearInspectorImages.IsEnabled = enabled;
+        }
+
+        private void LoadDisputeDetails(Guid returnRequestId)
+        {
+            try
+            {
+                using var db = new BuyOldBikeContext();
+
+                var request = db.ReturnRequests
+                    .Include(r => r.ReturnRequestImages)
+                    .Include(r => r.Order!)
+                        .ThenInclude(o => o.Buyer!)
+                            .ThenInclude(u => u.Address)
+                    .Include(r => r.Order!)
+                        .ThenInclude(o => o.Listing!)
+                            .ThenInclude(l => l.Seller!)
+                                .ThenInclude(u => u.Address)
+                    .Include(r => r.Order!)
+                        .ThenInclude(o => o.Listing!)
+                            .ThenInclude(l => l.Inspections)
+                                .ThenInclude(i => i.InspectionScores)
+                                    .ThenInclude(s => s.Component)
+                    .AsNoTracking()
+                    .FirstOrDefault(r => r.ReturnRequestId == returnRequestId);
+
+                if (request?.Order?.Listing == null)
+                {
+                    pnlDisputeDetails.DataContext = new DisputeDetailVm();
+                    return;
+                }
+
+                var listing = request.Order.Listing;
+                var inspection = listing.Inspections
+                    .OrderByDescending(i => i.CreatedAt)
+                    .FirstOrDefault(i => i.Status == StatusConstants.InspectionStatus.Completed)
+                    ?? listing.Inspections.OrderByDescending(i => i.CreatedAt).FirstOrDefault();
+
+                var componentResults = new List<DisputeInspectionComponentVm>();
+                foreach (var componentName in DefaultComponentNames)
+                {
+                    var score = inspection?.InspectionScores?
+                        .FirstOrDefault(s => string.Equals(s.Component?.ComponentName, componentName, StringComparison.OrdinalIgnoreCase));
+
+                    componentResults.Add(new DisputeInspectionComponentVm
+                    {
+                        ComponentName = componentName,
+                        ResultText = score?.Score == 1 ? "Pass" : score?.Score == 0 ? "Fail" : "-"
+                    });
+                }
+
+                var inspectionNote = inspection?.RejectReason;
+
+                pnlDisputeDetails.DataContext = new DisputeDetailVm
+                {
+                    ListingTitle = listing.Title ?? "-",
+                    OrderId = request.Order.OrderId,
+                    SellerName = GetDisplayName(listing.Seller),
+                    BuyerName = GetDisplayName(request.Order.Buyer),
+                    InspectionResultText = inspection?.Result == StatusConstants.InspectionResult.Passed
+                        ? "Pass"
+                        : inspection?.Result == StatusConstants.InspectionResult.Failed
+                            ? "Fail"
+                            : "-",
+                    InspectionOverallText = inspection?.OverallScore != null ? $"{inspection.OverallScore}/4" : "-",
+                    InspectionNoteText = !string.IsNullOrWhiteSpace(inspectionNote) ? inspectionNote.Trim() : "-",
+                    ComponentResults = componentResults
+                };
+            }
+            catch
+            {
+                pnlDisputeDetails.DataContext = new DisputeDetailVm();
+            }
+        }
+
+        private static string GetDisplayName(User? user)
+        {
+            var name = user?.Address?.FullName;
+            if (!string.IsNullOrWhiteSpace(name)) return name.Trim();
+
+            if (!string.IsNullOrWhiteSpace(user?.Email)) return user.Email.Trim();
+            if (!string.IsNullOrWhiteSpace(user?.PhoneNumber)) return user.PhoneNumber.Trim();
+            return "-";
+        }
+
+        private sealed class DisputeInspectionComponentVm
+        {
+            public string ComponentName { get; set; } = "-";
+            public string ResultText { get; set; } = "-";
+        }
+
+        private sealed class DisputeDetailVm
+        {
+            public string ListingTitle { get; set; } = "-";
+            public Guid OrderId { get; set; }
+            public string SellerName { get; set; } = "-";
+            public string BuyerName { get; set; } = "-";
+            public string InspectionResultText { get; set; } = "-";
+            public string InspectionOverallText { get; set; } = "-";
+            public string InspectionNoteText { get; set; } = "-";
+            public List<DisputeInspectionComponentVm> ComponentResults { get; set; } = [];
         }
 
         private void BtnResolveDispute_Click(object sender, RoutedEventArgs e)
@@ -181,6 +485,91 @@ namespace BuyOldBike_Presentation.Views
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
             LogoutManager.Logout(this);
+        }
+
+        private void BtnSelectInspectionReportImages_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog
+            {
+                Multiselect = true,
+                Filter = "Image files (*.png;*.jpeg;*.jpg)|*.png;*.jpeg;*.jpg"
+            };
+
+            if (dlg.ShowDialog() != true) return;
+
+            foreach (var f in dlg.FileNames)
+            {
+                if (_selectedInspectionReportImagePaths.Count >= 10) break;
+                if (_selectedInspectionReportImagePaths.Contains(f, StringComparer.OrdinalIgnoreCase)) continue;
+                _selectedInspectionReportImagePaths.Add(f);
+            }
+
+            icInspectionSelectedReportPreviews.ItemsSource = _selectedInspectionReportImagePaths.ToList();
+        }
+
+        private void BtnClearInspectionReportSelection_Click(object sender, RoutedEventArgs e)
+        {
+            ClearInspectionReportSelection();
+        }
+
+        private void BtnSelectInspectorImages_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog
+            {
+                Multiselect = true,
+                Filter = "Image files (*.png;*.jpeg;*.jpg)|*.png;*.jpeg;*.jpg"
+            };
+
+            if (dlg.ShowDialog() != true) return;
+
+            foreach (var f in dlg.FileNames)
+            {
+                if (_selectedInspectorImagePaths.Count >= 10) break;
+                if (_selectedInspectorImagePaths.Contains(f, StringComparer.OrdinalIgnoreCase)) continue;
+                _selectedInspectorImagePaths.Add(f);
+            }
+
+            icInspectorSelectedPreviews.ItemsSource = _selectedInspectorImagePaths.ToList();
+        }
+
+        private void BtnClearInspectorSelection_Click(object sender, RoutedEventArgs e)
+        {
+            _selectedInspectorImagePaths.Clear();
+            icInspectorSelectedPreviews.ItemsSource = new List<string>();
+        }
+
+        private void BtnUploadInspectorImages_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgDisputeList.SelectedItem is not ReturnRequest request)
+            {
+                MessageBox.Show("Vui lòng chọn một khiếu nại để tải ảnh.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (_selectedInspectorImagePaths.Count == 0)
+            {
+                MessageBox.Show("Vui lòng chọn ít nhất 1 ảnh.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                var savedUrls = _selectedInspectorImagePaths
+                    .Select(_mediaService.SaveImage)
+                    .Where(u => !string.IsNullOrWhiteSpace(u))
+                    .ToList();
+
+                _disputeService.AddInspectorImages(request.ReturnRequestId, savedUrls);
+
+                ReloadDisputeImages(request.ReturnRequestId);
+                BtnClearInspectorSelection_Click(sender, e);
+
+                MessageBox.Show("Đã tải ảnh inspector lên thành công.", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi tải ảnh: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

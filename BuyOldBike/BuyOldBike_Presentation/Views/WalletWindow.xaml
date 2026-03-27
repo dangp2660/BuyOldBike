@@ -11,9 +11,8 @@
         MinHeight="520"
         WindowStartupLocation="CenterOwner"
         Loaded="Window_Loaded">
-    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-        <Grid Background="#F9FAFB" Margin="24">
-            <Grid.RowDefinitions>
+    <Grid Background="#F9FAFB" Margin="24">
+        <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -70,13 +69,23 @@
                   Background="White"
                   BorderBrush="#FFE5E7EB"
                   BorderThickness="1"
-                  RowHeight="36">
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Thời gian" Binding="{Binding CreatedAt, StringFormat={}{0:yyyy-MM-dd HH:mm}}" Width="160" />
                 <DataGridTextColumn Header="Loại" Binding="{Binding Type}" Width="120" />
                 <DataGridTextColumn Header="Chiều" Binding="{Binding DirectionText}" Width="90" />
                 <DataGridTextColumn Header="Số tiền" Binding="{Binding AmountText}" Width="120" />
-                <DataGridTextColumn Header="Ghi chú" Binding="{Binding Note}" Width="*" />
+                <DataGridTemplateColumn Header="Ghi chú" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Note}"
+                                       TextWrapping="Wrap"
+                                       TextTrimming="CharacterEllipsis"
+                                       ToolTip="{Binding Note}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -88,5 +97,4 @@
                 Content="Đóng"
                 Click="Close_Click" />
     </Grid>
-    </ScrollViewer>
 </Window>

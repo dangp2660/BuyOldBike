@@ -1,5 +1,6 @@
 using BuyOldBike_DAL.Entities;
 using BuyOldBike_BLL.Services.BicycleListWindow;
+using BuyOldBike_BLL.Services.Feedback;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -11,11 +12,17 @@ namespace BuyOldBike_Presentation.ViewModels
     {
         public Listing? ListingBike { get; private set; }
         public ObservableCollection<BitmapImage> Images { get; } = new ObservableCollection<BitmapImage>();
+        public double SellerReputation { get; private set; }
 
         public void Load(Guid listingId)
         {
             var browseService = new ListingBrowseService();
             ListingBike = browseService.GetListingDetailById(listingId);
+            SellerReputation = 0;
+            if (ListingBike?.SellerId != null)
+            {
+                SellerReputation = new ReviewService().GetSellerAverageRating(ListingBike.SellerId.Value);
+            }
 
             Images.Clear();
             if (ListingBike?.ListingImages == null) return;

@@ -1,7 +1,6 @@
 using BuyOldBike_DAL.Constants;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BuyOldBike_DAL.Entities;
 
@@ -17,15 +16,6 @@ public partial class User
 
     public string Role { get; set; } = null!;
     public string Status { get; set; } = StatusConstants.UserStatus.Active;
-
-    [NotMapped]
-    public double? SellerRating { get; set; } = 0;
-
-    [NotMapped]
-    public int? TotalReviews { get; set; } = 0;
-
-    [NotMapped]
-    public DateTime? LastReviewDate { get; set; }
 
     public virtual Address? Address { get; set; }
 
@@ -44,4 +34,6 @@ public partial class User
     public virtual ICollection<Review> ReviewSellers { get; set; } = new List<Review>();
 
     public virtual UserWallet? Wallet { get; set; }
+
+    public virtual SellerProfile? SellerProfile { get; set; }
 }

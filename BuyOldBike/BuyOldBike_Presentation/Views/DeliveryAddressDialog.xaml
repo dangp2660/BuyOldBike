@@ -47,23 +47,26 @@
                         <TextBlock Margin="0,14,0,0" FontSize="12" Foreground="#FF6B7280" Text="Tỉnh/Thành phố" />
                         <ComboBox Margin="0,8,0,0"
                                   Name="cbxProvince"
-                                  IsEditable="True"
+                                  IsEditable="False"
                                   DisplayMemberPath="Name"
+                                  TextSearch.TextPath="Name"
                                   SelectionChanged="CbxProvince_SelectionChanged" />
 
                         <TextBlock Margin="0,14,0,0" FontSize="12" Foreground="#FF6B7280" Text="Quận/Huyện" />
                         <ComboBox Margin="0,8,0,0"
                                   Name="cbxDistrict"
-                                  IsEditable="True"
+                                  IsEditable="False"
                                   DisplayMemberPath="Name"
+                                  TextSearch.TextPath="Name"
                                   IsEnabled="False"
                                   SelectionChanged="CbxDistrict_SelectionChanged" />
 
                         <TextBlock Margin="0,14,0,0" FontSize="12" Foreground="#FF6B7280" Text="Phường/Xã" />
                         <ComboBox Margin="0,8,0,0"
                                   Name="cbxWard"
-                                  IsEditable="True"
+                                  IsEditable="False"
                                   DisplayMemberPath="Name"
+                                  TextSearch.TextPath="Name"
                                   IsEnabled="False" />
 
                         <TextBlock Margin="0,14,0,0" FontSize="12" Foreground="#FF6B7280" Text="Địa chỉ chi tiết" />

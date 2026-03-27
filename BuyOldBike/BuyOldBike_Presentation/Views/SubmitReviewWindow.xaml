@@ -1,0 +1,19 @@
+<Window x:Class="BuyOldBike_Presentation.Views.SubmitReviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:BuyOldBike_Presentation.Controls"
+        Title="Đánh giá người bán"
+        Width="560"
+        Height="620"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <controls:SubmitReviewControl x:Name="ReviewControl" Grid.Row="0"/>
+    </Grid>
+</Window>

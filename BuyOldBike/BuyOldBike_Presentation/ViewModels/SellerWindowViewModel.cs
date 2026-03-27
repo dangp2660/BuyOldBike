@@ -1,26 +1,81 @@
 using BuyOldBike_BLL.Services.Seller;
+using BuyOldBike_BLL.Features.Chats;
 using BuyOldBike_DAL.Constants;
 using BuyOldBike_DAL.Entities;
+using BuyOldBike_DAL.Repositories.Chats;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
 
 namespace BuyOldBike_Presentation.ViewModels
 {
-    public class SellerWindowViewModel
+    public class SellerWindowViewModel : INotifyPropertyChanged
     {
         private readonly ListingService _listingService;
         private readonly OrderService _orderService;
+        private readonly ChatService _chatService;
 
         public ObservableCollection<BitmapImage> SelectedImagePreviews { get; } = new ObservableCollection<BitmapImage>();
         public ObservableCollection<SellerListingRow> SellerListings { get; } = new ObservableCollection<SellerListingRow>();
         public ObservableCollection<SellerOrderRow> SellerOrders { get; } = new ObservableCollection<SellerOrderRow>();
 
+        private int _totalListingsCount;
+        public int TotalListingsCount
+        {
+            get => _totalListingsCount;
+            private set
+            {
+                if (_totalListingsCount == value) return;
+                _totalListingsCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _activeListingsCount;
+        public int ActiveListingsCount
+        {
+            get => _activeListingsCount;
+            private set
+            {
+                if (_activeListingsCount == value) return;
+                _activeListingsCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _pendingOrdersCount;
+        public int PendingOrdersCount
+        {
+            get => _pendingOrdersCount;
+            private set
+            {
+                if (_pendingOrdersCount == value) return;
+                _pendingOrdersCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _unreadMessageCount;
+        public int UnreadMessageCount
+        {
+            get => _unreadMessageCount;
+            private set
+            {
+                if (_unreadMessageCount == value) return;
+                _unreadMessageCount = value;
+                OnPropertyChanged();
+            }
+        }
+
         public SellerWindowViewModel()
         {
             _listingService = new ListingService();
             _orderService = new OrderService();
+            _chatService = new ChatService(new MessageRepository());
         }
 
         public void CreateNewPost(Listing listing, List<string> imagePaths)
@@ -33,6 +88,10 @@ namespace BuyOldBike_Presentation.ViewModels
             SellerListings.Clear();
 
             List<Listing> listings = _listingService.GetListingsBySeller(sellerId);
+            TotalListingsCount = listings.Count;
+            ActiveListingsCount = listings.Count(l =>
+                string.Equals(l.Status, StatusConstants.ListingStatus.Available, StringComparison.Ordinal));
+
             foreach (Listing listing in listings)
             {
                 SellerListings.Add(new SellerListingRow
@@ -41,8 +100,7 @@ namespace BuyOldBike_Presentation.ViewModels
                     Title = listing.Title ?? string.Empty,
                     Price = listing.Price ?? 0,
                     Status = listing.Status ?? string.Empty,
-                    Views = 0,
-                    IsPending = string.Equals(listing.Status, StatusConstants.ListingStatus.Pending_Inspection, StringComparison.Ordinal)
+                    Views = listing.Views
                 });
             }
         }
@@ -72,6 +130,12 @@ namespace BuyOldBike_Presentation.ViewModels
         {
             SellerOrders.Clear();
             var orders = _orderService.GetOrdersBySellerId(sellerId);
+
+            PendingOrdersCount = orders.Count(o =>
+                string.Equals(o.Status, StatusConstants.OrdersStatus.Deposit_Pending, StringComparison.Ordinal) ||
+                string.Equals(o.Status, StatusConstants.OrdersStatus.Deposit_Paid, StringComparison.Ordinal) ||
+                string.Equals(o.Status, StatusConstants.OrdersStatus.Disputed, StringComparison.Ordinal));
+
             foreach (var o in orders)
             {
                 var deliveryInfo = string.Empty;
@@ -109,5 +173,14 @@ namespace BuyOldBike_Presentation.ViewModels
         {
             _orderService.UpdateOrderStatus(orderId, newStatus);
         }
+
+        public void LoadUnreadMessageCount(Guid sellerId)
+        {
+            UnreadMessageCount = _chatService.GetUnreadCount(sellerId);
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void OnPropertyChanged([CallerMemberName] string? name = null)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }

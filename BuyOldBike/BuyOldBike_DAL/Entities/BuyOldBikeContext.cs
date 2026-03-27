@@ -8,11 +8,57 @@ public partial class BuyOldBikeContext : DbContext
 {
     public BuyOldBikeContext()
     {
+        EnsureSchema();
     }
 
     public BuyOldBikeContext(DbContextOptions<BuyOldBikeContext> options)
         : base(options)
     {
+        EnsureSchema();
+    }
+
+    private static bool _schemaEnsured;
+    private static readonly object _schemaLock = new();
+
+    private void EnsureSchema()
+    {
+        if (_schemaEnsured) return;
+        lock (_schemaLock)
+        {
+            if (_schemaEnsured) return;
+
+            Database.ExecuteSqlRaw(@"
+IF OBJECT_ID(N'dbo.listings', N'U') IS NOT NULL AND COL_LENGTH('dbo.listings', 'views') IS NULL
+BEGIN
+    ALTER TABLE dbo.listings
+    ADD views INT NOT NULL CONSTRAINT DF_listings_views DEFAULT (0) WITH VALUES;
+END
+
+IF OBJECT_ID(N'dbo.return_request_images', N'U') IS NOT NULL AND COL_LENGTH('dbo.return_request_images', 'uploader_role') IS NULL
+BEGIN
+    ALTER TABLE dbo.return_request_images
+    ADD uploader_role VARCHAR(20) NOT NULL CONSTRAINT DF_return_request_images_uploader_role DEFAULT ('Buyer') WITH VALUES;
+END
+
+IF OBJECT_ID(N'dbo.inspection_images', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.inspection_images
+    (
+        image_id UNIQUEIDENTIFIER NOT NULL CONSTRAINT DF_inspection_images_image_id DEFAULT (NEWID()),
+        inspection_id UNIQUEIDENTIFIER NOT NULL,
+        image_url VARCHAR(500) NOT NULL,
+        created_at DATETIME NULL,
+        CONSTRAINT PK_inspection_images PRIMARY KEY (image_id),
+        CONSTRAINT FK_inspection_images_inspections
+            FOREIGN KEY (inspection_id) REFERENCES dbo.inspections(inspection_id)
+    );
+
+    CREATE INDEX IX_inspection_images_inspection_id ON dbo.inspection_images(inspection_id);
+END
+");
+
+            _schemaEnsured = true;
+        }
     }
 
     public virtual DbSet<Address> Addresses { get; set; }
@@ -22,6 +68,8 @@ public partial class BuyOldBikeContext : DbContext
     public virtual DbSet<Inspection> Inspections { get; set; }
 
     public virtual DbSet<InspectionComponent> InspectionComponents { get; set; }
+
+    public virtual DbSet<InspectionImage> InspectionImages { get; set; }
 
     public virtual DbSet<InspectionLocation> InspectionLocations { get; set; }
 
@@ -48,6 +96,8 @@ public partial class BuyOldBikeContext : DbContext
     public virtual DbSet<ReturnRequestImage> ReturnRequestImages { get; set; }
 
     public virtual DbSet<Review> Reviews { get; set; }
+
+    public virtual DbSet<SellerProfile> SellerProfiles { get; set; }
 
     public virtual DbSet<Type> Types { get; set; }
 
@@ -162,6 +212,30 @@ public partial class BuyOldBikeContext : DbContext
                 .HasConstraintName("FK__inspectio__listi__4316F928");
         });
 
+        modelBuilder.Entity<InspectionImage>(entity =>
+        {
+            entity.HasKey(e => e.ImageId).HasName("PK__inspecti__DC9AC955B4F128C8");
+
+            entity.ToTable("inspection_images");
+
+            entity.Property(e => e.ImageId)
+                .HasDefaultValueSql("(newid())")
+                .HasColumnName("image_id");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("created_at");
+            entity.Property(e => e.ImageUrl)
+                .HasMaxLength(500)
+                .IsUnicode(false)
+                .HasColumnName("image_url");
+            entity.Property(e => e.InspectionId).HasColumnName("inspection_id");
+
+            entity.HasOne(d => d.Inspection).WithMany(p => p.InspectionImages)
+                .HasForeignKey(d => d.InspectionId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_inspection_images_inspections");
+        });
+
         modelBuilder.Entity<InspectionComponent>(entity =>
         {
             entity.HasKey(e => e.ComponentId).HasName("PK__inspecti__AEB1DA5903A6342E");
@@ -228,7 +302,7 @@ public partial class BuyOldBikeContext : DbContext
             entity.Property(e => e.InspectionId).HasColumnName("inspection_id");
             entity.Property(e => e.ComponentId).HasColumnName("component_id");
             entity.Property(e => e.Note)
-                .HasColumnType("text")
+                .HasColumnType("nvarchar(max)")
                 .HasColumnName("note");
             entity.Property(e => e.Score).HasColumnName("score");
 
@@ -367,6 +441,7 @@ public partial class BuyOldBikeContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("title");
             entity.Property(e => e.UsageDuration).HasColumnName("usage_duration");
+            entity.Property(e => e.Views).HasColumnName("views");
 
             entity.HasOne(d => d.BikeType).WithMany(p => p.Listings)
                 .HasForeignKey(d => d.BikeTypeId)
@@ -543,6 +618,11 @@ public partial class BuyOldBikeContext : DbContext
                 .HasMaxLength(500)
                 .IsUnicode(false)
                 .HasColumnName("image_url");
+            entity.Property(e => e.UploaderRole)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasDefaultValueSql("('Buyer')")
+                .HasColumnName("uploader_role");
             entity.Property(e => e.ReturnRequestId).HasColumnName("return_request_id");
 
             entity.HasOne(d => d.ReturnRequest).WithMany(p => p.ReturnRequestImages)
@@ -582,6 +662,28 @@ public partial class BuyOldBikeContext : DbContext
             entity.HasOne(d => d.Seller).WithMany(p => p.ReviewSellers)
                 .HasForeignKey(d => d.SellerId)
                 .HasConstraintName("FK__reviews__seller___656C112C");
+        });
+
+        modelBuilder.Entity<SellerProfile>(entity =>
+        {
+            entity.HasKey(e => e.SellerId);
+
+            entity.ToTable("seller_profiles");
+
+            entity.Property(e => e.SellerId).HasColumnName("seller_id");
+            entity.Property(e => e.SellerRating)
+                .HasColumnType("float")
+                .HasDefaultValue(0d)
+                .HasColumnName("seller_rating");
+            entity.Property(e => e.TotalReviews)
+                .HasDefaultValue(0)
+                .HasColumnName("total_reviews");
+            entity.Property(e => e.LastReviewDate)
+                .HasColumnType("datetime")
+                .HasColumnName("last_review_date");
+
+            entity.HasOne(d => d.Seller).WithOne(p => p.SellerProfile)
+                .HasForeignKey<SellerProfile>(d => d.SellerId);
         });
 
         modelBuilder.Entity<Type>(entity =>
@@ -687,6 +789,58 @@ public partial class BuyOldBikeContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("role");
+            entity.Property(e => e.Status)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasDefaultValue("Active")
+                .HasColumnName("status");
+        });
+
+        modelBuilder.Entity<FrameSize>(entity =>
+        {
+            entity.HasKey(e => e.FrameSizeId);
+
+            entity.ToTable("frame_sizes");
+
+            entity.Property(e => e.FrameSizeId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("frame_size_id");
+            entity.Property(e => e.SizeValue)
+                .HasMaxLength(50)
+                .HasColumnName("size_value");
+        });
+
+        modelBuilder.Entity<Message>(entity =>
+        {
+            entity.HasKey(e => e.MessageId);
+
+            entity.ToTable("messages");
+
+            entity.Property(e => e.MessageId)
+                .HasDefaultValueSql("(newid())")
+                .HasColumnName("message_id");
+            entity.Property(e => e.ListingId).HasColumnName("listing_id");
+            entity.Property(e => e.SenderId).HasColumnName("sender_id");
+            entity.Property(e => e.ReceiverId).HasColumnName("receiver_id");
+            entity.Property(e => e.Content)
+                .HasColumnType("nvarchar(max)")
+                .HasColumnName("content");
+            entity.Property(e => e.SentAt)
+                .HasColumnType("datetime")
+                .HasColumnName("sent_at");
+            entity.Property(e => e.IsRead).HasColumnName("is_read");
+
+            entity.HasOne(d => d.Listing).WithMany()
+                .HasForeignKey(d => d.ListingId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(d => d.Sender).WithMany()
+                .HasForeignKey(d => d.SenderId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(d => d.Receiver).WithMany()
+                .HasForeignKey(d => d.ReceiverId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         OnModelCreatingPartial(modelBuilder);

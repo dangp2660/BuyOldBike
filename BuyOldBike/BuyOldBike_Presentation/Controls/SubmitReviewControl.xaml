@@ -11,127 +11,134 @@
            
             BorderBrush="#E5E7EB"
             BorderThickness="1">
-        <StackPanel Orientation="Vertical">
-            <TextBlock FontSize="20"
-                       FontWeight="Bold"
-                       Foreground="#1F2937"
-                       Text="Đánh giá người bán"
-                       Margin="0,0,0,24" />
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-            <!-- Seller Info -->
-            <Border Padding="12"
-                    Background="#F3F4F6"
-                   
-                    Margin="0,0,0,20">
+            <ScrollViewer Grid.Row="0"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
                 <StackPanel Orientation="Vertical">
-                    <TextBlock FontSize="12"
-                               Foreground="#6B7280"
-                               Text="Người bán" />
+                    <TextBlock FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="#1F2937"
+                               Text="Đánh giá người bán"
+                               Margin="0,0,0,24" />
+
+                    <Border Padding="12"
+                            Background="#F3F4F6"
+                           
+                            Margin="0,0,0,20">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock FontSize="12"
+                                       Foreground="#6B7280"
+                                       Text="Người bán" />
+                            <TextBlock FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="#1F2937"
+                                       x:Name="SellerNameText"
+                                       Text="Seller Name" />
+                            <TextBlock FontSize="12"
+                                       Foreground="#6B7280"
+                                       x:Name="SellerEmailText"
+                                       Text="seller@example.com" />
+                        </StackPanel>
+                    </Border>
+
                     <TextBlock FontSize="14"
                                FontWeight="SemiBold"
                                Foreground="#1F2937"
-                               x:Name="SellerNameText"
-                               Text="Seller Name" />
+                               Text="Đánh giá * (bắt buộc)"
+                               Margin="0,0,0,12" />
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                        <Button x:Name="Star1Btn" Width="50" Height="50" Content="★" FontSize="32" Foreground="#D1D5DB" 
+                                Background="Transparent" BorderThickness="0" Click="RatingButton_Click" />
+                        <Button x:Name="Star2Btn" Width="50" Height="50" Content="★" FontSize="32" Foreground="#D1D5DB" 
+                                Background="Transparent" BorderThickness="0" Click="RatingButton_Click" />
+                        <Button x:Name="Star3Btn" Width="50" Height="50" Content="★" FontSize="32" Foreground="#D1D5DB" 
+                                Background="Transparent" BorderThickness="0" Click="RatingButton_Click" />
+                        <Button x:Name="Star4Btn" Width="50" Height="50" Content="★" FontSize="32" Foreground="#D1D5DB" 
+                                Background="Transparent" BorderThickness="0" Click="RatingButton_Click" />
+                        <Button x:Name="Star5Btn" Width="50" Height="50" Content="★" FontSize="32" Foreground="#D1D5DB" 
+                                Background="Transparent" BorderThickness="0" Click="RatingButton_Click" />
+                        <TextBlock Margin="20,0,0,0" VerticalAlignment="Center" FontSize="14" Foreground="#6B7280" 
+                                   x:Name="RatingDisplayText" Text="0 sao" />
+                    </StackPanel>
+
+                    <TextBlock FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="#1F2937"
+                               Text="Nhận xét chi tiết (không bắt buộc)"
+                               Margin="0,0,0,12" />
+                    <Border Background="White"
+                            BorderBrush="#D1D5DB"
+                            BorderThickness="1"
+                           
+                            Margin="0,0,0,8">
+                        <TextBox x:Name="DescriptionTextBox"
+                                 Height="120"
+                                 Padding="10"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 VerticalScrollBarVisibility="Auto"
+                                 Foreground="#374151"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Text="" />
+                    </Border>
+                    <TextBlock FontSize="11"
+                               Foreground="#6B7280"
+                               Text="Mô tả chi tiết của bạn giúp những người mua khác đưa ra quyết định tốt hơn"
+                               Margin="0,0,0,20" />
+
                     <TextBlock FontSize="12"
                                Foreground="#6B7280"
-                               x:Name="SellerEmailText"
-                               Text="seller@example.com" />
+                               x:Name="CharacterCountText"
+                               Text="0 / 1000 ký tự"
+                               Margin="0,0,0,4"
+                               TextAlignment="Right" />
                 </StackPanel>
-            </Border>
+            </ScrollViewer>
 
-            <!-- Rating Selection -->
-            <TextBlock FontSize="14"
-                       FontWeight="SemiBold"
-                       Foreground="#1F2937"
-                       Text="Đánh giá * (bắt buộc)"
-                       Margin="0,0,0,12" />
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                <Button x:Name="Star1Btn" Width="50" Height="50" Content="★" FontSize="32" Foreground="#D1D5DB" 
-                        Background="Transparent" BorderThickness="0" Click="RatingButton_Click" />
-                <Button x:Name="Star2Btn" Width="50" Height="50" Content="★" FontSize="32" Foreground="#D1D5DB" 
-                        Background="Transparent" BorderThickness="0" Click="RatingButton_Click" />
-                <Button x:Name="Star3Btn" Width="50" Height="50" Content="★" FontSize="32" Foreground="#D1D5DB" 
-                        Background="Transparent" BorderThickness="0" Click="RatingButton_Click" />
-                <Button x:Name="Star4Btn" Width="50" Height="50" Content="★" FontSize="32" Foreground="#D1D5DB" 
-                        Background="Transparent" BorderThickness="0" Click="RatingButton_Click" />
-                <Button x:Name="Star5Btn" Width="50" Height="50" Content="★" FontSize="32" Foreground="#D1D5DB" 
-                        Background="Transparent" BorderThickness="0" Click="RatingButton_Click" />
-                <TextBlock Margin="20,0,0,0" VerticalAlignment="Center" FontSize="14" Foreground="#6B7280" 
-                           x:Name="RatingDisplayText" Text="0 sao" />
+            <StackPanel Grid.Row="1" Margin="0,16,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="1"
+                            Width="100"
+                            Height="40"
+                            Content="Hủy"
+                            Foreground="#374151"
+                            Background="White"
+                            BorderBrush="#D1D5DB"
+                            BorderThickness="1"
+                            Margin="0,0,12,0"
+                            Click="CancelButton_Click" />
+
+                    <Button Grid.Column="2"
+                            Width="120"
+                            Height="40"
+                            Content="Gửi đánh giá"
+                            Foreground="White"
+                            Background="#3B82F6"
+                            BorderThickness="0"
+                            x:Name="SubmitButton"
+                            Click="SubmitButton_Click" />
+                </Grid>
+
+                <TextBlock FontSize="12"
+                           Foreground="#DC2626"
+                           x:Name="ErrorMessageText"
+                           Margin="0,12,0,0"
+                           TextWrapping="Wrap"
+                           Visibility="Collapsed" />
             </StackPanel>
-
-            <!-- Description -->
-            <TextBlock FontSize="14"
-                       FontWeight="SemiBold"
-                       Foreground="#1F2937"
-                       Text="Nhận xét chi tiết * (bắt buộc)"
-                       Margin="0,0,0,12" />
-            <Border Background="White"
-                    BorderBrush="#D1D5DB"
-                    BorderThickness="1"
-                   
-                    Margin="0,0,0,8">
-                <TextBox x:Name="DescriptionTextBox"
-                         Height="120"
-                         Padding="10"
-                         TextWrapping="Wrap"
-                         AcceptsReturn="True"
-                         VerticalScrollBarVisibility="Auto"
-                         Foreground="#374151"
-                         Background="Transparent"
-                         BorderThickness="0"
-                         Text="" />
-            </Border>
-            <TextBlock FontSize="11"
-                       Foreground="#6B7280"
-                       Text="Mô tả chi tiết của bạn giúp những người mua khác đưa ra quyết định tốt hơn"
-                       Margin="0,0,0,20" />
-
-            <!-- Character count -->
-            <TextBlock FontSize="12"
-                       Foreground="#6B7280"
-                       x:Name="CharacterCountText"
-                       Text="0 / 1000 ký tự"
-                       Margin="0,0,0,20"
-                       TextAlignment="Right" />
-
-            <!-- Buttons -->
-            <Grid Margin="0,20,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <Button Grid.Column="1"
-                        Width="100"
-                        Height="40"
-                        Content="Hủy"
-                        Foreground="#374151"
-                        Background="White"
-                        BorderBrush="#D1D5DB"
-                        BorderThickness="1"
-                        Margin="0,0,12,0"
-                        Click="CancelButton_Click" />
-
-                <Button Grid.Column="2"
-                        Width="120"
-                        Height="40"
-                        Content="Gửi đánh giá"
-                        Foreground="White"
-                        Background="#3B82F6"
-                        BorderThickness="0"
-                        x:Name="SubmitButton"
-                        Click="SubmitButton_Click" />
-            </Grid>
-
-            <!-- Error message -->
-            <TextBlock FontSize="12"
-                       Foreground="#DC2626"
-                       x:Name="ErrorMessageText"
-                       Margin="0,16,0,0"
-                       TextWrapping="Wrap"
-                       Visibility="Collapsed" />
-        </StackPanel>
+        </Grid>
     </Border>
 </UserControl>

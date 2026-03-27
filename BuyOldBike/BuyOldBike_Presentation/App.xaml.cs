@@ -1,4 +1,5 @@
 using BuyOldBike_BLL.Features.Payments;
+using BuyOldBike_DAL.Repositories.Seller;
 using System;
 using System.Configuration;
 using System.Data;
@@ -18,6 +19,14 @@ namespace BuyOldBike_Presentation
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            try
+            {
+                new BikePostRepository().EnsureInspectionCatalogSeeded();
+            }
+            catch
+            {
+            }
 
             _autoRefundCts = new CancellationTokenSource();
             _ = Task.Run(() => RunAutoRefundJob(_autoRefundCts.Token));

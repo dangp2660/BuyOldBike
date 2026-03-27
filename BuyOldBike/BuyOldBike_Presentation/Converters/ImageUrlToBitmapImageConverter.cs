@@ -20,11 +20,24 @@ namespace BuyOldBike_Presentation.Converters
                 return CreateBitmapImage(absoluteUri);
             }
 
-            string fullPath = Path.GetFullPath(source);
-            if (File.Exists(fullPath))
+            var normalizedPath = source.Replace('/', Path.DirectorySeparatorChar);
+            string fullPath;
+
+            if (Path.IsPathRooted(normalizedPath))
             {
-                return CreateBitmapImage(new Uri(fullPath, UriKind.Absolute));
+                fullPath = normalizedPath;
             }
+            else
+            {
+                fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, normalizedPath);
+                if (!File.Exists(fullPath))
+                {
+                    fullPath = Path.GetFullPath(normalizedPath);
+                }
+            }
+
+            if (File.Exists(fullPath))
+                return CreateBitmapImage(new Uri(fullPath, UriKind.Absolute));
 
             return null;
         }

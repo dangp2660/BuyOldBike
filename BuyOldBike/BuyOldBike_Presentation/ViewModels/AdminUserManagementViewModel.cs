@@ -46,7 +46,6 @@ namespace BuyOldBike_Presentation.ViewModels
             set { _isLoading = value; OnPropertyChanged(); }
         }
 
-        // Event để View mở dialog — ViewModel không phụ thuộc vào View
         public event Action<User>? OnViewProfileRequested;
 
         public AdminUserManagementViewModel(UserManagementService service)

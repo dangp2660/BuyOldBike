@@ -87,9 +87,10 @@ namespace BuyOldBike_Presentation.Controls
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(DescriptionTextBox.Text) || DescriptionTextBox.Text.Length < 10)
+            var description = (DescriptionTextBox.Text ?? string.Empty).Trim();
+            if (!string.IsNullOrWhiteSpace(description) && description.Length < 10)
             {
-                ShowError("Nhận xét phải có ít nhất 10 ký tự");
+                ShowError("Nhận xét (nếu có) phải có ít nhất 10 ký tự");
                 return;
             }
 
@@ -103,7 +104,7 @@ namespace BuyOldBike_Presentation.Controls
                     _buyerId,
                     _sellerId,
                     _selectedRating,
-                    DescriptionTextBox.Text
+                    description
                 );
 
                 if (success)
@@ -130,6 +131,21 @@ namespace BuyOldBike_Presentation.Controls
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            var window = Window.GetWindow(this);
+            if (window != null)
+            {
+                try
+                {
+                    window.DialogResult = false;
+                }
+                catch
+                {
+                }
+
+                window.Close();
+                return;
+            }
+
             ResetForm();
         }
 

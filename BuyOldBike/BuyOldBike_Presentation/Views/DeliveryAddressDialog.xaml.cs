@@ -14,6 +14,9 @@ namespace BuyOldBike_Presentation.Views
         private static readonly HttpClient _http = new HttpClient();
         private bool _isLoadingProvince;
         private bool _isLoadingDistrict;
+        private string _prefillProvince = string.Empty;
+        private string _prefillDistrict = string.Empty;
+        private string _prefillWard = string.Empty;
 
         public DeliveryAddressInfo? ResultAddress { get; private set; }
 
@@ -50,9 +53,12 @@ namespace BuyOldBike_Presentation.Views
                     {
                         txtPhoneNumber.Text = addr.PhoneNumber ?? string.Empty;
                     }
-                    cbxProvince.Text = addr.Province ?? addr.City ?? string.Empty;
-                    cbxDistrict.Text = addr.District ?? string.Empty;
-                    cbxWard.Text = addr.Ward ?? string.Empty;
+                    _prefillProvince = (addr.Province ?? addr.City ?? string.Empty).Trim();
+                    _prefillDistrict = (addr.District ?? string.Empty).Trim();
+                    _prefillWard = (addr.Ward ?? string.Empty).Trim();
+                    cbxProvince.Text = _prefillProvince;
+                    cbxDistrict.Text = _prefillDistrict;
+                    cbxWard.Text = _prefillWard;
                     txtDetail.Text = addr.Detail ?? string.Empty;
                 }
             }
@@ -63,12 +69,18 @@ namespace BuyOldBike_Presentation.Views
         {
             if (_isLoadingProvince) return;
             _isLoadingProvince = true;
+            ProvinceDto? toSelect = null;
             try
             {
                 var url = "https://provinces.open-api.vn/api/p/";
                 var json = await _http.GetStringAsync(url);
                 var provinces = JsonSerializer.Deserialize<ProvinceDto[]>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? Array.Empty<ProvinceDto>();
-                cbxProvince.ItemsSource = provinces.OrderBy(p => p.Name).ToArray();
+                var sorted = provinces.OrderBy(p => p.Name).ToArray();
+                cbxProvince.ItemsSource = sorted;
+                if (!string.IsNullOrWhiteSpace(_prefillProvince))
+                {
+                    toSelect = sorted.FirstOrDefault(p => string.Equals(p.Name, _prefillProvince, StringComparison.CurrentCultureIgnoreCase));
+                }
             }
             catch
             {
@@ -76,6 +88,10 @@ namespace BuyOldBike_Presentation.Views
             finally
             {
                 _isLoadingProvince = false;
+            }
+            if (toSelect != null)
+            {
+                cbxProvince.SelectedItem = toSelect;
             }
         }
 
@@ -98,14 +114,20 @@ namespace BuyOldBike_Presentation.Views
         {
             if (_isLoadingDistrict) return;
             _isLoadingDistrict = true;
+            DistrictDto? toSelect = null;
             try
             {
                 var url = $"https://provinces.open-api.vn/api/p/{provinceCode}?depth=2";
                 var json = await _http.GetStringAsync(url);
                 var province = JsonSerializer.Deserialize<ProvinceWithDistrictsDto>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 var districts = province?.Districts ?? Array.Empty<DistrictDto>();
-                cbxDistrict.ItemsSource = districts.OrderBy(d => d.Name).ToArray();
+                var sorted = districts.OrderBy(d => d.Name).ToArray();
+                cbxDistrict.ItemsSource = sorted;
                 cbxDistrict.IsEnabled = true;
+                if (!string.IsNullOrWhiteSpace(_prefillDistrict))
+                {
+                    toSelect = sorted.FirstOrDefault(d => string.Equals(d.Name, _prefillDistrict, StringComparison.CurrentCultureIgnoreCase));
+                }
             }
             catch
             {
@@ -113,6 +135,10 @@ namespace BuyOldBike_Presentation.Views
             finally
             {
                 _isLoadingDistrict = false;
+            }
+            if (toSelect != null)
+            {
+                cbxDistrict.SelectedItem = toSelect;
             }
         }
 
@@ -136,8 +162,17 @@ namespace BuyOldBike_Presentation.Views
                 var json = await _http.GetStringAsync(url);
                 var district = JsonSerializer.Deserialize<DistrictWithWardsDto>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 var wards = district?.Wards ?? Array.Empty<WardDto>();
-                cbxWard.ItemsSource = wards.OrderBy(w => w.Name).ToArray();
+                var sorted = wards.OrderBy(w => w.Name).ToArray();
+                cbxWard.ItemsSource = sorted;
                 cbxWard.IsEnabled = true;
+                if (!string.IsNullOrWhiteSpace(_prefillWard))
+                {
+                    var toSelect = sorted.FirstOrDefault(w => string.Equals(w.Name, _prefillWard, StringComparison.CurrentCultureIgnoreCase));
+                    if (toSelect != null)
+                    {
+                        cbxWard.SelectedItem = toSelect;
+                    }
+                }
             }
             catch
             {
@@ -152,9 +187,9 @@ namespace BuyOldBike_Presentation.Views
 
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
-            var province = (cbxProvince.Text ?? string.Empty).Trim();
-            var district = (cbxDistrict.Text ?? string.Empty).Trim();
-            var ward = (cbxWard.Text ?? string.Empty).Trim();
+            var province = (cbxProvince.SelectedItem as ProvinceDto)?.Name ?? (cbxProvince.Text ?? string.Empty).Trim();
+            var district = (cbxDistrict.SelectedItem as DistrictDto)?.Name ?? (cbxDistrict.Text ?? string.Empty).Trim();
+            var ward = (cbxWard.SelectedItem as WardDto)?.Name ?? (cbxWard.Text ?? string.Empty).Trim();
             var detail = (txtDetail.Text ?? string.Empty).Trim();
 
             if (string.IsNullOrWhiteSpace(province) ||
