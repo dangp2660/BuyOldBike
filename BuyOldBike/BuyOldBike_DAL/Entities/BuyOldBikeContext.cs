@@ -71,18 +71,15 @@ public partial class BuyOldBikeContext : DbContext
                 .HasColumnName("address_id");
             entity.Property(e => e.City)
                 .HasMaxLength(100)
-                .IsUnicode(false)
                 .HasColumnName("city");
             entity.Property(e => e.Detail)
-                .HasColumnType("text")
+                .HasColumnType("nvarchar(max)")
                 .HasColumnName("detail");
             entity.Property(e => e.District)
                 .HasMaxLength(100)
-                .IsUnicode(false)
                 .HasColumnName("district");
             entity.Property(e => e.FullName)
                 .HasMaxLength(255)
-                .IsUnicode(false)
                 .HasColumnName("full_name");
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(20)
@@ -90,12 +87,10 @@ public partial class BuyOldBikeContext : DbContext
                 .HasColumnName("phone_number");
             entity.Property(e => e.Province)
                 .HasMaxLength(100)
-                .IsUnicode(false)
                 .HasColumnName("province");
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.Ward)
                 .HasMaxLength(100)
-                .IsUnicode(false)
                 .HasColumnName("ward");
 
             entity.HasOne(d => d.User).WithOne(p => p.Address)
@@ -114,7 +109,6 @@ public partial class BuyOldBikeContext : DbContext
             entity.Property(e => e.BrandId).HasColumnName("brand_id");
             entity.Property(e => e.BrandName)
                 .HasMaxLength(100)
-                .IsUnicode(false)
                 .HasColumnName("brand_name");
         });
 
@@ -139,7 +133,7 @@ public partial class BuyOldBikeContext : DbContext
             entity.Property(e => e.ListingId).HasColumnName("listing_id");
             entity.Property(e => e.OverallScore).HasColumnName("overall_score");
             entity.Property(e => e.RejectReason)
-                .HasColumnType("text")
+                .HasColumnType("nvarchar(max)")
                 .HasColumnName("reject_reason");
             entity.Property(e => e.Result)
                 .HasMaxLength(50)
@@ -179,7 +173,6 @@ public partial class BuyOldBikeContext : DbContext
                 .HasColumnName("component_id");
             entity.Property(e => e.ComponentName)
                 .HasMaxLength(255)
-                .IsUnicode(false)
                 .HasColumnName("component_name");
         });
 
@@ -194,15 +187,12 @@ public partial class BuyOldBikeContext : DbContext
                 .HasColumnName("inspection_location_id");
             entity.Property(e => e.AddressLine)
                 .HasMaxLength(255)
-                .IsUnicode(false)
                 .HasColumnName("address_line");
             entity.Property(e => e.City)
                 .HasMaxLength(100)
-                .IsUnicode(false)
                 .HasColumnName("city");
             entity.Property(e => e.ContactName)
                 .HasMaxLength(255)
-                .IsUnicode(false)
                 .HasColumnName("contact_name");
             entity.Property(e => e.ContactPhone)
                 .HasMaxLength(20)
@@ -210,7 +200,6 @@ public partial class BuyOldBikeContext : DbContext
                 .HasColumnName("contact_phone");
             entity.Property(e => e.District)
                 .HasMaxLength(100)
-                .IsUnicode(false)
                 .HasColumnName("district");
             entity.Property(e => e.Latitude)
                 .HasColumnType("decimal(9, 6)")
@@ -219,7 +208,7 @@ public partial class BuyOldBikeContext : DbContext
                 .HasColumnType("decimal(9, 6)")
                 .HasColumnName("longitude");
             entity.Property(e => e.Note)
-                .HasColumnType("text")
+                .HasColumnType("nvarchar(max)")
                 .HasColumnName("note");
             entity.Property(e => e.Type)
                 .HasMaxLength(50)
@@ -227,7 +216,6 @@ public partial class BuyOldBikeContext : DbContext
                 .HasColumnName("type");
             entity.Property(e => e.Ward)
                 .HasMaxLength(100)
-                .IsUnicode(false)
                 .HasColumnName("ward");
         });
 
@@ -332,7 +320,6 @@ public partial class BuyOldBikeContext : DbContext
                 .HasColumnName("placeOfOrigin");
             entity.Property(e => e.PlaceOfResidence)
                 .HasMaxLength(255)
-                .IsUnicode(false)
                 .HasColumnName("placeOfResidence");
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.VerifiedAt)
@@ -359,7 +346,7 @@ public partial class BuyOldBikeContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("created_at");
             entity.Property(e => e.Description)
-                .HasColumnType("text")
+                .HasColumnType("nvarchar(max)")
                 .HasColumnName("description");
             entity.Property(e => e.FrameNumber)
                 .HasMaxLength(100)
@@ -378,7 +365,6 @@ public partial class BuyOldBikeContext : DbContext
                 .HasColumnName("status");
             entity.Property(e => e.Title)
                 .HasMaxLength(255)
-                .IsUnicode(false)
                 .HasColumnName("title");
             entity.Property(e => e.UsageDuration).HasColumnName("usage_duration");
 
@@ -432,6 +418,25 @@ public partial class BuyOldBikeContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("datetime")
                 .HasColumnName("created_at");
+            entity.Property(e => e.DeliveryDetail)
+                .HasColumnType("nvarchar(max)")
+                .HasColumnName("delivery_detail");
+            entity.Property(e => e.DeliveryDistrict)
+                .HasMaxLength(100)
+                .HasColumnName("delivery_district");
+            entity.Property(e => e.DeliveryFullName)
+                .HasMaxLength(255)
+                .HasColumnName("delivery_full_name");
+            entity.Property(e => e.DeliveryPhoneNumber)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("delivery_phone_number");
+            entity.Property(e => e.DeliveryProvince)
+                .HasMaxLength(100)
+                .HasColumnName("delivery_province");
+            entity.Property(e => e.DeliveryWard)
+                .HasMaxLength(100)
+                .HasColumnName("delivery_ward");
             entity.Property(e => e.ListingId).HasColumnName("listing_id");
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
@@ -506,11 +511,11 @@ public partial class BuyOldBikeContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("created_at");
             entity.Property(e => e.Detail)
-                .HasColumnType("text")
+                .HasColumnType("nvarchar(max)")
                 .HasColumnName("detail");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.Reason)
-                .HasColumnType("text")
+                .HasColumnType("nvarchar(max)")
                 .HasColumnName("reason");
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
@@ -560,7 +565,7 @@ public partial class BuyOldBikeContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("created_at");
             entity.Property(e => e.Description)
-                .HasColumnType("text")
+                .HasColumnType("nvarchar(max)")
                 .HasColumnName("description");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.Rating).HasColumnName("rating");
@@ -590,7 +595,6 @@ public partial class BuyOldBikeContext : DbContext
             entity.Property(e => e.BikeTypeId).HasColumnName("bike_type_id");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
-                .IsUnicode(false)
                 .HasColumnName("name");
         });
 
@@ -644,7 +648,7 @@ public partial class BuyOldBikeContext : DbContext
                 .HasColumnName("type");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.Note)
-                .HasColumnType("text")
+                .HasColumnType("nvarchar(max)")
                 .HasColumnName("note");
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("datetime")

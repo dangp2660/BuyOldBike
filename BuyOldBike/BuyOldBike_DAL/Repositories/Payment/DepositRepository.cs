@@ -13,7 +13,17 @@ namespace BuyOldBike_DAL.Repositories.Payment
         {
            
         }
-        public (Order, Entities.Payment) CreateDeposit(Guid buyerId, Guid listingId, decimal depositAmount)
+        public (Order, Entities.Payment) CreateDeposit(
+            Guid buyerId,
+            Guid listingId,
+            decimal depositAmount,
+            string? deliveryFullName,
+            string? deliveryPhoneNumber,
+            string? deliveryProvince,
+            string? deliveryDistrict,
+            string? deliveryWard,
+            string? deliveryDetail
+        )
         {
             var transaction = _db.Database.BeginTransaction();
             try
@@ -31,6 +41,12 @@ namespace BuyOldBike_DAL.Repositories.Payment
                     ListingId = listingId,
                     Status = StatusConstants.OrdersStatus.Deposit_Pending,
                     TotalAmount = depositAmount,
+                    DeliveryFullName = deliveryFullName,
+                    DeliveryPhoneNumber = deliveryPhoneNumber,
+                    DeliveryProvince = deliveryProvince,
+                    DeliveryDistrict = deliveryDistrict,
+                    DeliveryWard = deliveryWard,
+                    DeliveryDetail = deliveryDetail,
                     CreatedAt = DateTime.Now,
                 };
 
@@ -137,6 +153,110 @@ namespace BuyOldBike_DAL.Repositories.Payment
         {
             MaskDepositToNewStatus(orderId, StatusConstants.OrdersStatus.Deposit_Expired,
                 StatusConstants.PaymentStatus.Expired);
+        }
+
+        public List<Guid> GetExpiredDepositOrders()
+        {
+            var expiredDate = DateTime.Now.AddDays(-7);
+            return _db.Orders
+                .Where(o => o.Status == StatusConstants.OrdersStatus.Deposit_Paid 
+                            && o.CreatedAt.HasValue 
+                            && o.CreatedAt.Value <= expiredDate)
+                .Select(o => o.OrderId)
+                .ToList();
+        }
+
+        public void RefundDepositDueToSellerNoShow(Guid orderId)
+        {
+            var tx = _db.Database.BeginTransaction(IsolationLevel.Serializable);
+            try
+            {
+                var order = _db.Orders
+                    .Include(o => o.Listing)
+                    .Include(o => o.Payments)
+                    .FirstOrDefault(o => o.OrderId == orderId);
+
+                if (order == null) throw new InvalidOperationException("Không tìm thấy đơn hàng.");
+                if (order.Status != StatusConstants.OrdersStatus.Deposit_Paid)
+                    throw new InvalidOperationException("Chỉ có thể hoàn cọc khi đơn hàng đang ở trạng thái đã đặt cọc.");
+
+                // Kiểm tra xem đã quá 7 ngày kể từ lúc tạo đơn chưa
+                if (order.CreatedAt.HasValue && (DateTime.Now - order.CreatedAt.Value).TotalDays <= 7)
+                    throw new InvalidOperationException("Chưa quá hạn 7 ngày, không thể hoàn cọc với lý do này.");
+
+                var successPayment = order.Payments?
+                    .OrderByDescending(p => p.CreatedAt)
+                    .FirstOrDefault(p => p.Status == StatusConstants.PaymentStatus.Success);
+
+                if (successPayment == null) throw new InvalidOperationException("Không tìm thấy giao dịch thanh toán thành công.");
+
+                var amount = successPayment.Amount ?? order.TotalAmount ?? 0m;
+                if (amount <= 0) throw new InvalidOperationException("Số tiền hoàn không hợp lệ.");
+                if (order.BuyerId == null) throw new InvalidOperationException("Đơn hàng không có thông tin người mua.");
+
+                var buyerId = order.BuyerId.Value;
+
+                // Hoàn tiền vào ví người mua
+                var wallet = _db.UserWallets.FirstOrDefault(w => w.UserId == buyerId);
+                if (wallet == null)
+                {
+                    wallet = new UserWallet
+                    {
+                        WalletId = Guid.NewGuid(),
+                        UserId = buyerId,
+                        Balance = 0m,
+                        UpdatedAt = DateTime.Now
+                    };
+                    _db.UserWallets.Add(wallet);
+                }
+
+                wallet.Balance += amount;
+                wallet.UpdatedAt = DateTime.Now;
+
+                // Tạo giao dịch hoàn tiền
+                var refundTxnId = Guid.NewGuid();
+                _db.WalletTransactions.Add(new WalletTransaction
+                {
+                    WalletTransactionId = refundTxnId,
+                    WalletId = wallet.WalletId,
+                    Amount = amount,
+                    Direction = "Credit",
+                    Type = "Refund",
+                    OrderId = orderId,
+                    Note = $"Hoàn cọc 100% do người bán không giao xe đúng hạn cho đơn {orderId.ToString("N")}",
+                    CreatedAt = DateTime.Now
+                });
+
+                // Tạo payment record cho giao dịch hoàn
+                Entities.Payment refundPayment = new Entities.Payment
+                {
+                    PaymentId = Guid.NewGuid(),
+                    OrderId = order.OrderId,
+                    UserId = buyerId,
+                    Amount = amount,
+                    PaymentType = StatusConstants.PaymentType.Internal_Wallet,
+                    Status = StatusConstants.PaymentStatus.Success,
+                    ProviderTxnNo = refundTxnId.ToString("N"),
+                    CreatedAt = DateTime.Now
+                };
+                _db.Payments.Add(refundPayment);
+
+                // Cập nhật trạng thái Order và Listing
+                order.Status = StatusConstants.OrdersStatus.Deposit_Expired; // Hoặc một trạng thái như Refunded
+
+                if (order.Listing != null)
+                {
+                    order.Listing.Status = StatusConstants.ListingStatus.Available; // Mở lại listing cho người khác
+                }
+
+                _db.SaveChanges();
+                tx.Commit();
+            }
+            catch
+            {
+                tx.Rollback();
+                throw;
+            }
         }
 
 

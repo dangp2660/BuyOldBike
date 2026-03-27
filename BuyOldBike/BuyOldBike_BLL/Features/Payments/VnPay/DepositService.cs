@@ -1,4 +1,4 @@
-﻿using BuyOldBike_BLL.Features.Payments.VnPay;
+using BuyOldBike_BLL.Features.Payments.VnPay;
 using BuyOldBike_DAL.Constants;
 using BuyOldBike_DAL.Entities;
 using BuyOldBike_DAL.Repositories.Payment;
@@ -25,7 +25,7 @@ namespace BuyOldBike_BLL.Features.Payments
             if (listing?.Price == null || listing.Price <= 0) throw new InvalidOperationException("Giá listing không hợp lệ.");
 
             var depositAmount = Math.Round(listing.Price.Value * DepositRate, 0, MidpointRounding.AwayFromZero);
-            var (order, payment) = _depositRepo.CreateDeposit(buyerId, listingId, depositAmount);
+            var (order, payment) = _depositRepo.CreateDeposit(buyerId, listingId, depositAmount, null, null, null, null, null, null);
 
             var url = _builder.BuildPaymetUrl(options, new VnPayCreatePaymentRequest
             {
@@ -120,9 +120,66 @@ namespace BuyOldBike_BLL.Features.Payments
             _depositRepo.MaskDepositExpried(orderId);
         }
 
+        public void AutoRefundExpiredDeposits()
+        {
+            var expiredOrders = _depositRepo.GetExpiredDepositOrders();
+            foreach (var orderId in expiredOrders)
+            {
+                try
+                {
+                    _depositRepo.RefundDepositDueToSellerNoShow(orderId);
+                }
+                catch
+                {
+                    // Ignore errors for individual refunds, continue with others
+                }
+            }
+        }
+
+        public void RefundDepositDueToSellerNoShow(Guid orderId)
+        {
+            _depositRepo.RefundDepositDueToSellerNoShow(orderId);
+        }
+
         public void PayPendingDepositWithWallet(Guid buyerId, Guid orderId)
         {
             _depositRepo.PayDepositWithWallet(buyerId, orderId);
+        }
+
+        public void PlaceDepositWithWallet(Guid buyerId, Guid listingId, DeliveryAddressInfo deliveryAddress)
+        {
+            if (deliveryAddress == null) throw new InvalidOperationException("Thiếu địa chỉ nghiệm thu.");
+            if (string.IsNullOrWhiteSpace(deliveryAddress.Province)) throw new InvalidOperationException("Vui lòng nhập tỉnh/thành phố.");
+            if (string.IsNullOrWhiteSpace(deliveryAddress.District)) throw new InvalidOperationException("Vui lòng nhập quận/huyện.");
+            if (string.IsNullOrWhiteSpace(deliveryAddress.Ward)) throw new InvalidOperationException("Vui lòng nhập phường/xã.");
+            if (string.IsNullOrWhiteSpace(deliveryAddress.Detail)) throw new InvalidOperationException("Vui lòng nhập địa chỉ chi tiết.");
+
+            var listing = _listingRepo.GetListingDetailById(listingId);
+            if (listing?.Price == null || listing.Price <= 0) throw new InvalidOperationException("Giá listing không hợp lệ.");
+
+            var depositAmount = Math.Round(listing.Price.Value * DepositRate, 0, MidpointRounding.AwayFromZero);
+            
+            // Check if wallet has enough money first
+            using var db = new BuyOldBikeContext();
+            var wallet = db.UserWallets.FirstOrDefault(w => w.UserId == buyerId);
+            if (wallet == null || wallet.Balance < depositAmount)
+                throw new InvalidOperationException("Số dư trong ví không đủ để đặt cọc. Vui lòng nạp thêm tiền.");
+
+            // Create deposit
+            var (order, payment) = _depositRepo.CreateDeposit(
+                buyerId,
+                listingId,
+                depositAmount,
+                deliveryAddress.FullName,
+                deliveryAddress.PhoneNumber,
+                deliveryAddress.Province,
+                deliveryAddress.District,
+                deliveryAddress.Ward,
+                deliveryAddress.Detail
+            );
+            
+            // Pay with wallet
+            _depositRepo.PayDepositWithWallet(buyerId, order.OrderId);
         }
     }
 }

@@ -69,71 +69,6 @@ namespace BuyOldBike_Presentation.Views
             Close();
         }
 
-        private async void BtnPayDeposit_Click(object sender, RoutedEventArgs e)
-        {
-            if (!AppSession.IsAuthenticated || AppSession.CurrentUser == null)
-            {
-                MessageBox.Show("Bạn cần đăng nhập để thanh toán.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            if (sender is not FrameworkElement fe || fe.DataContext is not DepositOrderRow row)
-            {
-                return;
-            }
-
-            var depositService = new DepositService();
-            try
-            {
-                var amount = row.DepositAmount ?? 0m;
-                var confirm = MessageBox.Show(
-                    $"Thanh toán đặt cọc {amount:N0}đ bằng VNPay hay ví?\n\nYes: VNPay\nNo: Ví\nCancel: Hủy",
-                    "Xác nhận",
-                    MessageBoxButton.YesNoCancel,
-                    MessageBoxImage.Question
-                );
-
-                if (confirm == MessageBoxResult.Cancel) return;
-
-                if (confirm == MessageBoxResult.Yes)
-                {
-                    if (sender is FrameworkElement element) element.IsEnabled = false;
-
-                    var options = VnPayOptionsLoader.LoadValidated();
-                    var waitTask = VnPayReturnListener.WaitForReturnAsync(options.ReturnUrl, TimeSpan.FromMinutes(5));
-                    var paymentUrl = depositService.BuildPaymentUrlForPendingDeposit(
-                        AppSession.CurrentUser.UserId,
-                        row.OrderId,
-                        options,
-                        "127.0.0.1"
-                    );
-
-                    Process.Start(new ProcessStartInfo { FileName = paymentUrl, UseShellExecute = true });
-
-                    var query = await waitTask;
-                    var ok = depositService.ProcessVnPayReturn(options, query, out var message);
-                    MessageBox.Show(message, "VNPay", MessageBoxButton.OK, ok ? MessageBoxImage.Information : MessageBoxImage.Warning);
-                    return;
-                }
-
-                depositService.PayPendingDepositWithWallet(AppSession.CurrentUser.UserId, row.OrderId);
-                MessageBox.Show("Thanh toán thành công.", "Ví", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (TimeoutException)
-            {
-                MessageBox.Show("Hết thời gian chờ VNPay trả về.", "VNPay", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                if (sender is FrameworkElement element) element.IsEnabled = true;
-                LoadDepositOrders(AppSession.CurrentUser.UserId);
-            }
-        }
-
         private void FillKycInfo(KycProfile profile)
         {
             txtIdNumber.Text = profile.IdNumber ?? "";
@@ -160,8 +95,11 @@ namespace BuyOldBike_Presentation.Views
                     .Where(o => o.BuyerId == userId &&
                                 (o.Status == StatusConstants.OrdersStatus.Deposit_Pending ||
                                  o.Status == StatusConstants.OrdersStatus.Deposit_Paid ||
+                                 o.Status == StatusConstants.OrdersStatus.Paid ||
                                  o.Status == StatusConstants.OrdersStatus.Deposit_Failed ||
-                                 o.Status == StatusConstants.OrdersStatus.Deposit_Expired))
+                                 o.Status == StatusConstants.OrdersStatus.Deposit_Expired ||
+                                 o.Status == StatusConstants.OrdersStatus.Disputed ||
+                                 o.Status == StatusConstants.OrdersStatus.Dispute_Resolved))
                     .Include(o => o.Listing)
                     .Include(o => o.Payments)
                     .OrderByDescending(o => o.CreatedAt)
@@ -176,13 +114,15 @@ namespace BuyOldBike_Presentation.Views
                     return new DepositOrderRow
                     {
                         OrderId = o.OrderId,
+                        ListingId = o.ListingId,
                         TxnRef = payment?.TxnRef ?? o.OrderId.ToString("N"),
                         ListingTitle = o.Listing?.Title ?? "(Không có tiêu đề)",
                         DepositAmount = o.TotalAmount ?? payment?.Amount,
                         OrderStatus = o.Status ?? "",
                         PaymentStatus = payment?.Status ?? "",
                         CreatedAt = o.CreatedAt ?? payment?.CreatedAt,
-                        ListingStatus = o.Listing?.Status ?? ""
+                        ListingStatus = o.Listing?.Status ?? "",
+                        ListingPrice = o.Listing?.Price ?? 0m
                     };
                 }).ToList();
 
@@ -224,6 +164,7 @@ namespace BuyOldBike_Presentation.Views
         private sealed class DepositOrderRow
         {
             public Guid OrderId { get; init; }
+            public Guid? ListingId { get; init; }
             public string TxnRef { get; init; } = "";
             public string ListingTitle { get; init; } = "";
             public decimal? DepositAmount { get; init; }
@@ -231,13 +172,26 @@ namespace BuyOldBike_Presentation.Views
             public string OrderStatus { get; init; } = "";
             public string PaymentStatus { get; init; } = "";
             public string ListingStatus { get; init; } = "";
+            public decimal ListingPrice { get; init; }
 
             public string OrderStatusText => MapOrderStatus(OrderStatus);
             public string PaymentStatusText => MapPaymentStatus(PaymentStatus);
             public string ListingStatusText => MapListingStatus(ListingStatus);
-            public bool CanPay =>
+            
+            public Visibility CanPayVisibility => 
                 string.Equals(OrderStatus, StatusConstants.OrdersStatus.Deposit_Pending, StringComparison.Ordinal) &&
-                string.Equals(PaymentStatus, StatusConstants.PaymentStatus.Pending, StringComparison.Ordinal);
+                string.Equals(PaymentStatus, StatusConstants.PaymentStatus.Pending, StringComparison.Ordinal)
+                ? Visibility.Visible : Visibility.Collapsed;
+
+            public Visibility CanBuyVisibility =>
+                string.Equals(OrderStatus, StatusConstants.OrdersStatus.Deposit_Paid, StringComparison.Ordinal) &&
+                string.Equals(ListingStatus, StatusConstants.ListingStatus.Reserved, StringComparison.Ordinal)
+                ? Visibility.Visible : Visibility.Collapsed;
+
+            public Visibility CanRefundVisibility =>
+                string.Equals(OrderStatus, StatusConstants.OrdersStatus.Deposit_Paid, StringComparison.Ordinal) &&
+                CreatedAt.HasValue && (DateTime.Now - CreatedAt.Value).TotalDays > 7
+                ? Visibility.Visible : Visibility.Collapsed;
 
             private static string MapOrderStatus(string? status)
             {
@@ -245,10 +199,16 @@ namespace BuyOldBike_Presentation.Views
                     return "Đang chờ";
                 if (string.Equals(status, StatusConstants.OrdersStatus.Deposit_Paid, StringComparison.Ordinal))
                     return "Đã đặt cọc";
+                if (string.Equals(status, StatusConstants.OrdersStatus.Paid, StringComparison.Ordinal))
+                    return "Đã mua";
                 if (string.Equals(status, StatusConstants.OrdersStatus.Deposit_Failed, StringComparison.Ordinal))
                     return "Thất bại";
                 if (string.Equals(status, StatusConstants.OrdersStatus.Deposit_Expired, StringComparison.Ordinal))
                     return "Hết hạn";
+                if (string.Equals(status, StatusConstants.OrdersStatus.Disputed, StringComparison.Ordinal))
+                    return "Đang khiếu nại";
+                if (string.Equals(status, StatusConstants.OrdersStatus.Dispute_Resolved, StringComparison.Ordinal))
+                    return "Đã xử lý khiếu nại";
                 return string.IsNullOrWhiteSpace(status) ? "--" : status;
             }
 
@@ -279,7 +239,101 @@ namespace BuyOldBike_Presentation.Views
                     return "Chờ kiểm định";
                 if (string.Equals(status, StatusConstants.ListingStatus.Rejected, StringComparison.Ordinal))
                     return "Từ chối";
+                if (string.Equals(status, StatusConstants.ListingStatus.Sold, StringComparison.Ordinal))
+                    return "Đã bán";
                 return string.IsNullOrWhiteSpace(status) ? "--" : status;
+            }
+        }
+
+        private void BtnBuyBike_Click(object sender, RoutedEventArgs e)
+        {
+            if (!AppSession.IsAuthenticated || AppSession.CurrentUser == null)
+            {
+                MessageBox.Show("Bạn cần đăng nhập để thanh toán.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            if (sender is not FrameworkElement fe || fe.DataContext is not DepositOrderRow row)
+            {
+                return;
+            }
+
+            if (row.ListingId == null)
+            {
+                MessageBox.Show("Không tìm thấy thông tin xe.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            try
+            {
+                var result = MessageBox.Show($"Bạn có chắc chắn muốn mua xe này bằng số dư trong ví? (Số tiền thanh toán sẽ được khấu trừ tiền đặt cọc)", "Xác nhận", MessageBoxButton.YesNo);
+                if (result != MessageBoxResult.Yes) return;
+
+                var orderService = new BuyOldBike_BLL.Services.Seller.OrderService();
+                orderService.BuyBikeWithWallet(AppSession.CurrentUser.UserId, row.ListingId.Value);
+
+                MessageBox.Show("Mua xe thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                LoadDepositOrders(AppSession.CurrentUser.UserId);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi mua xe: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void BtnRefundDeposit_Click(object sender, RoutedEventArgs e)
+        {
+            if (!AppSession.IsAuthenticated || AppSession.CurrentUser == null)
+            {
+                MessageBox.Show("Bạn cần đăng nhập để thao tác.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            if (sender is not FrameworkElement fe || fe.DataContext is not DepositOrderRow row)
+            {
+                return;
+            }
+
+            try
+            {
+                var result = MessageBox.Show(
+                    "Đã quá hạn 7 ngày nhưng người bán vẫn chưa giao xe. Bạn có chắc chắn muốn yêu cầu hoàn cọc 100% về ví?",
+                    "Xác nhận hoàn cọc",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (result != MessageBoxResult.Yes) return;
+
+                var depositService = new DepositService();
+                depositService.RefundDepositDueToSellerNoShow(row.OrderId);
+
+                MessageBox.Show("Đã hoàn cọc 100% vào ví thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                LoadDepositOrders(AppSession.CurrentUser.UserId);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi hoàn cọc: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void BtnDispute_Click(object sender, RoutedEventArgs e)
+        {
+            if (!AppSession.IsAuthenticated || AppSession.CurrentUser == null)
+            {
+                MessageBox.Show("Bạn cần đăng nhập để thao tác.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            if (sender is not FrameworkElement fe || fe.DataContext is not DepositOrderRow row)
+            {
+                return;
+            }
+
+            var window = new CreateDisputeWindow(row.OrderId);
+            window.Owner = this;
+            if (window.ShowDialog() == true)
+            {
+                LoadDepositOrders(AppSession.CurrentUser.UserId);
             }
         }
     }

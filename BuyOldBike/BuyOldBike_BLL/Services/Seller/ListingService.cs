@@ -37,13 +37,11 @@ namespace BuyOldBike_BLL.Services.Seller
             return _bikePostRepo.GetListingsBySellerId(sellerId);
         }
 
-        // New: Update listing details (publish/edit)
         public void UpdateListing(Listing listing)
         {
             _bikePostRepo.UpdateListing(listing);
         }
 
-        // New: Hide listing
         public void HideListing(Guid listingId)
         {
             _bikePostRepo.HideListing(listingId);

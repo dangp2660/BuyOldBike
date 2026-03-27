@@ -1,0 +1,34 @@
+<Window x:Class="BuyOldBike_Presentation.Views.CreateDisputeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Tạo Khiếu Nại" Height="400" Width="400" WindowStartupLocation="CenterOwner">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Khiếu nại xe không đúng cam kết" FontSize="18" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <TextBlock Grid.Row="1" Text="Lý do khiếu nại:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+        <ComboBox Grid.Row="2" Name="cmbReason" Margin="0,0,0,15" Height="30">
+            <ComboBoxItem Content="Xe bị hỏng hóc nặng" IsSelected="True"/>
+            <ComboBoxItem Content="Sai thông tin (màu sắc, đời xe, ...)"/>
+            <ComboBoxItem Content="Giấy tờ không hợp lệ"/>
+            <ComboBoxItem Content="Lý do khác"/>
+        </ComboBox>
+
+        <TextBlock Grid.Row="3" Text="Chi tiết (bằng chứng):" FontWeight="SemiBold" Margin="0,0,0,5" VerticalAlignment="Top"/>
+        <TextBox Grid.Row="3" Name="txtDetail" AcceptsReturn="True" TextWrapping="Wrap" Margin="0,25,0,20"/>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Hủy" Width="80" Height="30" Margin="0,0,10,0" Click="BtnCancel_Click"/>
+            <Button Content="Gửi khiếu nại" Width="100" Height="30" Background="#EF4444" Foreground="White" Click="BtnSubmit_Click"/>
+        </StackPanel>
+    </Grid>
+    </ScrollViewer>
+</Window>

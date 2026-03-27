@@ -11,8 +11,9 @@
         MinHeight="520"
         WindowStartupLocation="CenterOwner"
         Loaded="Window_Loaded">
-    <Grid Background="#F9FAFB" Margin="24">
-        <Grid.RowDefinitions>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <Grid Background="#F9FAFB" Margin="24">
+            <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -87,4 +88,5 @@
                 Content="Đóng"
                 Click="Close_Click" />
     </Grid>
+    </ScrollViewer>
 </Window>

@@ -87,7 +87,7 @@
                             Click="btnProfile_Click">
                         <Button.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Hồ sơ eKYC" Click="MenuProfile_Click" />
+                                <MenuItem Header="Hồ sơ" Click="MenuProfile_Click" />
                                 <MenuItem Header="Ví / Nạp tiền" Click="MenuWallet_Click" />
                                 <MenuItem Header="Đăng xuất" Click="MenuLogout_Click" />
                             </ContextMenu>
@@ -106,7 +106,7 @@
 
             <ScrollViewer Grid.Column="0"
                           VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Disabled">
+                          HorizontalScrollBarVisibility="Auto">
                 <StackPanel>
                     <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Bộ lọc" />
                     <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Hãng" />
@@ -127,7 +127,7 @@
 
             <ScrollViewer Grid.Column="2"
                           VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Disabled">
+                          HorizontalScrollBarVisibility="Auto">
                 <Grid>
                 <ItemsControl ItemsSource="{Binding Listings}">
                     <ItemsControl.ItemsPanel>

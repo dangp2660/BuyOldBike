@@ -46,7 +46,7 @@
 
         <ScrollViewer Grid.Column="1"
                       VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Disabled"
+                      HorizontalScrollBarVisibility="Auto"
                       Padding="46">
             <StackPanel HorizontalAlignment="Center"
                         MaxWidth="460"

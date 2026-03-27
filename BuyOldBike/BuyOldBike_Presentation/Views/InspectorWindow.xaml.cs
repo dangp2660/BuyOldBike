@@ -1,8 +1,11 @@
+using BuyOldBike_BLL.Services.Dispute;
 using BuyOldBike_BLL.Services.Seller;
 using BuyOldBike_DAL.Constants;
 using BuyOldBike_DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using BuyOldBike_Presentation.State;
@@ -12,6 +15,7 @@ namespace BuyOldBike_Presentation.Views
     public partial class InspectorWindow : Window
     {
         private readonly InspectionService _inspectionService = new InspectionService();
+        private readonly DisputeService _disputeService = new DisputeService();
         private bool _isSyncingSelection;
 
         public InspectorWindow()
@@ -28,6 +32,9 @@ namespace BuyOldBike_Presentation.Views
                 List<Inspection> pendingInspections = _inspectionService.GetPendingRequests();
                 dgPendingInspections.ItemsSource = pendingInspections;
                 dgInspectionQueue.ItemsSource = pendingInspections;
+
+                var disputes = _disputeService.GetAllPendingDisputes();
+                dgDisputeList.ItemsSource = disputes;
             }
             catch (Exception ex)
             {
@@ -134,6 +141,40 @@ namespace BuyOldBike_Presentation.Views
             catch (Exception ex)
             {
                 MessageBox.Show($"Lỗi khi xử lý kiểm định: {ex.Message}");
+            }
+        }
+
+        private void dgDisputeList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgDisputeList.SelectedItem is ReturnRequest request)
+            {
+                txtDisputeDetail.Text = request.Detail;
+            }
+            else
+            {
+                txtDisputeDetail.Text = "Chọn một đơn để xem chi tiết";
+            }
+        }
+
+        private void BtnResolveDispute_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgDisputeList.SelectedItem is not ReturnRequest request)
+            {
+                MessageBox.Show("Vui lòng chọn một khiếu nại để xử lý.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            decimal percentage = (decimal)sldRefundPercentage.Value;
+
+            try
+            {
+                _disputeService.ResolveDispute(request.ReturnRequestId, percentage);
+                MessageBox.Show("Đã xử lý khiếu nại thành công.", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                LoadData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi xử lý khiếu nại: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

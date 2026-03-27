@@ -28,7 +28,7 @@
             </StackPanel>
         </Border>
 
-        <ScrollViewer Grid.Row="1" Margin="16" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <ScrollViewer Grid.Row="1" Margin="16" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <StackPanel>
                 <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Thông tin xe" />
                 <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Chi tiết listing" />
@@ -244,6 +244,8 @@
                         Click="BtnContact_Click"
                         Visibility="Collapsed"/>
                 <Button Height="40" MinWidth="120" Margin="0,0,10,0" Content="Đóng" Click="BtnClose_Click" />
+                <Button Height="40" MinWidth="120" Margin="0,0,10,0" Content="Đặt Cọc (Ví)" Click="BtnDeposit_Click" x:Name="btnDeposit" />
+                
                 <Button Height="40" MinWidth="120" Margin="0,0,10,0" Content="Lưu" Click="BtnSave_Click" x:Name="btnSave" Visibility="Collapsed" />
             </StackPanel>
         </Border>

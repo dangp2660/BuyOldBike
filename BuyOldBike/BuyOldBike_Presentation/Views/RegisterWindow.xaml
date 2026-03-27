@@ -10,11 +10,12 @@
         MinWidth="1024"
         MinHeight="640"
         WindowStartupLocation="CenterScreen">
-    <Grid Background="#FFF9FAFB">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="460" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Grid Background="#FFF9FAFB">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="460" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
         <Border Grid.Column="0"
                 Background="#FF2563EB"
@@ -209,4 +210,5 @@
             </StackPanel>
         </ScrollViewer>
     </Grid>
+    </ScrollViewer>
 </Window>

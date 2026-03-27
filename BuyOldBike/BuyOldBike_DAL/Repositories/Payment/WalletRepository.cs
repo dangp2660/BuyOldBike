@@ -37,7 +37,7 @@ public class WalletRepository
     {
         if (amount <= 0) throw new InvalidOperationException("Số tiền nạp phải lớn hơn 0.");
 
-        using var tx = _db.Database.BeginTransaction(IsolationLevel.Serializable);
+        var tx = _db.Database.BeginTransaction(IsolationLevel.Serializable);
         try
         {
             var wallet = _db.UserWallets.FirstOrDefault(w => w.UserId == userId);

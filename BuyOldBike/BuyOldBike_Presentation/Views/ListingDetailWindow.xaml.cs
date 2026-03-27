@@ -49,6 +49,76 @@ namespace BuyOldBike_Presentation.Views
             {
                 EnterEditMode();
             }
+            else
+            {
+                UpdateBuyerActionButtons();
+            }
+        }
+
+        private void UpdateBuyerActionButtons()
+        {
+            if (btnDeposit != null) btnDeposit.Visibility = Visibility.Collapsed;
+
+            if (_vm.ListingBike == null) return;
+
+            // Cannot buy/deposit own listing
+            if (AppSession.CurrentUser != null && _vm.ListingBike.SellerId == AppSession.CurrentUser.UserId)
+                return;
+
+            if (_vm.ListingBike.Status == BuyOldBike_DAL.Constants.StatusConstants.ListingStatus.Available)
+            {
+                if (btnDeposit != null) btnDeposit.Visibility = Visibility.Visible;
+            }
+        }
+        private void SetupChat()
+        {
+            var currentUser = AppSession.CurrentUser;
+            if (currentUser == null) return;
+
+            // Chỉ hiện chat với Buyer
+            if (currentUser.Role != "Buyer") return;
+
+            var sellerId = _vm.ListingBike?.SellerId;
+            if (sellerId == null) return;
+
+            // Không cho chat với chính mình
+            if (currentUser.UserId == sellerId) return;
+
+            _chatVm = new ChatViewModel(
+                _listingId,
+                currentUser.UserId,
+                sellerId.Value);
+
+            // Hiện panel và nút
+            ChatPanel.Visibility = Visibility.Visible;
+            BtnContact.Visibility = Visibility.Visible;
+
+            IcMessages.ItemsSource = _chatVm.Messages;
+            TxtChatInput.DataContext = _chatVm;
+
+            _chatVm.LoadMessages();
+        }
+        private void BtnContact_Click(object sender, RoutedEventArgs e)
+        {
+            // Toggle hiện/ẩn chat panel
+            ChatPanel.Visibility = ChatPanel.Visibility == Visibility.Visible
+                ? Visibility.Collapsed
+                : Visibility.Visible;
+        }
+        private void BtnSendChat_Click(object sender, RoutedEventArgs e)
+        {
+            if (_chatVm == null) return;
+            _chatVm.InputText = TxtChatInput.Text;
+            _chatVm.Send();
+            TxtChatInput.Text = string.Empty;
+
+            // Scroll xuống cuối
+            ChatScrollViewer.ScrollToBottom();
+        }
+        private void BtnRefreshChat_Click(object sender, RoutedEventArgs e)
+        {
+            _chatVm?.LoadMessages();
+            ChatScrollViewer.ScrollToBottom();
         }
         private void SetupChat()
         {
@@ -129,7 +199,7 @@ namespace BuyOldBike_Presentation.Views
             txtFrame_Edit.Text = _vm.ListingBike?.FrameNumber ?? string.Empty;
             txtUsage_Edit.Text = _vm.ListingBike?.UsageDuration?.ToString() ?? string.Empty;
 
-            using var db = new BuyOldBike_DAL.Entities.BuyOldBikeContext();
+            var db = new BuyOldBike_DAL.Entities.BuyOldBikeContext();
 
             // load brands into cbxBrand_Edit
             var brands = db.Brands.ToList();
@@ -312,5 +382,40 @@ namespace BuyOldBike_Presentation.Views
 
             return decimal.TryParse(digits, NumberStyles.None, CultureInfo.InvariantCulture, out price);
         }
+
+        private void BtnDeposit_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (AppSession.CurrentUser == null)
+                {
+                    MessageBox.Show("Vui lòng đăng nhập để thực hiện chức năng này.");
+                    return;
+                }
+
+                if (_vm.ListingBike == null) return;
+
+                var addressDialog = new DeliveryAddressDialog(AppSession.CurrentUser.UserId)
+                {
+                    Owner = this
+                };
+                if (addressDialog.ShowDialog() != true || addressDialog.ResultAddress == null) return;
+
+                var result = MessageBox.Show($"Bạn có chắc chắn muốn đặt cọc 20% cho xe này bằng số dư trong ví?", "Xác nhận", MessageBoxButton.YesNo);
+                if (result != MessageBoxResult.Yes) return;
+
+                var depositService = new BuyOldBike_BLL.Features.Payments.DepositService();
+                depositService.PlaceDepositWithWallet(AppSession.CurrentUser.UserId, _vm.ListingBike.ListingId, addressDialog.ResultAddress);
+                
+                MessageBox.Show("Đặt cọc thành công!");
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi đặt cọc: {ex.Message}");
+            }
+        }
+
+        
     }
 }

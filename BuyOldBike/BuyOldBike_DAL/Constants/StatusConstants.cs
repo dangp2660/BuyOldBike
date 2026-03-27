@@ -13,6 +13,7 @@ namespace BuyOldBike_DAL.Constants
             public const string Pending_Inspection = "Pending_Inspection";
             public const string Available = "Available";
             public const string Reserved = "Reserved";
+            public const string Sold = "Sold";
             public const string Deposit_Pending = "Deposit_Pending";
             public const string Rejected = "Rejected";
             public const string Hidden = "Hidden";
@@ -23,8 +24,11 @@ namespace BuyOldBike_DAL.Constants
         {
             public const string Deposit_Pending = "Deposit_Pending";
             public const string Deposit_Paid = "Deposit_Paid";
+            public const string Paid = "Paid";
             public const string Deposit_Failed = "Deposit_Failed";
             public const string Deposit_Expired = "Deposit_Expired";
+            public const string Disputed = "Disputed";
+            public const string Dispute_Resolved = "Dispute_Resolved";
         }
 
         public static class PaymentType
@@ -46,7 +50,6 @@ namespace BuyOldBike_DAL.Constants
         {
             public const string Pending = "Pending";
             public const string Completed = "Completed";
-
         }
 
         public static class InspectionResult
@@ -54,10 +57,18 @@ namespace BuyOldBike_DAL.Constants
             public const string Passed = "Passed";
             public const string Failed = "Failed";
         }
+
         public static class UserStatus
         {
             public const string Active = "Active";
             public const string Suspended = "Suspended";
+        }
+
+        public static class ReturnRequestStatus
+        {
+            public const string Pending = "Pending";
+            public const string Resolved = "Resolved";
+            public const string Rejected = "Rejected";
         }
     }
 }

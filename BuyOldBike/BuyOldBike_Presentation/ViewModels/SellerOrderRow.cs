@@ -10,5 +10,6 @@ namespace BuyOldBike_Presentation.ViewModels
         public decimal Price { get; set; }
         public string DepositStatus { get; set; } = string.Empty;
         public string OrderStatus { get; set; } = string.Empty;
+        public string DeliveryInfo { get; set; } = string.Empty;
     }
 }

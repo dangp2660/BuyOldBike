@@ -25,7 +25,7 @@
         <TabControl Grid.Row="0" Margin="24,24,24,24" Grid.ColumnSpan="3">
             <TabItem Header="Hồ sơ eKYC">
                 <ScrollViewer VerticalScrollBarVisibility="Auto"
-                              HorizontalScrollBarVisibility="Disabled"
+                              HorizontalScrollBarVisibility="Auto"
                               Padding="0,0,0,8">
                     <StackPanel>
                         <TextBlock FontSize="24"
@@ -172,11 +172,24 @@
                             <DataGridTemplateColumn Header="Hành động" Width="120">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Width="100"
-                                                Height="28"
-                                                Content="Thanh toán"
-                                                IsEnabled="{Binding CanPay}"
-                                                Click="BtnPayDeposit_Click" />
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Width="80"
+                                                    Height="28"
+                                                    Content="Mua xe"
+                                                    Visibility="{Binding CanBuyVisibility}"
+                                                    Click="BtnBuyBike_Click" />
+                                            <Button Width="80"
+                                                    Height="28"
+                                                    Content="Hoàn cọc"
+                                                    Visibility="{Binding CanRefundVisibility}"
+                                                    Click="BtnRefundDeposit_Click" />
+                                            <Button Width="80"
+                                                    Height="28"
+                                                    Margin="4,0,0,0"
+                                                    Content="Khiếu nại"
+                                                    Visibility="{Binding CanBuyVisibility}"
+                                                    Click="BtnDispute_Click" />
+                                        </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

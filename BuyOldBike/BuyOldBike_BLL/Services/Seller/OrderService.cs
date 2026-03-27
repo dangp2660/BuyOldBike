@@ -23,5 +23,10 @@ namespace BuyOldBike_BLL.Services.Seller
         {
             _repo.UpdateOrderStatus(orderId, newStatus);
         }
+
+        public Order BuyBikeWithWallet(Guid buyerId, Guid listingId)
+        {
+            return _repo.BuyBikeWithWallet(buyerId, listingId);
+        }
     }
 }

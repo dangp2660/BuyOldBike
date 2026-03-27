@@ -15,6 +15,18 @@ public partial class Order
 
     public decimal? TotalAmount { get; set; }
 
+    public string? DeliveryFullName { get; set; }
+
+    public string? DeliveryPhoneNumber { get; set; }
+
+    public string? DeliveryProvince { get; set; }
+
+    public string? DeliveryDistrict { get; set; }
+
+    public string? DeliveryWard { get; set; }
+
+    public string? DeliveryDetail { get; set; }
+
     public DateTime? CreatedAt { get; set; }
 
     public virtual User? Buyer { get; set; }

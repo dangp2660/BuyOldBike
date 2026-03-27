@@ -50,7 +50,7 @@
 
         <TabControl Grid.Row="1" Margin="16" Background="{x:Null}">
             <TabItem Header="Dashboard">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <StackPanel>
                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Tổng quan" />
 
@@ -115,7 +115,7 @@
             </TabItem>
 
             <TabItem Header="Create Listing">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <StackPanel>
                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Tạo bài đăng mới" />
 
@@ -194,7 +194,7 @@
                                                 BorderThickness="1"
                                                 CornerRadius="10"
                                                 Padding="8">
-                                            <ScrollViewer Height="120" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                                            <ScrollViewer Height="120" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                                                 <ItemsControl ItemsSource="{Binding SelectedImagePreviews}">
                                                     <ItemsControl.ItemsPanel>
                                                         <ItemsPanelTemplate>
@@ -245,7 +245,7 @@
             </TabItem>
 
             <TabItem Header="Manage Listings">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <StackPanel>
                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Quản lý bài đăng" />
 
@@ -301,7 +301,7 @@
             </TabItem>
  
             <TabItem Header="Seller Orders">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <StackPanel>
                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Đơn hàng của tôi" />
 
@@ -314,6 +314,7 @@
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="3*" />
                                         <ColumnDefinition Width="2*" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" FontWeight="SemiBold" Text="Buyer" />
@@ -321,7 +322,8 @@
                                     <TextBlock Grid.Column="2" FontWeight="SemiBold" Text="Price" />
                                     <TextBlock Grid.Column="3" FontWeight="SemiBold" Text="Deposit Status" />
                                     <TextBlock Grid.Column="4" FontWeight="SemiBold" Text="Order Status" />
-                                    <TextBlock Grid.Column="5" FontWeight="SemiBold" Text="Actions" />
+                                    <TextBlock Grid.Column="5" FontWeight="SemiBold" Text="Delivery" />
+                                    <TextBlock Grid.Column="6" FontWeight="SemiBold" Text="Actions" />
                                 </Grid>
 
                                 <Border Margin="0,12,0,0" BorderBrush="#FFE5E7EB" BorderThickness="0,1,0,0" />
@@ -337,6 +339,7 @@
                                                         <ColumnDefinition Width="*" />
                                                         <ColumnDefinition Width="*" />
                                                         <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="3*" />
                                                         <ColumnDefinition Width="2*" />
                                                     </Grid.ColumnDefinitions>
                                                     <TextBlock Grid.Column="0" Text="{Binding BuyerName}" />
@@ -344,7 +347,8 @@
                                                     <TextBlock Grid.Column="2" Text="{Binding Price, StringFormat=N0}" />
                                                     <TextBlock Grid.Column="3" Text="{Binding DepositStatus}" />
                                                     <TextBlock Grid.Column="4" Text="{Binding OrderStatus}" />
-                                                    <StackPanel Grid.Column="5" Orientation="Horizontal" HorizontalAlignment="Left">
+                                                    <TextBlock Grid.Column="5" Text="{Binding DeliveryInfo}" TextWrapping="Wrap" />
+                                                    <StackPanel Grid.Column="6" Orientation="Horizontal" HorizontalAlignment="Left">
                                                         <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Accept" Click="BtnAcceptOrder_Click" />
                                                         <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Reject" Click="BtnRejectOrder_Click" />
                                                         <Button MinWidth="72" Height="30" Padding="10,4" Margin="6,0,0,0" Content="Completed" Click="BtnCompleteOrder_Click" />
@@ -437,7 +441,7 @@
             </TabItem>
 
             <TabItem Header="Seller Reviews">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <StackPanel>
                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Đánh giá" />
 

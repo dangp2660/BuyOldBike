@@ -74,6 +74,24 @@ namespace BuyOldBike_Presentation.ViewModels
             var orders = _orderService.GetOrdersBySellerId(sellerId);
             foreach (var o in orders)
             {
+                var deliveryInfo = string.Empty;
+                if (!string.IsNullOrWhiteSpace(o.DeliveryDetail) ||
+                    !string.IsNullOrWhiteSpace(o.DeliveryWard) ||
+                    !string.IsNullOrWhiteSpace(o.DeliveryDistrict) ||
+                    !string.IsNullOrWhiteSpace(o.DeliveryProvince))
+                {
+                    var contact = string.Empty;
+                    if (!string.IsNullOrWhiteSpace(o.DeliveryFullName) && !string.IsNullOrWhiteSpace(o.DeliveryPhoneNumber))
+                        contact = $"{o.DeliveryFullName} - {o.DeliveryPhoneNumber}";
+                    else if (!string.IsNullOrWhiteSpace(o.DeliveryFullName))
+                        contact = o.DeliveryFullName;
+                    else if (!string.IsNullOrWhiteSpace(o.DeliveryPhoneNumber))
+                        contact = o.DeliveryPhoneNumber;
+
+                    var addr = $"{o.DeliveryDetail}, {o.DeliveryWard}, {o.DeliveryDistrict}, {o.DeliveryProvince}";
+                    deliveryInfo = string.IsNullOrWhiteSpace(contact) ? addr : $"{contact} | {addr}";
+                }
+
                 SellerOrders.Add(new SellerOrderRow
                 {
                     OrderId = o.OrderId,
@@ -81,7 +99,8 @@ namespace BuyOldBike_Presentation.ViewModels
                     BicycleTitle = o.Listing?.Title ?? string.Empty,
                     Price = o.TotalAmount ?? 0,
                     DepositStatus = "N/A",
-                    OrderStatus = o.Status ?? string.Empty
+                    OrderStatus = o.Status ?? string.Empty,
+                    DeliveryInfo = deliveryInfo
                 });
             }
         }
