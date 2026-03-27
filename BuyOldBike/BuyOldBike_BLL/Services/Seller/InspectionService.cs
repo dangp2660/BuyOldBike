@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace BuyOldBike_BLL.Services.Seller
 {
@@ -53,6 +54,31 @@ namespace BuyOldBike_BLL.Services.Seller
         public List<InspectionImage> GetInspectionImages(Guid inspectionId)
         {
             return _bikePostRepository.GetInspectionImages(inspectionId);
+        }
+
+        public int CountCompletedInspectionsSince(DateTime fromDate)
+        {
+            using var db = new BuyOldBikeContext();
+            return db.Inspections
+                .AsNoTracking()
+                .Count(i => i.Status == StatusConstants.InspectionStatus.Completed && i.CreatedAt >= fromDate);
+        }
+
+        public Listing? GetListingDetailsForInspection(Guid listingId)
+        {
+            using var db = new BuyOldBikeContext();
+            return db.Listings
+                .Include(l => l.Seller)
+                .Include(l => l.Brand)
+                .Include(l => l.BikeType)
+                .Include(l => l.ListingImages)
+                .AsNoTracking()
+                .FirstOrDefault(l => l.ListingId == listingId);
+        }
+
+        public void EnsureInspectionCatalogSeeded()
+        {
+            _bikePostRepository.EnsureInspectionCatalogSeeded();
         }
     }
 }

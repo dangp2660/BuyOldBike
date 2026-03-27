@@ -1,6 +1,6 @@
 using BuyOldBike_BLL.Services.BicycleListWindow;
+using BuyOldBike_BLL.Services.Lookups;
 using BuyOldBike_BLL.Services.Seller;
-using BuyOldBike_DAL.Entities;
 using BuyOldBike_Presentation.State;
 using BuyOldBike_Presentation.ViewModels;
 using Microsoft.Win32;
@@ -176,10 +176,10 @@ namespace BuyOldBike_Presentation.Views
                 }
             }
 
-            var db = new BuyOldBikeContext();
+            var lookupService = new LookupService();
 
             // load brands into cbxBrand_Edit
-            var brands = db.Brands.ToList();
+            var brands = lookupService.GetBrands();
             cbxBrand_Edit.ItemsSource = brands;
             cbxBrand_Edit.SelectedValuePath = "BrandId";
             cbxBrand_Edit.DisplayMemberPath = "BrandName";
@@ -189,7 +189,7 @@ namespace BuyOldBike_Presentation.Views
             }
 
             // load bike types into cbxType_Edit
-            var types = db.Types.ToList();
+            var types = lookupService.GetBikeTypes();
             cbxType_Edit.ItemsSource = types;
             cbxType_Edit.SelectedValuePath = "BikeTypeId";
             cbxType_Edit.DisplayMemberPath = "Name";

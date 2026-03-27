@@ -1,4 +1,4 @@
-﻿using BuyOldBike_DAL.Constants;
+using BuyOldBike_DAL.Constants;
 using BuyOldBike_DAL.Entities;
 using System;
 using System.Collections.Generic;
@@ -12,6 +12,10 @@ namespace BuyOldBike_BLL.Services.Listings
     public class ListingModerationService
     {
         private readonly ListingModerationRepository _repo;
+
+        public ListingModerationService() : this(new ListingModerationRepository())
+        {
+        }
 
         public ListingModerationService(ListingModerationRepository repo)
         {

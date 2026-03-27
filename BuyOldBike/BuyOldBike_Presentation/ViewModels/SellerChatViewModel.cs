@@ -1,6 +1,5 @@
-﻿using BuyOldBike_BLL.Features.Chats;
+using BuyOldBike_BLL.Features.Chats;
 using BuyOldBike_DAL.Entities;
-using BuyOldBike_DAL.Repositories.Chats;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -50,8 +49,7 @@ namespace BuyOldBike_Presentation.ViewModels
         public SellerChatViewModel(Guid sellerId)
         {
             SellerId = sellerId;
-            var repo = new MessageRepository();
-            _service = new ChatService(repo);
+            _service = new ChatService();
         }
 
         public void LoadConversations()

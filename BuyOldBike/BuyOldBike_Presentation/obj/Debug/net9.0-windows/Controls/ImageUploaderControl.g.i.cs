@@ -68,7 +68,7 @@ namespace BuyOldBike_Presentation.Controls {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/BuyOldBike_Presentation;V1.0.0.0;component/controls/imageuploadercontrol.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/BuyOldBike_Presentation;component/controls/imageuploadercontrol.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Controls\ImageUploaderControl.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

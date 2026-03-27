@@ -110,7 +110,7 @@ namespace BuyOldBike_BLL.Services.Dispute
         {
             using var db = new BuyOldBikeContext();
             return db.ReturnRequests
-                .Include(r => r.Order)
+                .Include(r => r.Order!)
                 .ThenInclude(o => o.Listing)
                 .Include(r => r.ReturnRequestImages)
                 .Where(r => r.Status == StatusConstants.ReturnRequestStatus.Pending)
@@ -174,6 +174,28 @@ namespace BuyOldBike_BLL.Services.Dispute
             };
         }
 
+        public ReturnRequest? GetDisputeDetailsForInspector(Guid returnRequestId)
+        {
+            using var db = new BuyOldBikeContext();
+
+            return db.ReturnRequests
+                .Include(r => r.ReturnRequestImages)
+                .Include(r => r.Order!)
+                    .ThenInclude(o => o.Buyer!)
+                        .ThenInclude(u => u.Address)
+                .Include(r => r.Order!)
+                    .ThenInclude(o => o.Listing!)
+                        .ThenInclude(l => l.Seller!)
+                            .ThenInclude(u => u.Address)
+                .Include(r => r.Order!)
+                    .ThenInclude(o => o.Listing!)
+                        .ThenInclude(l => l.Inspections)
+                            .ThenInclude(i => i.InspectionScores)
+                                .ThenInclude(s => s.Component)
+                .AsNoTracking()
+                .FirstOrDefault(r => r.ReturnRequestId == returnRequestId);
+        }
+
         public void ResolveDispute(Guid returnRequestId, decimal refundPercentage)
         {
             using var db = new BuyOldBikeContext();
@@ -181,9 +203,9 @@ namespace BuyOldBike_BLL.Services.Dispute
             try
             {
                 var request = db.ReturnRequests
-                    .Include(r => r.Order)
+                    .Include(r => r.Order!)
                     .ThenInclude(o => o.Payments)
-                    .Include(r => r.Order)
+                    .Include(r => r.Order!)
                     .ThenInclude(o => o.Listing)
                     .FirstOrDefault(r => r.ReturnRequestId == returnRequestId);
 

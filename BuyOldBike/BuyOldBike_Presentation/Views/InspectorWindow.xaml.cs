@@ -2,7 +2,6 @@ using BuyOldBike_BLL.Services.Dispute;
 using BuyOldBike_BLL.Services.Seller;
 using BuyOldBike_DAL.Constants;
 using BuyOldBike_DAL.Entities;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -112,10 +111,7 @@ namespace BuyOldBike_Presentation.Views
                 RecentDisputes = disputes.Take(10).ToList();
 
                 var fromDate = DateTime.Now.AddDays(-30);
-                using var db = new BuyOldBikeContext();
-                CompletedInspectionCountLast30Days = db.Inspections
-                    .AsNoTracking()
-                    .Count(i => i.Status == StatusConstants.InspectionStatus.Completed && i.CreatedAt >= fromDate);
+                CompletedInspectionCountLast30Days = _inspectionService.CountCompletedInspectionsSince(fromDate);
             }
             catch (Exception ex)
             {
@@ -216,14 +212,7 @@ namespace BuyOldBike_Presentation.Views
         {
             try
             {
-                BuyOldBikeContext db = new BuyOldBikeContext();
-                Listing? listing = db.Listings
-                    .Include(l => l.Seller)
-                    .Include(l => l.Brand)
-                    .Include(l => l.BikeType)
-                    .Include(l => l.ListingImages)
-                    .AsNoTracking()
-                    .FirstOrDefault(l => l.ListingId == listingId);
+                Listing? listing = _inspectionService.GetListingDetailsForInspection(listingId);
 
                 pnlInspectionDetails.DataContext = listing;
             }
@@ -364,24 +353,7 @@ namespace BuyOldBike_Presentation.Views
         {
             try
             {
-                using var db = new BuyOldBikeContext();
-
-                var request = db.ReturnRequests
-                    .Include(r => r.ReturnRequestImages)
-                    .Include(r => r.Order!)
-                        .ThenInclude(o => o.Buyer!)
-                            .ThenInclude(u => u.Address)
-                    .Include(r => r.Order!)
-                        .ThenInclude(o => o.Listing!)
-                            .ThenInclude(l => l.Seller!)
-                                .ThenInclude(u => u.Address)
-                    .Include(r => r.Order!)
-                        .ThenInclude(o => o.Listing!)
-                            .ThenInclude(l => l.Inspections)
-                                .ThenInclude(i => i.InspectionScores)
-                                    .ThenInclude(s => s.Component)
-                    .AsNoTracking()
-                    .FirstOrDefault(r => r.ReturnRequestId == returnRequestId);
+                var request = _disputeService.GetDisputeDetailsForInspector(returnRequestId);
 
                 if (request?.Order?.Listing == null)
                 {

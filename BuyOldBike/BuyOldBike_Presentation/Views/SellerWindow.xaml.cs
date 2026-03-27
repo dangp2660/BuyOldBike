@@ -2,6 +2,7 @@ using BuyOldBike_DAL.Constants;
 using BuyOldBike_DAL.Entities;
 using BuyOldBike_BLL.Features.Payments;
 using BuyOldBike_BLL.Features.Payments.Wallet;
+using BuyOldBike_BLL.Services.Lookups;
 using BuyOldBike_Presentation.Payments;
 using BuyOldBike_Presentation.State;
 using BuyOldBike_Presentation.ViewModels;
@@ -358,12 +359,12 @@ namespace BuyOldBike_Presentation.Views
 
         public void Load()
         {
-            BuyOldBikeContext db = new BuyOldBikeContext();
-            var brands = db.Brands.ToList();
+            var lookupService = new LookupService();
+            var brands = lookupService.GetBrands();
             cbxBrand.ItemsSource = brands;
             cbxBrand.SelectedValuePath = "BrandId";
             cbxBrand.DisplayMemberPath = "BrandName";
-            var types = db.Types.ToList();
+            var types = lookupService.GetBikeTypes();
             cbxBikeType.ItemsSource = types;
             cbxBikeType.SelectedValuePath = "BikeTypeId";
             cbxBikeType.DisplayMemberPath = "Name";

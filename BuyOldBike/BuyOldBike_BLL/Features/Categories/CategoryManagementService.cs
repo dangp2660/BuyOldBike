@@ -1,4 +1,4 @@
-﻿using BuyOldBike_DAL.Entities;
+using BuyOldBike_DAL.Entities;
 using BuyOldBike_DAL.Repositories.Categories;
 using System;
 using System.Collections.Generic;
@@ -11,6 +11,10 @@ namespace BuyOldBike_BLL.Features.Categories
     public class CategoryManagementService
     {
         private readonly CategoryRepository _repo;
+
+        public CategoryManagementService() : this(new CategoryRepository())
+        {
+        }
 
         public CategoryManagementService(CategoryRepository repo)
         {

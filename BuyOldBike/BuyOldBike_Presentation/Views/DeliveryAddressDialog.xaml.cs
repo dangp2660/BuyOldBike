@@ -1,5 +1,5 @@
 using BuyOldBike_BLL.Features.Payments;
-using BuyOldBike_DAL.Entities;
+using BuyOldBike_BLL.Services.Users;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -38,28 +38,26 @@ namespace BuyOldBike_Presentation.Views
 
             try
             {
-                using var db = new BuyOldBikeContext();
-                var user = db.Users.FirstOrDefault(u => u.UserId == userId);
-                if (user != null && !string.IsNullOrEmpty(user.PhoneNumber))
+                var prefill = new UserAddressQueryService().GetPrefill(userId.Value);
+                if (!string.IsNullOrEmpty(prefill.PhoneNumber))
                 {
-                    txtPhoneNumber.Text = user.PhoneNumber;
+                    txtPhoneNumber.Text = prefill.PhoneNumber;
                 }
 
-                var addr = db.Addresses.FirstOrDefault(a => a.UserId == userId);
-                if (addr != null)
+                if (!string.IsNullOrEmpty(prefill.FullName) ||
+                    !string.IsNullOrEmpty(prefill.Province) ||
+                    !string.IsNullOrEmpty(prefill.District) ||
+                    !string.IsNullOrEmpty(prefill.Ward) ||
+                    !string.IsNullOrEmpty(prefill.Detail))
                 {
-                    txtFullName.Text = addr.FullName ?? string.Empty;
-                    if (string.IsNullOrEmpty(txtPhoneNumber.Text))
-                    {
-                        txtPhoneNumber.Text = addr.PhoneNumber ?? string.Empty;
-                    }
-                    _prefillProvince = (addr.Province ?? addr.City ?? string.Empty).Trim();
-                    _prefillDistrict = (addr.District ?? string.Empty).Trim();
-                    _prefillWard = (addr.Ward ?? string.Empty).Trim();
+                    txtFullName.Text = prefill.FullName;
+                    _prefillProvince = prefill.Province;
+                    _prefillDistrict = prefill.District;
+                    _prefillWard = prefill.Ward;
                     cbxProvince.Text = _prefillProvince;
                     cbxDistrict.Text = _prefillDistrict;
                     cbxWard.Text = _prefillWard;
-                    txtDetail.Text = addr.Detail ?? string.Empty;
+                    txtDetail.Text = prefill.Detail;
                 }
             }
             catch { }

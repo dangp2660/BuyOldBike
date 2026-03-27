@@ -499,3 +499,4 @@ d:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_IpnApi\bin\Debug\net9.0\artifact
 d:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_IpnApi\bin\Debug\net9.0\artifacts\build\Debug\net9.0\_build_verify\Debug\net9.0\BuyOldBike_IpnApi.deps.json
 d:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_IpnApi\bin\Debug\net9.0\artifacts\build\Debug\net9.0\_build_verify\Debug\net9.0\BuyOldBike_IpnApi.runtimeconfig.json
 d:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_IpnApi\bin\Debug\net9.0\artifacts\build\Debug\net9.0\_build_verify\Debug\net9.0\BuyOldBike_IpnApi.staticwebassets.endpoints.json
+D:\SP26\PRN212\BuyOldBike\BuyOldBike\BuyOldBike_IpnApi\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

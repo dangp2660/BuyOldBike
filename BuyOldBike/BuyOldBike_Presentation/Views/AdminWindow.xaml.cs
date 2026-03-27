@@ -1,20 +1,16 @@
-﻿using BuyOldBike_BLL.Features.Auth;
+using BuyOldBike_BLL.Features.Auth;
 using BuyOldBike_BLL.Features.Categories;
 using BuyOldBike_BLL.Features.Transaction;
 using BuyOldBike_BLL.Services.Exports;
 using BuyOldBike_BLL.Services.Listings;
 using BuyOldBike_DAL.Constants;
 using BuyOldBike_DAL.Entities;
-using BuyOldBike_DAL.Repositories.Auth;
-using BuyOldBike_DAL.Repositories.Categories;
-using BuyOldBike_DAL.Repositories.Transaction;
 using BuyOldBike_Presentation.State;
 using BuyOldBike_Presentation.ViewModels;
 using Microsoft.Win32;
 using System.Data.Common;
 using System.Windows;
 using System.Windows.Controls;
-using static BuyOldBike_DAL.Repositories.Seller.ListingRepository;
 
 namespace BuyOldBike_Presentation.Views
 {
@@ -29,22 +25,18 @@ namespace BuyOldBike_Presentation.Views
         {
             InitializeComponent();
             if (!RoleNavigator.EnsureRole(this, RoleConstants.Admin)) return;
-            var userRepo = new UserRepository();
-            var userSvc = new UserManagementService(userRepo);
+            var userSvc = new UserManagementService();
             _userVm = new AdminUserManagementViewModel(userSvc);
 
-            var listingRepo = new ListingModerationRepository();
-            var listingSvc = new ListingModerationService(listingRepo);
+            var listingSvc = new ListingModerationService();
             _listingVm = new ListingModerationViewModel(listingSvc);
             DgListings.ItemsSource = _listingVm.Listings;
 
-            var categoryRepo = new CategoryRepository();
-            var categorySvc = new CategoryManagementService(categoryRepo);
+            var categorySvc = new CategoryManagementService();
             _categoryVm = new CategoryManagementViewModel(categorySvc);
             TabCategoryManagement.DataContext = _categoryVm;
 
-            var transactionRepo = new TransactionRepository();
-            var transactionSvc = new TransactionManagementService(transactionRepo);
+            var transactionSvc = new TransactionManagementService();
             _transactionVm = new TransactionManagementViewModel(transactionSvc);
 
             _transactionVm.OnViewDetailRequested += (order) =>

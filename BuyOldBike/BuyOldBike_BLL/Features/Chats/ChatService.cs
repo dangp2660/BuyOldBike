@@ -1,4 +1,4 @@
-﻿using BuyOldBike_DAL.Entities;
+using BuyOldBike_DAL.Entities;
 using BuyOldBike_DAL.Repositories.Chats;
 using System;
 using System.Collections.Generic;
@@ -11,6 +11,10 @@ namespace BuyOldBike_BLL.Features.Chats
     public class ChatService
     {
         private readonly MessageRepository _repo;
+
+        public ChatService() : this(new MessageRepository())
+        {
+        }
 
         public ChatService(MessageRepository repo)
         {

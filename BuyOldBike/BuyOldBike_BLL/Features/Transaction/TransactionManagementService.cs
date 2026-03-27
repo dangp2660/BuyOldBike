@@ -1,4 +1,4 @@
-﻿using BuyOldBike_DAL.Entities;
+using BuyOldBike_DAL.Entities;
 using BuyOldBike_DAL.Repositories.Transaction;
 using System;
 using System.Collections.Generic;
@@ -11,6 +11,10 @@ namespace BuyOldBike_BLL.Features.Transaction
     public class TransactionManagementService
     {
         private readonly TransactionRepository _repo;
+
+        public TransactionManagementService() : this(new TransactionRepository())
+        {
+        }
 
         public TransactionManagementService(TransactionRepository repo)
         {

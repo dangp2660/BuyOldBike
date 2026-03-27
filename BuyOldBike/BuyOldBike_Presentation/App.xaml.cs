@@ -1,5 +1,5 @@
 using BuyOldBike_BLL.Features.Payments;
-using BuyOldBike_DAL.Repositories.Seller;
+using BuyOldBike_BLL.Services.Seller;
 using System;
 using System.Configuration;
 using System.Data;
@@ -22,7 +22,7 @@ namespace BuyOldBike_Presentation
 
             try
             {
-                new BikePostRepository().EnsureInspectionCatalogSeeded();
+                new InspectionService().EnsureInspectionCatalogSeeded();
             }
             catch
             {

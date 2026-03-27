@@ -1,11 +1,12 @@
 using BuyOldBike_BLL.Features.Payments;
 using BuyOldBike_BLL.Features.Payments.Wallet;
+using BuyOldBike_BLL.Services.Listings;
+using BuyOldBike_BLL.Services.Orders;
 using BuyOldBike_BLL.Services.Kyc;
 using BuyOldBike_DAL.Constants;
 using BuyOldBike_DAL.Entities;
 using BuyOldBike_Presentation.Payments;
 using BuyOldBike_Presentation.State;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -89,21 +90,7 @@ namespace BuyOldBike_Presentation.Views
             {
                 txtDepositOrdersStatus.Text = "Đang tải đơn đặt cọc...";
 
-                using var db = new BuyOldBikeContext();
-                var orders = db.Orders
-                    .AsNoTracking()
-                    .Where(o => o.BuyerId == userId &&
-                                (o.Status == StatusConstants.OrdersStatus.Deposit_Pending ||
-                                 o.Status == StatusConstants.OrdersStatus.Deposit_Paid ||
-                                 o.Status == StatusConstants.OrdersStatus.Paid ||
-                                 o.Status == StatusConstants.OrdersStatus.Deposit_Failed ||
-                                 o.Status == StatusConstants.OrdersStatus.Deposit_Expired ||
-                                 o.Status == StatusConstants.OrdersStatus.Disputed ||
-                                 o.Status == StatusConstants.OrdersStatus.Dispute_Resolved))
-                    .Include(o => o.Listing)
-                    .Include(o => o.Payments)
-                    .OrderByDescending(o => o.CreatedAt)
-                    .ToList();
+                var orders = new BuyerOrderQueryService().GetDepositOrders(userId);
 
                 var rows = orders.Select(o =>
                 {
@@ -345,23 +332,15 @@ namespace BuyOldBike_Presentation.Views
             {
                 if (AppSession.CurrentUser == null) return;
 
-                using var db = new BuyOldBikeContext();
-                Listing? listing = null;
+                var listingQuery = new ListingQueryService();
+                Listing? listing;
                 if (listingId.HasValue)
                 {
-                    listing = db.Listings
-                        .AsNoTracking()
-                        .Include(l => l.Seller)
-                        .FirstOrDefault(l => l.ListingId == listingId.Value);
+                    listing = listingQuery.GetListingWithSeller(listingId.Value);
                 }
                 else
                 {
-                    var order = db.Orders
-                        .AsNoTracking()
-                        .Include(o => o.Listing)
-                            .ThenInclude(l => l.Seller)
-                        .FirstOrDefault(o => o.OrderId == orderId);
-                    listing = order?.Listing;
+                    listing = listingQuery.GetOrderWithListingAndSeller(orderId)?.Listing;
                 }
 
                 var sellerId = listing?.SellerId;

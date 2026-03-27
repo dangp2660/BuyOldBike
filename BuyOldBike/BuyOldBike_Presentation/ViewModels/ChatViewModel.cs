@@ -1,4 +1,4 @@
-﻿using BuyOldBike_BLL.Features.Chats;
+using BuyOldBike_BLL.Features.Chats;
 using BuyOldBike_DAL.Entities;
 using System;
 using System.Collections.Generic;
@@ -35,8 +35,7 @@ namespace BuyOldBike_Presentation.ViewModels
             SenderId = senderId;
             ReceiverId = receiverId;
 
-            var repo = new BuyOldBike_DAL.Repositories.Chats.MessageRepository();
-            _service = new ChatService(repo);
+            _service = new ChatService();
         }
 
         public void LoadMessages()

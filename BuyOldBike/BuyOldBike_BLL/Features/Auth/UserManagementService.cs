@@ -1,4 +1,4 @@
-﻿using BuyOldBike_DAL.Constants;
+using BuyOldBike_DAL.Constants;
 using BuyOldBike_DAL.Entities;
 using BuyOldBike_DAL.Repositories.Auth;
 using System;
@@ -12,6 +12,10 @@ namespace BuyOldBike_BLL.Features.Auth
     public class UserManagementService
     {
         private readonly UserRepository _userRepo;
+
+        public UserManagementService() : this(new UserRepository())
+        {
+        }
 
         public UserManagementService(UserRepository userRepo)
         {

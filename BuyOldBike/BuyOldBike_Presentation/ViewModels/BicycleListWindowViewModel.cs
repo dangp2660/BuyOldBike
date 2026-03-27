@@ -1,7 +1,6 @@
 using BuyOldBike_DAL.Entities;
-using BuyOldBike_DAL.Repositories.Categories;
-using BuyOldBike_DAL.Repositories.Seller;
 using BuyOldBike_BLL.Features.Categories;
+using BuyOldBike_BLL.Services.BicycleListWindow;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -89,8 +88,8 @@ namespace BuyOldBike_Presentation.ViewModels
 
         public void Load()
         {
-            BikePostRepository _repo = new BikePostRepository();
-            List<Listing> items = _repo.GetAvailableListings();
+            var browseService = new ListingBrowseService();
+            List<Listing> items = browseService.GetAvailableListings();
 
             _all.Clear();
             foreach (Listing l in items)
@@ -203,7 +202,7 @@ namespace BuyOldBike_Presentation.ViewModels
             BikeTypes.Add("Tất cả");
             try
             {
-                var categoryService = new CategoryManagementService(new CategoryRepository());
+                var categoryService = new CategoryManagementService();
 
                 foreach (var b in categoryService
                     .GetBrands()

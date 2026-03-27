@@ -2,7 +2,6 @@ using BuyOldBike_BLL.Services.Seller;
 using BuyOldBike_BLL.Features.Chats;
 using BuyOldBike_DAL.Constants;
 using BuyOldBike_DAL.Entities;
-using BuyOldBike_DAL.Repositories.Chats;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -75,7 +74,7 @@ namespace BuyOldBike_Presentation.ViewModels
         {
             _listingService = new ListingService();
             _orderService = new OrderService();
-            _chatService = new ChatService(new MessageRepository());
+            _chatService = new ChatService();
         }
 
         public void CreateNewPost(Listing listing, List<string> imagePaths)

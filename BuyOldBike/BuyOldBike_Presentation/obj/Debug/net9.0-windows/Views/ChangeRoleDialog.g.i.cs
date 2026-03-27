@@ -68,7 +68,7 @@ namespace BuyOldBike_Presentation.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/BuyOldBike_Presentation;V1.0.0.0;component/views/changeroledialog.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/BuyOldBike_Presentation;component/views/changeroledialog.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Views\ChangeRoleDialog.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
