@@ -92,7 +92,6 @@ namespace BuyOldBike_Presentation.Views
             if (!RoleNavigator.EnsureRole(this, RoleConstants.Inspector)) return;
             DataContext = this;
             LoadData();
-            SetInspectorUploadEnabled(false);
         }
 
         private void LoadData()
@@ -321,7 +320,6 @@ namespace BuyOldBike_Presentation.Views
                 txtDisputeDetail.Text = request.Detail;
                 ReloadDisputeImages(request.ReturnRequestId);
                 LoadDisputeDetails(request.ReturnRequestId);
-                SetInspectorUploadEnabled(true);
             }
             else
             {
@@ -331,7 +329,6 @@ namespace BuyOldBike_Presentation.Views
                 icInspectorSelectedPreviews.ItemsSource = new List<string>();
                 _selectedInspectorImagePaths.Clear();
                 pnlDisputeDetails.DataContext = null;
-                SetInspectorUploadEnabled(false);
             }
         }
 
@@ -340,13 +337,6 @@ namespace BuyOldBike_Presentation.Views
             var result = _disputeService.GetDisputeImagesForInspector(returnRequestId);
             icBuyerDisputeImages.ItemsSource = result.BuyerImages;
             icInspectorDisputeImages.ItemsSource = result.InspectorImages;
-        }
-
-        private void SetInspectorUploadEnabled(bool enabled)
-        {
-            btnSelectInspectorImages.IsEnabled = enabled;
-            btnUploadInspectorImages.IsEnabled = enabled;
-            btnClearInspectorImages.IsEnabled = enabled;
         }
 
         private void LoadDisputeDetails(Guid returnRequestId)
@@ -484,64 +474,5 @@ namespace BuyOldBike_Presentation.Views
             ClearInspectionReportSelection();
         }
 
-        private void BtnSelectInspectorImages_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog dlg = new OpenFileDialog
-            {
-                Multiselect = true,
-                Filter = "Image files (*.png;*.jpeg;*.jpg)|*.png;*.jpeg;*.jpg"
-            };
-
-            if (dlg.ShowDialog() != true) return;
-
-            foreach (var f in dlg.FileNames)
-            {
-                if (_selectedInspectorImagePaths.Count >= 10) break;
-                if (_selectedInspectorImagePaths.Contains(f, StringComparer.OrdinalIgnoreCase)) continue;
-                _selectedInspectorImagePaths.Add(f);
-            }
-
-            icInspectorSelectedPreviews.ItemsSource = _selectedInspectorImagePaths.ToList();
-        }
-
-        private void BtnClearInspectorSelection_Click(object sender, RoutedEventArgs e)
-        {
-            _selectedInspectorImagePaths.Clear();
-            icInspectorSelectedPreviews.ItemsSource = new List<string>();
-        }
-
-        private void BtnUploadInspectorImages_Click(object sender, RoutedEventArgs e)
-        {
-            if (dgDisputeList.SelectedItem is not ReturnRequest request)
-            {
-                MessageBox.Show("Vui lòng chọn một khiếu nại để tải ảnh.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (_selectedInspectorImagePaths.Count == 0)
-            {
-                MessageBox.Show("Vui lòng chọn ít nhất 1 ảnh.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            try
-            {
-                var savedUrls = _selectedInspectorImagePaths
-                    .Select(_mediaService.SaveImage)
-                    .Where(u => !string.IsNullOrWhiteSpace(u))
-                    .ToList();
-
-                _disputeService.AddInspectorImages(request.ReturnRequestId, savedUrls);
-
-                ReloadDisputeImages(request.ReturnRequestId);
-                BtnClearInspectorSelection_Click(sender, e);
-
-                MessageBox.Show("Đã tải ảnh inspector lên thành công.", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi tải ảnh: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
     }
 }

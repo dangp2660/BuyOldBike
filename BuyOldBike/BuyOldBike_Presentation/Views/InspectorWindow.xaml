@@ -623,17 +623,6 @@
                                             </ItemsControl>
                                         </ScrollViewer>
 
-                                        <TextBlock Margin="0,14,0,0" FontWeight="SemiBold" Text="Ghi chú kiểm định (Inspector)" />
-                                        <Border Margin="0,8,0,0" Background="#FFF9FAFB" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="10" Padding="10">
-                                            <TextBlock Text="{Binding InspectionNoteText}" TextWrapping="Wrap" />
-                                        </Border>
-
-                                        <StackPanel Margin="0,14,0,0" Orientation="Horizontal">
-                                            <Button x:Name="btnSelectInspectorImages" Content="Chọn ảnh" Click="BtnSelectInspectorImages_Click" />
-                                            <Button x:Name="btnUploadInspectorImages" Margin="10,0,0,0" Content="Tải lên" Click="BtnUploadInspectorImages_Click" />
-                                            <Button x:Name="btnClearInspectorImages" Margin="10,0,0,0" Content="Xóa chọn" Click="BtnClearInspectorSelection_Click" />
-                                        </StackPanel>
-
                                         <ScrollViewer Margin="0,12,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
                                             <ItemsControl x:Name="icInspectorSelectedPreviews">
                                                 <ItemsControl.ItemsPanel>

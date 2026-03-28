@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BuyOldBike_IpnApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+54128c0b93a36fd5c089851040c0408e26755b5d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9f78d63c2af3bd9ec9a0257bc33e7671fb1d803f")]
 [assembly: System.Reflection.AssemblyProductAttribute("BuyOldBike_IpnApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BuyOldBike_IpnApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
