@@ -69,28 +69,29 @@ namespace BuyOldBike_Presentation.Views
                 _transactionVm?.LoadOrders();
         }
 
-        private void BtnApproveListing_Click(object sender, RoutedEventArgs e)
+        //listing
+        private void BtnViewListingDetail_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as Button)?.DataContext is not Listing listing) return;
+            var window = new ListingDetailWindow(listing.ListingId) { Owner = this };
+            window.ShowDialog();
+        }
+        private void CmbListingStatus_Changed(object sender, SelectionChangedEventArgs e)
         {
             if (_listingVm == null) return;
-            if ((sender as Button)?.DataContext is not Listing listing) return;
-
-            var confirm = MessageBox.Show(
-                $"Duyệt bài \"{listing.Title}\"?",
-                "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (confirm == MessageBoxResult.Yes)
-                _listingVm.ApproveListing(listing.ListingId);
+            if (CmbListingStatus.SelectedItem is ComboBoxItem item)
+                _listingVm.SelectedStatus = item.Tag?.ToString() ?? "All status";
+            _listingVm.LoadListings();
         }
-        private void BtnRejectListing_Click(object sender, RoutedEventArgs e)
+        private void BtnListingSearch_Click(object sender, RoutedEventArgs e)
         {
             if (_listingVm == null) return;
-            if ((sender as Button)?.DataContext is not Listing listing) return;
-
-            var confirm = MessageBox.Show(
-                $"Reject bài \"{listing.Title}\"?",
-                "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (confirm == MessageBoxResult.Yes)
-                _listingVm.RejectListing(listing.ListingId);
+            _listingVm.SearchText = TxtListingSearch.Text.Trim();
+            if (CmbListingStatus.SelectedItem is ComboBoxItem item)
+                _listingVm.SelectedStatus = item.Tag?.ToString() ?? "All status";
+            _listingVm.LoadListings();
         }
+        //user
         private void BtnSearch_Click(object sender, RoutedEventArgs e)
         {
             if (_userVm == null) return;
@@ -160,14 +161,7 @@ namespace BuyOldBike_Presentation.Views
             LogoutManager.Logout(this);
         }
 
-        private void BtnListingSearch_Click(object sender, RoutedEventArgs e)
-        {
-            if (_listingVm == null) return;
-            _listingVm.SearchText = TxtListingSearch.Text.Trim();
-            if (CmbListingStatus.SelectedItem is ComboBoxItem item)
-                _listingVm.SelectedStatus = item.Tag?.ToString() ?? "All status";
-            _listingVm.LoadListings();
-        }
+
 
         //category 
         private void BtnAddType_Click(object sender, RoutedEventArgs e)

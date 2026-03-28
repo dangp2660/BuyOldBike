@@ -1,0 +1,117 @@
+﻿<Window x:Class="BuyOldBike_Presentation.Views.BuyerMessagesView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Tin nhắn"
+        Height="600" Width="900">
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- LEFT -->
+        <ListBox x:Name="LbConversations"
+                 SelectionChanged="LbConversations_SelectionChanged">
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="10">
+                        <TextBlock Text="{Binding OtherUserEmail}"
+                                   FontWeight="Bold"/>
+                        <TextBlock Text="{Binding ListingTitle}" FontSize="12"/>
+                        <TextBlock Text="{Binding LastMessage}" FontSize="11"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+
+        </ListBox>
+
+        <!-- RIGHT -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <ScrollViewer x:Name="ChatScrollViewer">
+                <ItemsControl x:Name="IcMessages">
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="5">
+
+                                <Border Padding="10"
+                            Background="#3B82F6"
+                            CornerRadius="10">
+
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <!-- mặc định: tin của mình -->
+                                            <Setter Property="HorizontalAlignment" Value="Right"/>
+
+                                            <Style.Triggers>
+                                                <!-- tin người khác -->
+                                                <DataTrigger Binding="{Binding IsMine}" Value="False">
+                                                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                                                    <Setter Property="Background" Value="#E5E7EB"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Content}"
+                                       TextWrapping="Wrap"
+                                       Foreground="White">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsMine}" Value="False">
+                                                            <Setter Property="Foreground" Value="Black"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+
+                                        <TextBlock Text="{Binding SentAt, StringFormat={}{0:HH:mm}}"
+                                       FontSize="10"
+                                       HorizontalAlignment="Right"
+                                       Margin="0,4,0,0"/>
+                                    </StackPanel>
+
+                                </Border>
+
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <!-- TextBox auto -->
+                    <ColumnDefinition Width="10"/>
+                    <!-- spacing -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- Button -->
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0"
+                         x:Name="TxtInput"
+                         Height="36"
+                         VerticalContentAlignment="Center"/>
+                <Button Grid.Column="2"
+                        Content="Gửi"
+                        Width="80"
+                        Height="36"
+                        Click="BtnSend_Click"/>
+                <Button Grid.Column="3"
+                        Content="Refresh"
+                        Height="36"
+                        Click="BtnRefreshChat_Click" VerticalAlignment="Top"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

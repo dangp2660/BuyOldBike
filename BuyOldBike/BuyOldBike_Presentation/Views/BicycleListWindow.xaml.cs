@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -196,6 +196,12 @@ namespace BuyOldBike_Presentation.Views
             var detailWindow = new ListingDetailWindow(card.ListingId);
             detailWindow.Owner = this;
             detailWindow.ShowDialog();
+        }
+        private void BtnMessages_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new BuyerMessagesView();
+            win.Owner = this;
+            win.Show();
         }
     }
 }

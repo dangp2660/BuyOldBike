@@ -11,7 +11,6 @@
         MinHeight="680"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <!-- XmlDataProviders giữ nguyên từ main -->
         <XmlDataProvider x:Key="AdminUsersProvider" XPath="/Items/Item">
             <x:XData>
                 <Items xmlns="">
@@ -84,8 +83,11 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <Border Grid.Row="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="0,0,0,1" Padding="16">
+        <Border Grid.Row="0"
+                Background="White"
+                BorderBrush="#FFE5E7EB"
+                BorderThickness="0,0,0,1"
+                Padding="16">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -94,7 +96,9 @@
 
                 <StackPanel>
                     <TextBlock FontSize="18" FontWeight="SemiBold" Text="Admin Center" />
-                    <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Quản trị người dùng, bài đăng, danh mục và giao dịch" />
+                    <TextBlock Margin="0,4,0,0"
+                               Foreground="#FF6B7280"
+                               Text="Quản trị người dùng, bài đăng, danh mục và giao dịch" />
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
@@ -104,12 +108,11 @@
             </Grid>
         </Border>
 
-        <!-- Main TabControl -->
-        <TabControl Grid.Row="1" Margin="16" Background="{x:Null}" x:Name="MainTabControl" SelectionChanged="TabControl_SelectionChanged">
-
-           
-                <TabItem Header="Dashboard">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <TabControl Grid.Row="1" Margin="16" Background="{x:Null}"
+                    x:Name="MainTabControl"
+                    SelectionChanged="TabControl_SelectionChanged">
+            <TabItem Header="Dashboard">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Tổng quan hệ thống" />
 
@@ -177,6 +180,7 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="User Management" />
+
                         <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                             <StackPanel>
                                 <Grid>
@@ -187,26 +191,31 @@
                                         <ColumnDefinition Width="12" />
                                         <ColumnDefinition Width="140" />
                                         <ColumnDefinition Width="12" />
-                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="120" />
                                     </Grid.ColumnDefinitions>
 
                                     <TextBox Grid.Column="0" x:Name="TxtSearch" Text="Tìm theo tên / email..." />
-                                    <ComboBox Grid.Column="2" x:Name="CmbRole" SelectedIndex="0">
+                                    <ComboBox Grid.Column="2" x:Name="CmbRole" SelectedIndex="0" SelectionChanged="CmbRole_Changed">
                                         <ComboBoxItem Content="All roles" Tag="All roles"/>
                                         <ComboBoxItem Content="Buyer" Tag="Buyer"/>
                                         <ComboBoxItem Content="Seller" Tag="Seller" />
                                         <ComboBoxItem Content="Inspector" Tag="Inspector"/>
                                         <ComboBoxItem Content="Admin" Tag="Admin"/>
                                     </ComboBox>
-                                    <ComboBox Grid.Column="4" x:Name="CmbStatus" SelectedIndex="0" SelectionChanged="CmbStatus_Changed">
+                                    <ComboBox Grid.Column="4" 
+                                              x:Name="CmbStatus"
+                                              SelectedIndex="0"
+                                              SelectionChanged="CmbStatus_Changed">
                                         <ComboBoxItem Content="All status" Tag="All status" />
                                         <ComboBoxItem Content="Active"  Tag="Active"/>
                                         <ComboBoxItem Content="Suspended" Tag="Suspended" />
                                     </ComboBox>
-                                    <Button Grid.Column="6" Height="36" Content="Tìm kiếm" Click="BtnSearch_Click"/>
+                                    <Button Grid.Column="6" Height="36"
+                                            Content="Tìm kiếm"
+                                            Click="BtnSearch_Click"/>
                                 </Grid>
 
-                                <DataGrid x:Name="DgUsers"
+                                <DataGrid x:Name="DgUsers" 
                                           Margin="0,12,0,0"
                                           Height="480"
                                           AutoGenerateColumns="False"
@@ -225,13 +234,13 @@
                                           Background="White"
                                           RowBackground="White"
                                           AlternatingRowBackground="#FFF9FAFB"
-                                          ItemsSource="{Binding Source={StaticResource AdminUsersProvider}}">
+                                          ItemsSource="{Binding}">
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Header="User Name" Width="220" Binding="{Binding XPath=@Name}" />
-                                        <DataGridTextColumn Header="Email" Width="260" Binding="{Binding XPath=@Email}" />
-                                        <DataGridTextColumn Header="PhoneNumber" Width="120" Binding="{Binding XPath=@PhoneNumber}" />
-                                        <DataGridTextColumn Header="Role" Width="120" Binding="{Binding XPath=@Role}" />
-                                        <DataGridTextColumn Header="Status" Width="120" Binding="{Binding XPath=@Status}" />
+                                        <DataGridTextColumn Header="User Name" Width="220" Binding="{Binding Name}" />
+                                        <DataGridTextColumn Header="Email" Width="260" Binding="{Binding Email}" />
+                                        <DataGridTextColumn Header="PhoneNumber" Width="120" Binding="{Binding PhoneNumber}" />
+                                        <DataGridTextColumn Header="Role" Width="120" Binding="{Binding Role}" />
+                                        <DataGridTextColumn Header="Status" Width="120" Binding="{Binding Status}" />
                                         <DataGridTemplateColumn Header="Actions" Width="260">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
@@ -252,7 +261,7 @@
             </TabItem>
 
             <TabItem Header="Listing Moderation" x:Name="TabListingModeration">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Listing Moderation" />
 
@@ -267,18 +276,22 @@
                                         <ColumnDefinition Width="160" />
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBox Grid.Column="0" x:Name="TxtListingSearch" />
-                                    <ComboBox Grid.Column="2" x:Name="CmbListingStatus" SelectedIndex="0">
+                                    <TextBox Grid.Column="0"
+                                             x:Name="TxtListingSearch"
+                                             Text="Tìm theo tiêu đề / seller..." />
+                                    <ComboBox Grid.Column="2" 
+                                              x:Name="CmbListingStatus"
+                                              SelectedIndex="0"
+                                              SelectionChanged="CmbListingStatus_Changed">
                                         <ComboBoxItem Content="All status" Tag="All status" />
-                                        <ComboBoxItem Content="Pending" Tag="Pending" />
-                                        <ComboBoxItem Content="Approved" Tag="Approved" />
+                                        <ComboBoxItem Content="Available" Tag="Available"/>
                                         <ComboBoxItem Content="Rejected" Tag="Rejected" />
-                                        <ComboBoxItem Content="Flagged" Tag="Flagged" />
+                                        <ComboBoxItem Content="Deleted" Tag="Deleted" />
                                     </ComboBox>
                                     <Button Grid.Column="4" Content="Tìm kiếm" Click="BtnListingSearch_Click" />
                                 </Grid>
 
-                                <DataGrid x:Name="DgListings"
+                                <DataGrid x:Name="DgListings" 
                                           Margin="0,12,0,0"
                                           Height="480"
                                           AutoGenerateColumns="False"
@@ -297,19 +310,20 @@
                                           Background="White"
                                           RowBackground="White"
                                           AlternatingRowBackground="#FFF9FAFB"
-                                          ItemsSource="{Binding Source={StaticResource ModerationListingsProvider}}">
+                                          ItemsSource="{Binding}">
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Listing Title" Width="340" Binding="{Binding XPath=@Title}" />
-                                        <DataGridTextColumn Header="Seller" Width="180" Binding="{Binding XPath=@Seller}" />
-                                        <DataGridTextColumn Header="Date Posted" Width="140" Binding="{Binding XPath=@DatePosted}" />
-                                        <DataGridTextColumn Header="Status" Width="120" Binding="{Binding XPath=@Status}" />
+                                        <DataGridTextColumn Header="Listing Title" Width="340" Binding="{Binding Title}" />
+                                        <DataGridTextColumn Header="Seller" Width="220" Binding="{Binding Seller.Email}" />
+                                        <DataGridTextColumn Header="Date Posted" Width="140" Binding="{Binding CreatedAt}" />
+                                        <DataGridTextColumn Header="Status" Width="120" Binding="{Binding Status}" />
+                                        <DataGridTextColumn Header="Price" Width="120" Binding="{Binding Price}" />
                                         <DataGridTemplateColumn Header="Buttons" Width="240">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                                        <Button Height="28" Padding="10,4" Content="Approve" Click="BtnApproveListing_Click" />
-                                                        <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Reject" Click="BtnRejectListing_Click" />
-                                                        <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Remove" />
+                                                    <StackPanel Orientation="Horizontal" Margin="4,0">
+                                                        <Button Height="28" Padding="10,4"
+                                                                Content="View Detail"
+                                                                Click="BtnViewListingDetail_Click"/>
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
@@ -323,7 +337,7 @@
             </TabItem>
 
             <TabItem Header="Category Management" x:Name="TabCategoryManagement">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Category Management" />
 
@@ -345,23 +359,19 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Bicycle Categories" />
                                         <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                            <Button Height="28" Padding="10,4" Content="Add" Click="BtnAddType_Click" />
+                                            <Button Height="28" Padding="10,4" Content="Add" Click="BtnAddType_Click"/>
                                             <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Edit" Click="BtnEditType_Click" />
                                             <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Delete" Click="BtnDeleteType_Click" />
                                         </StackPanel>
                                     </Grid>
-                                    <TextBox x:Name="TxtTypeInput" Margin="0,12,0,0" />
-                                    <ListBox x:Name="LbTypes"
-                                             Margin="0,12,0,0"
-                                             Height="420"
-                                             ItemsSource="{Binding Types}"
-                                             SelectionChanged="LbTypes_SelectionChanged">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Name}" />
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
+                                    <TextBox x:Name="TxtTypeInput"
+                                             Margin="0,10,0,8"/>
+                                    <ListBox x:Name="LbTypes" 
+                                             Margin="0,12,0,0" 
+                                             Height="420" 
+                                             ItemsSource="{Binding Types}" 
+                                             DisplayMemberPath= "Name" 
+                                             SelectionChanged= "LbTypes_SelectionChanged"/>
                                 </StackPanel>
                             </Border>
 
@@ -376,21 +386,17 @@
                                         <StackPanel Grid.Column="1" Orientation="Horizontal">
                                             <Button Height="28" Padding="10,4" Content="Add" Click="BtnAddBrand_Click" />
                                             <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Edit" Click="BtnEditBrand_Click" />
-                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Delete" Click="BtnDeleteBrand_Click" />
+                                            <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Delete"  Click="BtnDeleteBrand_Click" />
                                         </StackPanel>
                                     </Grid>
-                                    <TextBox x:Name="TxtBrandInput" Margin="0,12,0,0" />
-                                    <ListBox x:Name="LbBrands"
-                                             Margin="0,12,0,0"
-                                             Height="420"
+                                    <TextBox x:Name="TxtBrandInput"
+                                             Margin="0,10,0,8"/>
+                                    <ListBox x:Name="LbBrands" 
+                                             Margin="0,12,0,0" 
+                                             Height="420" 
                                              ItemsSource="{Binding Brands}"
-                                             SelectionChanged="LbBrands_SelectionChanged">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding BrandName}" />
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
+                                             DisplayMemberPath="BrandName"
+                                             SelectionChanged="LbBrands_SelectionChanged"/>
                                 </StackPanel>
                             </Border>
 
@@ -408,18 +414,14 @@
                                             <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Delete" Click="BtnDeleteFrameSize_Click" />
                                         </StackPanel>
                                     </Grid>
-                                    <TextBox x:Name="TxtFrameSizeInput" Margin="0,12,0,0" />
+                                    <TextBox x:Name="TxtFrameSizeInput"
+                                             Margin="0,10,0,8"/>
                                     <ListBox x:Name="LbFrameSizes"
-                                             Margin="0,12,0,0"
-                                             Height="420"
+                                             Margin="0,12,0,0" 
+                                             Height="420" 
                                              ItemsSource="{Binding FrameSizes}"
-                                             SelectionChanged="LbFrameSizes_SelectionChanged">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding SizeValue}" />
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
+                                             DisplayMemberPath="SizeValue"
+                                             SelectionChanged="LbFrameSizes_SelectionChanged"/>
                                 </StackPanel>
                             </Border>
                         </Grid>
@@ -428,7 +430,7 @@
             </TabItem>
 
             <TabItem Header="Transaction Management" x:Name="TabTransactionManagement">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Transaction Management" />
 
@@ -438,12 +440,14 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="16" />
-                                        <ColumnDefinition Width="180" />
+                                        <ColumnDefinition Width="200" />
                                         <ColumnDefinition Width="12" />
-                                        <ColumnDefinition Width="140" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="12" />
+                                        <ColumnDefinition Width="100" />
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBox Grid.Column="0" x:Name="TxtTransactionSearch" />
+                                    <TextBox Grid.Column="0" x:Name="TxtTransactionSearch" Text="Tìm theo transaction / buyer / seller..." />
                                     <ComboBox Grid.Column="2" x:Name="CmbTransactionStatus" SelectedIndex="0">
                                         <ComboBoxItem Content="All status" Tag="All status" />
                                         <ComboBoxItem Content="Completed" Tag="Completed" />
@@ -451,10 +455,13 @@
                                         <ComboBoxItem Content="Disputed" Tag="Disputed" />
                                         <ComboBoxItem Content="Refunded" Tag="Refunded" />
                                     </ComboBox>
-                                    <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
-                                        <Button Height="28" Padding="10,4" Content="Tìm" Click="BtnTransactionSearch_Click" />
-                                        <Button Margin="8,0,0,0" Height="28" Padding="10,4" Content="Export" Click="BtnTransactionExport_Click" />
-                                    </StackPanel>
+                                    <Button Grid.Column="4" Height="36"
+                                            Content="Tìm kiếm"
+                                            Click="BtnTransactionSearch_Click"/>
+                                    <Button Grid.Column="6" 
+                                            Height="36" 
+                                            Content="Export" 
+                                            Click="BtnTransactionExport_Click" />
                                 </Grid>
 
                                 <DataGrid x:Name="DgTransactions"
@@ -476,14 +483,27 @@
                                           Background="White"
                                           RowBackground="White"
                                           AlternatingRowBackground="#FFF9FAFB"
-                                          ItemsSource="{Binding Source={StaticResource TransactionsProvider}}">
+                                          ItemsSource="{Binding}">
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Transaction ID" Width="130" Binding="{Binding XPath=@TxId}" />
-                                        <DataGridTextColumn Header="Buyer" Width="160" Binding="{Binding XPath=@Buyer}" />
-                                        <DataGridTextColumn Header="Seller" Width="160" Binding="{Binding XPath=@Seller}" />
-                                        <DataGridTextColumn Header="Amount" Width="130" Binding="{Binding XPath=@Amount}" />
-                                        <DataGridTextColumn Header="Status" Width="120" Binding="{Binding XPath=@Status}" />
-                                        <DataGridTextColumn Header="Date" Width="120" Binding="{Binding XPath=@Date}" />
+                                        <DataGridTextColumn Header="Transaction ID" Width="130" Binding="{Binding OrderId}" />
+                                        <DataGridTextColumn Header="Buyer" Width="160" Binding="{Binding Buyer.Email}" />
+                                        <DataGridTextColumn Header="Seller" Width="160" Binding="{Binding Listing.Seller.Email}" />
+                                        <DataGridTextColumn Header="Amount" Width="130" Binding="{Binding TotalAmount}" />
+                                        <DataGridTextColumn Header="Status" Width="120" Binding="{Binding Status}" />
+                                        <DataGridTextColumn Header="Date" Width="120" Binding="{Binding CreatedAt}" />
+                                        <DataGridTemplateColumn Header="Actions" Width="*">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Left"
+                                                    Margin="4,0">
+                                                        <Button Height="28" Padding="10,4"
+                                                    Content="View Detail"
+                                                    Click="BtnViewOrderDetail_Click"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </StackPanel>

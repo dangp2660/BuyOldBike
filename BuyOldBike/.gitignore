@@ -1,6 +1,10 @@
 # Build outputs
 **/bin/
 **/obj/
+.vs/
+*.csproj.user
+*.suo
+*.user
 
 # Local secrets
 BuyOldBike_Presentation/appsettings.local.json
