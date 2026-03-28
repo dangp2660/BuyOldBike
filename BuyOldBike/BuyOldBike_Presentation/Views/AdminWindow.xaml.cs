@@ -1,3 +1,4 @@
+using BuyOldBike_BLL.Features.Admin;
 using BuyOldBike_BLL.Features.Auth;
 using BuyOldBike_BLL.Features.Categories;
 using BuyOldBike_BLL.Features.Transaction;
@@ -16,6 +17,7 @@ namespace BuyOldBike_Presentation.Views
 {
     public partial class AdminWindow : Window
     {
+        private AdminDashboardViewModel? _dashboardVm;
         private AdminUserManagementViewModel? _userVm;
         private ListingModerationViewModel? _listingVm;
         private CategoryManagementViewModel? _categoryVm;
@@ -25,6 +27,10 @@ namespace BuyOldBike_Presentation.Views
         {
             InitializeComponent();
             if (!RoleNavigator.EnsureRole(this, RoleConstants.Admin)) return;
+            var dashboardSvc = new AdminDashboardService();
+            _dashboardVm = new AdminDashboardViewModel(dashboardSvc);
+            TabDashboard.DataContext = _dashboardVm;
+            _dashboardVm.LoadDashboard();
             var userSvc = new UserManagementService();
             _userVm = new AdminUserManagementViewModel(userSvc);
 
@@ -59,6 +65,8 @@ namespace BuyOldBike_Presentation.Views
         {
             if (e.Source is not TabControl) return;
             if (_userVm == null) return;
+            if (TabDashboard.IsSelected)
+                _dashboardVm?.LoadDashboard();
             if (TabUserManagement.IsSelected)
                 _userVm.LoadUsers();
             if (TabListingModeration.IsSelected)

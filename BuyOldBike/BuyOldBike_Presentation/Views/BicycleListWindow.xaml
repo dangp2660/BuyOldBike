@@ -102,6 +102,12 @@
                             </ContextMenu>
                         </Button.ContextMenu>
                     </Button>
+                    <Button Content="💬 Tin nhắn"
+                            Click="BtnMessages_Click"
+                            Width="100"
+                            Height="40"
+                            Name="btnMessages"
+                            Visibility="Collapsed" />
                 </StackPanel>
             </Grid>
         </Border>
@@ -133,15 +139,15 @@
                           VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Auto">
                 <Grid>
-                <ItemsControl ItemsSource="{Binding Listings}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Columns="5" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Margin="0,0,12,12"
+                    <ItemsControl ItemsSource="{Binding Listings}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="5" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0,0,12,12"
                                     Padding="10"
                                     Background="White"
                                     BorderBrush="#E5E7EB"
@@ -150,548 +156,549 @@
                                     Cursor="Hand"
                                     MouseLeftButtonUp="ListingCard_MouseLeftButtonUp"
                                     VerticalAlignment="Top">
-                                <StackPanel>
-                                    <Border Height="90"
+                                    <StackPanel>
+                                        <Border Height="90"
                                             Background="#F3F4F6"
                                             CornerRadius="10"
                                             ClipToBounds="True">
-                                        <Grid>
-                                            <Image Source="{Binding FirstImageUrl, Converter={StaticResource ImageUrlToBitmapImageConverter}}"
+                                            <Grid>
+                                                <Image Source="{Binding FirstImageUrl, Converter={StaticResource ImageUrlToBitmapImageConverter}}"
                                                    Stretch="UniformToFill" />
-                                            <TextBlock HorizontalAlignment="Center"
+                                                <TextBlock HorizontalAlignment="Center"
                                                        VerticalAlignment="Center"
                                                        Foreground="#6B7280"
                                                        Text="Ảnh xe">
-                                            </TextBlock>
-                                        </Grid>
-                                    </Border>
+                                                </TextBlock>
+                                            </Grid>
+                                        </Border>
 
-                                    <TextBlock Margin="0,8,0,0"
+                                        <TextBlock Margin="0,8,0,0"
                                                FontSize="14"
                                                FontWeight="SemiBold"
                                                Text="{Binding Title}" />
-                                    <TextBlock Margin="0,4,0,0"
+                                        <TextBlock Margin="0,4,0,0"
                                                FontSize="16"
                                                FontWeight="Bold"
                                                Text="{Binding Price, StringFormat={}{0:N0}đ}" />
-                                    <TextBlock Margin="0,4,0,0"
+                                        <TextBlock Margin="0,4,0,0"
                                                Foreground="#6B7280"
                                                Text="{Binding MetaText}" />
                                     <TextBlock Margin="0,4,0,0"
                                                Foreground="#6B7280"
                                                Text="{Binding SellerRatingText}" />
 
-                                    <StackPanel Margin="0,8,0,0" Orientation="Horizontal">
-                                        <Border Padding="8,4"
+                                        <StackPanel Margin="0,8,0,0" Orientation="Horizontal">
+                                            <Border Padding="8,4"
                                                 Background="#ECFDF5"
                                                 CornerRadius="999">
-                                            <TextBlock Foreground="#047857"
+                                                <TextBlock Foreground="#047857"
                                                        FontSize="12"
                                                        Text="Đã kiểm định" />
-                                        </Border>
-                                        <Button Margin="10,0,0,0"
+                                            </Border>
+                                            <Button Margin="10,0,0,0"
                                                 MinWidth="34"
                                                 Height="28"
                                                 Padding="8,4"
                                                 Content="♥" />
+                                        </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <StackPanel Visibility="Collapsed">
-                    <Border Margin="0,0,0,12"
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <StackPanel Visibility="Collapsed">
+                        <Border Margin="0,0,0,12"
                             Padding="12"
                             Background="White"
                             BorderBrush="#E5E7EB"
                             BorderThickness="1"
                             CornerRadius="14">
-                        <StackPanel>
-                            <Border Height="120"
+                            <StackPanel>
+                                <Border Height="120"
                                     Background="#F3F4F6"
                                     CornerRadius="10">
-                                <TextBlock HorizontalAlignment="Center"
+                                    <TextBlock HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
-                                           Foreground="#6B7280"/>
+                                           Foreground="#6B7280"
+                                           Text="Ảnh xe" />
                             </Border>
                             <TextBlock Margin="0,10,0,0"
                                        FontSize="14"
                                        FontWeight="SemiBold"
                                        Text="Xe đạp road Giant TCR" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        FontSize="16"
                                        FontWeight="Bold"
                                        Text="12.500.000đ" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        Foreground="#6B7280"
                                        Text="Giant • Như mới" />
-                            <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                                <Border Width="150"
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <Border Width="150"
                                         Padding="8,4"
                                         Background="#ECFDF5"
                                         CornerRadius="999">
-                                    <TextBlock Foreground="#047857"
+                                        <TextBlock Foreground="#047857"
                                                FontSize="12"
                                                Text="Đã kiểm định" />
-                                </Border>
-                                <Button Margin="10,0,0,0"
+                                    </Border>
+                                    <Button Margin="10,0,0,0"
                                         Content="♥" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Border>
+                        </Border>
 
-                    <Border Margin="0,0,0,12"
+                        <Border Margin="0,0,0,12"
                             Padding="12"
                             Background="White"
                             BorderBrush="#E5E7EB"
                             BorderThickness="1"
                             CornerRadius="14">
-                        <StackPanel>
-                            <Border Height="120"
+                            <StackPanel>
+                                <Border Height="120"
                                     Background="#F3F4F6"
                                     CornerRadius="10">
-                                <TextBlock HorizontalAlignment="Center"
+                                    <TextBlock HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            Foreground="#6B7280"
                                            Text="Ảnh xe" />
-                            </Border>
-                            <TextBlock Margin="0,10,0,0"
+                                </Border>
+                                <TextBlock Margin="0,10,0,0"
                                        FontSize="14"
                                        FontWeight="SemiBold"
                                        Text="Xe đạp city Trek FX" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        FontSize="16"
                                        FontWeight="Bold"
                                        Text="7.900.000đ" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        Foreground="#6B7280"
                                        Text="Trek • Tốt" />
-                            <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                                <Border Width="150"
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <Border Width="150"
                                         Padding="8,4"
                                         Background="#FEF3C7"
                                         CornerRadius="999">
-                                    <TextBlock Foreground="#92400E"
+                                        <TextBlock Foreground="#92400E"
                                                FontSize="12"
                                                Text="Chưa kiểm định" />
-                                </Border>
-                                <Button Margin="10,0,0,0"
+                                    </Border>
+                                    <Button Margin="10,0,0,0"
                                         Content="♥" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Border>
+                        </Border>
 
-                    <Border Margin="0,0,0,12"
+                        <Border Margin="0,0,0,12"
                             Padding="12"
                             Background="White"
                             BorderBrush="#E5E7EB"
                             BorderThickness="1"
                             CornerRadius="14">
-                        <StackPanel>
-                            <Border Height="120"
+                            <StackPanel>
+                                <Border Height="120"
                                     Background="#F3F4F6"
                                     CornerRadius="10">
-                                <TextBlock HorizontalAlignment="Center"
+                                    <TextBlock HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            Foreground="#6B7280"
                                            Text="Ảnh xe" />
-                            </Border>
-                            <TextBlock Margin="0,10,0,0"
+                                </Border>
+                                <TextBlock Margin="0,10,0,0"
                                        FontSize="14"
                                        FontWeight="SemiBold"
                                        Text="Xe đạp MTB Specialized" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        FontSize="16"
                                        FontWeight="Bold"
                                        Text="9.300.000đ" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        Foreground="#6B7280"
                                        Text="Specialized • Đã qua sử dụng" />
-                            <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                                <Border Width="150"
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <Border Width="150"
                                         Padding="8,4"
                                         Background="#ECFDF5"
                                         CornerRadius="999">
-                                    <TextBlock Foreground="#047857"
+                                        <TextBlock Foreground="#047857"
                                                FontSize="12"
                                                Text="Đã kiểm định" />
-                                </Border>
-                                <Button Margin="10,0,0,0"
+                                    </Border>
+                                    <Button Margin="10,0,0,0"
                                         Content="♥" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Border>
+                        </Border>
 
-                    <Border Margin="0,0,0,12"
+                        <Border Margin="0,0,0,12"
                             Padding="12"
                             Background="White"
                             BorderBrush="#E5E7EB"
                             BorderThickness="1"
                             CornerRadius="14">
-                        <StackPanel>
-                            <Border Height="120"
+                            <StackPanel>
+                                <Border Height="120"
                                     Background="#F3F4F6"
                                     CornerRadius="10">
-                                <TextBlock HorizontalAlignment="Center"
+                                    <TextBlock HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            Foreground="#6B7280"
                                            Text="Ảnh xe" />
-                            </Border>
-                            <TextBlock Margin="0,10,0,0"
+                                </Border>
+                                <TextBlock Margin="0,10,0,0"
                                        FontSize="14"
                                        FontWeight="SemiBold"
                                        Text="Xe đạp road Merida Scultura" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        FontSize="16"
                                        FontWeight="Bold"
                                        Text="10.800.000đ" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        Foreground="#6B7280"
                                        Text="Merida • Tốt" />
-                            <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                                <Border Width="150"
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <Border Width="150"
                                         Padding="8,4"
                                         Background="#FEF3C7"
                                         CornerRadius="999">
-                                    <TextBlock Foreground="#92400E"
+                                        <TextBlock Foreground="#92400E"
                                                FontSize="12"
                                                Text="Chưa kiểm định" />
-                                </Border>
-                                <Button Margin="10,0,0,0"
+                                    </Border>
+                                    <Button Margin="10,0,0,0"
                                         Content="♥" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Border>
+                        </Border>
 
-                    <Border Margin="0,0,0,12"
+                        <Border Margin="0,0,0,12"
                             Padding="12"
                             Background="White"
                             BorderBrush="#E5E7EB"
                             BorderThickness="1"
                             CornerRadius="14">
-                        <StackPanel>
-                            <Border Height="120"
+                            <StackPanel>
+                                <Border Height="120"
                                     Background="#F3F4F6"
                                     CornerRadius="10">
-                                <TextBlock HorizontalAlignment="Center"
+                                    <TextBlock HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            Foreground="#6B7280"
                                            Text="Ảnh xe" />
-                            </Border>
-                            <TextBlock Margin="0,10,0,0"
+                                </Border>
+                                <TextBlock Margin="0,10,0,0"
                                        FontSize="14"
                                        FontWeight="SemiBold"
                                        Text="Xe đạp gấp Folding Bike" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        FontSize="16"
                                        FontWeight="Bold"
                                        Text="4.600.000đ" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        Foreground="#6B7280"
                                        Text="Khác • Đã qua sử dụng" />
-                            <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                                <Border Width="150"
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <Border Width="150"
                                         Padding="8,4"
                                         Background="#ECFDF5"
                                         CornerRadius="999">
-                                    <TextBlock Foreground="#047857"
+                                        <TextBlock Foreground="#047857"
                                                FontSize="12"
                                                Text="Đã kiểm định" />
-                                </Border>
-                                <Button Margin="10,0,0,0"
+                                    </Border>
+                                    <Button Margin="10,0,0,0"
                                         Content="♥" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Border>
+                        </Border>
 
-                    <Border Margin="0,0,0,12"
+                        <Border Margin="0,0,0,12"
                             Padding="12"
                             Background="White"
                             BorderBrush="#E5E7EB"
                             BorderThickness="1"
                             CornerRadius="14">
-                        <StackPanel>
-                            <Border Height="120"
+                            <StackPanel>
+                                <Border Height="120"
                                     Background="#F3F4F6"
                                     CornerRadius="10">
-                                <TextBlock HorizontalAlignment="Center"
+                                    <TextBlock HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            Foreground="#6B7280"
                                            Text="Ảnh xe" />
-                            </Border>
-                            <TextBlock Margin="0,10,0,0"
+                                </Border>
+                                <TextBlock Margin="0,10,0,0"
                                        FontSize="14"
                                        FontWeight="SemiBold"
                                        Text="Xe đạp touring Kona" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        FontSize="16"
                                        FontWeight="Bold"
                                        Text="8.200.000đ" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        Foreground="#6B7280"
                                        Text="Kona • Tốt" />
-                            <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                                <Border Width="150"
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <Border Width="150"
                                         Padding="8,4"
                                         Background="#ECFDF5"
                                         CornerRadius="999">
-                                    <TextBlock Foreground="#047857"
+                                        <TextBlock Foreground="#047857"
                                                FontSize="12"
                                                Text="Đã kiểm định" />
-                                </Border>
-                                <Button Margin="10,0,0,0"
+                                    </Border>
+                                    <Button Margin="10,0,0,0"
                                         Content="♥" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Border>
+                        </Border>
 
-                    <Border Margin="0,0,0,12"
+                        <Border Margin="0,0,0,12"
                             Padding="12"
                             Background="White"
                             BorderBrush="#E5E7EB"
                             BorderThickness="1"
                             CornerRadius="14">
-                        <StackPanel>
-                            <Border Height="120"
+                            <StackPanel>
+                                <Border Height="120"
                                     Background="#F3F4F6"
                                     CornerRadius="10">
-                                <TextBlock HorizontalAlignment="Center"
+                                    <TextBlock HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            Foreground="#6B7280"
                                            Text="Ảnh xe" />
-                            </Border>
-                            <TextBlock Margin="0,10,0,0"
+                                </Border>
+                                <TextBlock Margin="0,10,0,0"
                                        FontSize="14"
                                        FontWeight="SemiBold"
                                        Text="Xe đạp trẻ em Kids Bike" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        FontSize="16"
                                        FontWeight="Bold"
                                        Text="1.900.000đ" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        Foreground="#6B7280"
                                        Text="Khác • Tốt" />
-                            <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                                <Border Width="150"
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <Border Width="150"
                                         Padding="8,4"
                                         Background="#FEF3C7"
                                         CornerRadius="999">
-                                    <TextBlock Foreground="#92400E"
+                                        <TextBlock Foreground="#92400E"
                                                FontSize="12"
                                                Text="Chưa kiểm định" />
-                                </Border>
-                                <Button Margin="10,0,0,0"
+                                    </Border>
+                                    <Button Margin="10,0,0,0"
                                         Content="♥" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Border>
+                        </Border>
 
-                    <Border Margin="0,0,0,12"
+                        <Border Margin="0,0,0,12"
                             Padding="12"
                             Background="White"
                             BorderBrush="#E5E7EB"
                             BorderThickness="1"
                             CornerRadius="14">
-                        <StackPanel>
-                            <Border Height="120"
+                            <StackPanel>
+                                <Border Height="120"
                                     Background="#F3F4F6"
                                     CornerRadius="10">
-                                <TextBlock HorizontalAlignment="Center"
+                                    <TextBlock HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            Foreground="#6B7280"
                                            Text="Ảnh xe" />
-                            </Border>
-                            <TextBlock Margin="0,10,0,0"
+                                </Border>
+                                <TextBlock Margin="0,10,0,0"
                                        FontSize="14"
                                        FontWeight="SemiBold"
                                        Text="Xe đạp fixie Fixed Gear" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        FontSize="16"
                                        FontWeight="Bold"
                                        Text="3.700.000đ" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        Foreground="#6B7280"
                                        Text="Khác • Đã qua sử dụng" />
-                            <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                                <Border Width="150"
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <Border Width="150"
                                         Padding="8,4"
                                         Background="#ECFDF5"
                                         CornerRadius="999">
-                                    <TextBlock Foreground="#047857"
+                                        <TextBlock Foreground="#047857"
                                                FontSize="12"
                                                Text="Đã kiểm định" />
-                                </Border>
-                                <Button Margin="10,0,0,0"
+                                    </Border>
+                                    <Button Margin="10,0,0,0"
                                         Content="♥" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Border>
+                        </Border>
 
-                    <Border Margin="0,0,0,12"
+                        <Border Margin="0,0,0,12"
                             Padding="12"
                             Background="White"
                             BorderBrush="#E5E7EB"
                             BorderThickness="1"
                             CornerRadius="14">
-                        <StackPanel>
-                            <Border Height="120"
+                            <StackPanel>
+                                <Border Height="120"
                                     Background="#F3F4F6"
                                     CornerRadius="10">
-                                <TextBlock HorizontalAlignment="Center"
+                                    <TextBlock HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            Foreground="#6B7280"
                                            Text="Ảnh xe" />
-                            </Border>
-                            <TextBlock Margin="0,10,0,0"
+                                </Border>
+                                <TextBlock Margin="0,10,0,0"
                                        FontSize="14"
                                        FontWeight="SemiBold"
                                        Text="Xe đạp gravel Cannondale" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        FontSize="16"
                                        FontWeight="Bold"
                                        Text="11.400.000đ" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        Foreground="#6B7280"
                                        Text="Cannondale • Như mới" />
-                            <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                                <Border Width="150"
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <Border Width="150"
                                         Padding="8,4"
                                         Background="#ECFDF5"
                                         CornerRadius="999">
-                                    <TextBlock Foreground="#047857"
+                                        <TextBlock Foreground="#047857"
                                                FontSize="12"
                                                Text="Đã kiểm định" />
-                                </Border>
-                                <Button Margin="10,0,0,0"
+                                    </Border>
+                                    <Button Margin="10,0,0,0"
                                         Content="♥" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Border>
+                        </Border>
 
-                    <Border Margin="0,0,0,12"
+                        <Border Margin="0,0,0,12"
                             Padding="12"
                             Background="White"
                             BorderBrush="#E5E7EB"
                             BorderThickness="1"
                             CornerRadius="14">
-                        <StackPanel>
-                            <Border Height="120"
+                            <StackPanel>
+                                <Border Height="120"
                                     Background="#F3F4F6"
                                     CornerRadius="10">
-                                <TextBlock HorizontalAlignment="Center"
+                                    <TextBlock HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            Foreground="#6B7280"
                                            Text="Ảnh xe" />
-                            </Border>
-                            <TextBlock Margin="0,10,0,0"
+                                </Border>
+                                <TextBlock Margin="0,10,0,0"
                                        FontSize="14"
                                        FontWeight="SemiBold"
                                        Text="Xe đạp hybrid Scott" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        FontSize="16"
                                        FontWeight="Bold"
                                        Text="6.300.000đ" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        Foreground="#6B7280"
                                        Text="Scott • Tốt" />
-                            <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                                <Border Width="150"
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <Border Width="150"
                                         Padding="8,4"
                                         Background="#FEF3C7"
                                         CornerRadius="999">
-                                    <TextBlock Foreground="#92400E"
+                                        <TextBlock Foreground="#92400E"
                                                FontSize="12"
                                                Text="Chưa kiểm định" />
-                                </Border>
-                                <Button Margin="10,0,0,0"
+                                    </Border>
+                                    <Button Margin="10,0,0,0"
                                         Content="♥" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Border>
+                        </Border>
 
-                    <Border Margin="0,0,0,12"
+                        <Border Margin="0,0,0,12"
                             Padding="12"
                             Background="White"
                             BorderBrush="#E5E7EB"
                             BorderThickness="1"
                             CornerRadius="14">
-                        <StackPanel>
-                            <Border Height="120"
+                            <StackPanel>
+                                <Border Height="120"
                                     Background="#F3F4F6"
                                     CornerRadius="10">
-                                <TextBlock HorizontalAlignment="Center"
+                                    <TextBlock HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            Foreground="#6B7280"
                                            Text="Ảnh xe" />
-                            </Border>
-                            <TextBlock Margin="0,10,0,0"
+                                </Border>
+                                <TextBlock Margin="0,10,0,0"
                                        FontSize="14"
                                        FontWeight="SemiBold"
                                        Text="Xe đạp MTB Cube" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        FontSize="16"
                                        FontWeight="Bold"
                                        Text="5.800.000đ" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        Foreground="#6B7280"
                                        Text="Cube • Đã qua sử dụng" />
-                            <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                                <Border Width="150"
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <Border Width="150"
                                         Padding="8,4"
                                         Background="#ECFDF5"
                                         CornerRadius="999">
-                                    <TextBlock Foreground="#047857"
+                                        <TextBlock Foreground="#047857"
                                                FontSize="12"
                                                Text="Đã kiểm định" />
-                                </Border>
-                                <Button Margin="10,0,0,0"
+                                    </Border>
+                                    <Button Margin="10,0,0,0"
                                         Content="♥" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Border>
+                        </Border>
 
-                    <Border Margin="0,0,0,12"
+                        <Border Margin="0,0,0,12"
                             Padding="12"
                             Background="White"
                             BorderBrush="#E5E7EB"
                             BorderThickness="1"
                             CornerRadius="14">
-                        <StackPanel>
-                            <Border Height="120"
+                            <StackPanel>
+                                <Border Height="120"
                                     Background="#F3F4F6"
                                     CornerRadius="10">
-                                <TextBlock HorizontalAlignment="Center"
+                                    <TextBlock HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            Foreground="#6B7280"
                                            Text="Ảnh xe" />
-                            </Border>
-                            <TextBlock Margin="0,10,0,0"
+                                </Border>
+                                <TextBlock Margin="0,10,0,0"
                                        FontSize="14"
                                        FontWeight="SemiBold"
                                        Text="Xe đạp road Bianchi" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        FontSize="16"
                                        FontWeight="Bold"
                                        Text="14.200.000đ" />
-                            <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,6,0,0"
                                        Foreground="#6B7280"
                                        Text="Bianchi • Như mới" />
-                            <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                                <Border Width="150"
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <Border Width="150"
                                         Padding="8,4"
                                         Background="#ECFDF5"
                                         CornerRadius="999">
-                                    <TextBlock Foreground="#047857"
+                                        <TextBlock Foreground="#047857"
                                                FontSize="12"
                                                Text="Đã kiểm định" />
-                                </Border>
-                                <Button Margin="10,0,0,0"
+                                    </Border>
+                                    <Button Margin="10,0,0,0"
                                         Content="♥" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
+                        </Border>
+                    </StackPanel>
                 </Grid>
             </ScrollViewer>
         </Grid>

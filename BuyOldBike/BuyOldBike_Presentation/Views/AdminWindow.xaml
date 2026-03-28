@@ -111,7 +111,7 @@
         <TabControl Grid.Row="1" Margin="16" Background="{x:Null}"
                     x:Name="MainTabControl"
                     SelectionChanged="TabControl_SelectionChanged">
-            <TabItem Header="Dashboard">
+            <TabItem Header="Dashboard" x:Name="TabDashboard">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
                         <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Tổng quan hệ thống" />
@@ -131,7 +131,7 @@
                             <Border Grid.Row="0" Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
                                     <TextBlock Foreground="#FF6B7280" Text="Total Users" />
-                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="1,248" />
+                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="{Binding TotalUsersText}" />
                                     <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Tổng số người dùng" />
                                 </StackPanel>
                             </Border>
@@ -139,7 +139,7 @@
                             <Border Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
                                     <TextBlock Foreground="#FF6B7280" Text="Active Listings" />
-                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="312" />
+                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="{Binding ActiveListingsText}" />
                                     <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Bài đăng đang hoạt động" />
                                 </StackPanel>
                             </Border>
@@ -147,7 +147,7 @@
                             <Border Grid.Row="2" Grid.Column="0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
                                     <TextBlock Foreground="#FF6B7280" Text="Total Transactions" />
-                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="842" />
+                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="{Binding TotalTransactionsText}" />
                                     <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Tổng số giao dịch" />
                                 </StackPanel>
                             </Border>
@@ -155,7 +155,7 @@
                             <Border Grid.Row="2" Grid.Column="2" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                                 <StackPanel>
                                     <TextBlock Foreground="#FF6B7280" Text="System Revenue" />
-                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="128,500,000" />
+                                    <TextBlock Margin="0,8,0,0" FontSize="28" FontWeight="Bold" Text="{Binding SystemRevenueText}" />
                                     <TextBlock Margin="0,8,0,0" Foreground="#FF6B7280" Text="Doanh thu hệ thống (VND)" />
                                 </StackPanel>
                             </Border>
@@ -164,13 +164,9 @@
                         <Border Margin="0,16,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
                             <StackPanel>
                                 <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Hoạt động gần đây" />
-                                <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Một số sự kiện mẫu để minh hoạ" />
+                                <TextBlock Margin="0,4,0,0" Foreground="#FF6B7280" Text="Các sự kiện mới nhất từ hệ thống" />
 
-                                <ListBox Margin="0,12,0,0">
-                                    <ListBoxItem Content="12/03 - 3 listing mới đang chờ duyệt" />
-                                    <ListBoxItem Content="13/03 - 1 giao dịch chuyển sang trạng thái Disputed" />
-                                    <ListBoxItem Content="13/03 - 2 user bị suspend do vi phạm" />
-                                </ListBox>
+                                <ListBox Margin="0,12,0,0" ItemsSource="{Binding RecentActivities}" />
                             </StackPanel>
                         </Border>
                     </StackPanel>

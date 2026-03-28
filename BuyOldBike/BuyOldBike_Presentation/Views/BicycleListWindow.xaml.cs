@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BuyOldBike_BLL.Features.Payments.Wallet;
+using BuyOldBike_DAL.Constants;
 using BuyOldBike_Presentation.State;
 using BuyOldBike_Presentation.ViewModels;
 
@@ -99,6 +100,12 @@ namespace BuyOldBike_Presentation.Views
                 btnProfile.Content = GetProfileBadgeText();
                 walletBadge.Visibility = Visibility.Visible;
                 btnWallet.Visibility = Visibility.Visible;
+                btnMessages.Visibility = string.Equals(
+                    (AppSession.CurrentUser?.Role ?? "").Trim(),
+                    RoleConstants.Buyer,
+                    StringComparison.OrdinalIgnoreCase)
+                    ? Visibility.Visible
+                    : Visibility.Collapsed;
                 RefreshWalletBadge();
                 return;
             }
@@ -107,6 +114,7 @@ namespace BuyOldBike_Presentation.Views
             btnLogin.Visibility = Visibility.Visible;
             walletBadge.Visibility = Visibility.Collapsed;
             btnWallet.Visibility = Visibility.Collapsed;
+            btnMessages.Visibility = Visibility.Collapsed;
         }
 
         private void TryLoadListings()
@@ -199,6 +207,7 @@ namespace BuyOldBike_Presentation.Views
         }
         private void BtnMessages_Click(object sender, RoutedEventArgs e)
         {
+            if (!RoleNavigator.EnsureRole(this, RoleConstants.Buyer)) return;
             var win = new BuyerMessagesView();
             win.Owner = this;
             win.Show();
