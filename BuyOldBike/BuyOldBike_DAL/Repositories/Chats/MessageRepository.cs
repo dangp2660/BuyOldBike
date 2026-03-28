@@ -64,5 +64,27 @@ namespace BuyOldBike_DAL.Repositories.Chats
             return _db.Messages
                       .Count(m => m.ReceiverId == sellerId && !m.IsRead);
         }
+
+        public List<Message> GetAllMessagesForUser(Guid userId)
+        {
+            using var db = new BuyOldBikeContext();
+
+            return db.Messages
+                .Where(x => x.SenderId == userId || x.ReceiverId == userId)
+                .Select(x => new Message
+                {
+                    MessageId = x.MessageId,
+                    ListingId = x.ListingId,
+                    SenderId = x.SenderId,
+                    ReceiverId = x.ReceiverId,
+                    Content = x.Content,
+                    SentAt = x.SentAt,
+
+                    Sender = x.Sender,
+                    Receiver = x.Receiver,
+                    Listing = x.Listing
+                })
+                .ToList();
+        }
     }
 }

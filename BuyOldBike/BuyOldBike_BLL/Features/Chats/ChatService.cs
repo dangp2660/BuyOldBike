@@ -1,12 +1,15 @@
-﻿using BuyOldBike_DAL.Entities;
+﻿using BuyOldBike_BLL.Features.Chats;
+using BuyOldBike_DAL.Entities;
 using BuyOldBike_DAL.Repositories.Chats;
+using BuyOldBike_Presentation.ViewModels;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BuyOldBike_BLL.Features.Chats
+namespace BuyOldBike_Presentation.ViewModels
 {
     public class ChatService
     {
@@ -58,6 +61,37 @@ namespace BuyOldBike_BLL.Features.Chats
         public int GetUnreadCount(Guid sellerId)
         {
             return _repo.CountUnread(sellerId);
+        }
+        public List<ConversationViewModel> GetConversationsForBuyer(Guid buyerId)
+        {
+            var messages = _repo.GetAllMessagesForUser(buyerId);
+
+            return messages
+                .GroupBy(x => new
+                {
+                    x.ListingId,
+                    OtherUserId = x.SenderId == buyerId ? x.ReceiverId : x.SenderId
+                })
+                .Select(g =>
+                {
+                    var last = g.OrderByDescending(x => x.SentAt).First();
+
+                    return new ConversationViewModel
+                    {
+                        ListingId = g.Key.ListingId,
+                        OtherUserId = g.Key.OtherUserId,
+
+                        OtherUserEmail = last.SenderId == buyerId
+                            ? last.Receiver?.Email??""
+                            : last.Sender?.Email??"",
+
+                        ListingTitle = last.Listing?.Title??"",
+                        LastMessage = last.Content,
+                        LastTime = last.SentAt
+                    };
+                })
+                .OrderByDescending(x => x.LastTime)
+                .ToList();
         }
     }
 }

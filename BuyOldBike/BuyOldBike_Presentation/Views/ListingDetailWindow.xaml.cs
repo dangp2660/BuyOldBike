@@ -25,7 +25,6 @@ namespace BuyOldBike_Presentation.Views
         private bool _isPriceFormatting;
 
         public Action? OnSaved;
-        private ChatViewModel? _chatVm;
 
         public ListingDetailWindow(Guid listingId, bool editMode = false)
         {
@@ -41,22 +40,26 @@ namespace BuyOldBike_Presentation.Views
                 Close();
                 return;
             }
+            var currentUser = AppSession.CurrentUser;
+
+            if (currentUser != null
+                && currentUser.Role == "Buyer"
+                && _vm.ListingBike?.SellerId != currentUser.UserId)
+            {
+                BtnContact.Visibility = Visibility.Visible;
+            }
 
             DataContext = _vm;
-            SetupChat();
 
             if (_isEditMode)
             {
                 EnterEditMode();
             }
         }
-        private void SetupChat()
+        private void BtnContact_Click(object sender, RoutedEventArgs e)
         {
             var currentUser = AppSession.CurrentUser;
             if (currentUser == null) return;
-
-            // Chỉ hiện chat với Buyer
-            if (currentUser.Role != "Buyer") return;
 
             var sellerId = _vm.ListingBike?.SellerId;
             if (sellerId == null) return;
@@ -64,41 +67,13 @@ namespace BuyOldBike_Presentation.Views
             // Không cho chat với chính mình
             if (currentUser.UserId == sellerId) return;
 
-            _chatVm = new ChatViewModel(
+            var chatWindow = new ChatWindow(
                 _listingId,
                 currentUser.UserId,
                 sellerId.Value);
 
-            // Hiện panel và nút
-            ChatPanel.Visibility = Visibility.Visible;
-            BtnContact.Visibility = Visibility.Visible;
-
-            IcMessages.ItemsSource = _chatVm.Messages;
-            TxtChatInput.DataContext = _chatVm;
-
-            _chatVm.LoadMessages();
-        }
-        private void BtnContact_Click(object sender, RoutedEventArgs e)
-        {
-            // Toggle hiện/ẩn chat panel
-            ChatPanel.Visibility = ChatPanel.Visibility == Visibility.Visible
-                ? Visibility.Collapsed
-                : Visibility.Visible;
-        }
-        private void BtnSendChat_Click(object sender, RoutedEventArgs e)
-        {
-            if (_chatVm == null) return;
-            _chatVm.InputText = TxtChatInput.Text;
-            _chatVm.Send();
-            TxtChatInput.Text = string.Empty;
-
-            // Scroll xuống cuối
-            ChatScrollViewer.ScrollToBottom();
-        }
-        private void BtnRefreshChat_Click(object sender, RoutedEventArgs e)
-        {
-            _chatVm?.LoadMessages();
-            ChatScrollViewer.ScrollToBottom();
+            chatWindow.Owner = this; 
+            chatWindow.Show();
         }
 
         private void EnterEditMode()

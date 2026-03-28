@@ -1,6 +1,7 @@
 using BuyOldBike_BLL.Services.Auth;
 using BuyOldBike_Presentation.State;
 using System.Windows;
+using static BuyOldBike_BLL.Services.Auth.LoginService;
 
 namespace BuyOldBike_Presentation.Views
 {
@@ -28,15 +29,28 @@ namespace BuyOldBike_Presentation.Views
             }
 
             LoginService loginService = new LoginService();
-            var user = loginService.LoginAndGetUser(email, password);
-            if (user == null)
+            var result = loginService.LoginWithResult(email, password);
+            switch (result)
             {
-                MessageBox.Show("Invalid email or password. Please try again.", "Login Failed", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            else
-            {
-                AppSession.SetCurrentUser(user);
-                RoleNavigator.NavigateToHome(this);
+                case LoginResult.Success:
+                    var user = loginService.LoginAndGetUser(email, password);
+                    AppSession.SetCurrentUser(user!);
+                    RoleNavigator.NavigateToHome(this);
+                    break;
+
+                case LoginResult.Suspended:
+                    MessageBox.Show(
+                        "Your account has been locked.\nPlease contact the administrator for assistance.",
+                        "Account locked",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    break;
+
+                case LoginResult.InvalidCredentials:
+                    MessageBox.Show(
+                        "Invalid email or password. " +
+                        "Please try again.", "Login Failed",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    break;
             }
         }
 

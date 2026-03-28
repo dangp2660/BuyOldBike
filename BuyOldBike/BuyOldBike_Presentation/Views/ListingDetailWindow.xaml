@@ -202,29 +202,6 @@
                                 </ScrollViewer>
 
                                 <!-- Input -->
-                                <Grid Margin="0,12,0,0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="12"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="8"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <TextBox Grid.Column="0"
-                                             x:Name="TxtChatInput"
-                                             Height="36"
-                                             VerticalContentAlignment="Center"
-                                             Text="{Binding InputText,
-                                                 ElementName=ChatPanelControl,
-                                                 UpdateSourceTrigger=PropertyChanged}"/>
-                                    <Button Grid.Column="2" Height="36" Width="80"
-                                            Content="Gửi"
-                                            Click="BtnSendChat_Click"/>
-                                    <Button Grid.Column="4" Height="36" Width="80"
-                                            Content="Refresh"
-                                            Click="BtnRefreshChat_Click"/>
-                                </Grid>
                             </StackPanel>
                         </Border>
                     </StackPanel>

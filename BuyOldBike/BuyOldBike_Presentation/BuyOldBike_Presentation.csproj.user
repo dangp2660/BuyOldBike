@@ -5,7 +5,13 @@
     <Compile Update="Views\BicycleListWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\BuyerMessagesView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\ChangeRoleDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ChatWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\OrderDetailDialog.xaml.cs">
