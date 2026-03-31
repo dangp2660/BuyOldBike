@@ -35,5 +35,7 @@ public partial class User
 
     public virtual UserWallet? Wallet { get; set; }
 
+    public virtual ICollection<WithdrawalRequest> WithdrawalRequests { get; set; } = new List<WithdrawalRequest>();
+
     public virtual SellerProfile? SellerProfile { get; set; }
 }

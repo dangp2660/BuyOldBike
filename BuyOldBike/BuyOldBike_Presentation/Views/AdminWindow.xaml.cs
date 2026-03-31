@@ -1,6 +1,7 @@
-using BuyOldBike_BLL.Features.Admin;
+ using BuyOldBike_BLL.Features.Admin;
 using BuyOldBike_BLL.Features.Auth;
 using BuyOldBike_BLL.Features.Categories;
+using BuyOldBike_BLL.Features.Payments.Wallet;
 using BuyOldBike_BLL.Features.Transaction;
 using BuyOldBike_BLL.Services.Exports;
 using BuyOldBike_BLL.Services.Listings;
@@ -22,6 +23,7 @@ namespace BuyOldBike_Presentation.Views
         private ListingModerationViewModel? _listingVm;
         private CategoryManagementViewModel? _categoryVm;
         private TransactionManagementViewModel? _transactionVm;
+        private WithdrawalManagementViewModel? _withdrawVm;
 
         public AdminWindow()
         {
@@ -52,6 +54,10 @@ namespace BuyOldBike_Presentation.Views
             };
             DgTransactions.ItemsSource = _transactionVm.Orders;
 
+            var withdrawSvc = new WithdrawalRequestService();
+            _withdrawVm = new WithdrawalManagementViewModel(withdrawSvc);
+            DgWithdrawals.ItemsSource = _withdrawVm.Requests;
+
             _userVm.OnViewProfileRequested += (user) =>
             {
                 var dialog = new UserProfileDialog(user) { Owner = this };
@@ -75,6 +81,8 @@ namespace BuyOldBike_Presentation.Views
                 _categoryVm?.LoadAll();
             if (TabTransactionManagement.IsSelected)
                 _transactionVm?.LoadOrders();
+            if (TabWithdrawalManagement.IsSelected)
+                _withdrawVm?.LoadRequests();
         }
 
         //listing
@@ -98,6 +106,21 @@ namespace BuyOldBike_Presentation.Views
             if (CmbListingStatus.SelectedItem is ComboBoxItem item)
                 _listingVm.SelectedStatus = item.Tag?.ToString() ?? "All status";
             _listingVm.LoadListings();
+        }
+
+        private void BtnConfirmWithdrawal_Click(object sender, RoutedEventArgs e)
+        {
+            if (_withdrawVm == null) return;
+            if ((sender as Button)?.DataContext is not WithdrawalRequestRow row) return;
+
+            var confirm = MessageBox.Show(
+                $"Xác nhận rút {row.AmountText} cho {row.UserEmail}?",
+                "Xác nhận",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+            if (confirm != MessageBoxResult.Yes) return;
+
+            _withdrawVm.Confirm(row.WithdrawalRequestId);
         }
         //user
         private void BtnSearch_Click(object sender, RoutedEventArgs e)

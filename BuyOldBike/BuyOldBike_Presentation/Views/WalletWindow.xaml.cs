@@ -82,6 +82,43 @@ public partial class WalletWindow : Window
         }
     }
 
+    private void BtnWithdraw_Click(object sender, RoutedEventArgs e)
+    {
+        if (!AppSession.IsAuthenticated || AppSession.CurrentUser == null)
+        {
+            MessageBox.Show("Bạn cần đăng nhập để rút tiền.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        var dialog = new WithdrawRequestWindow { Owner = this };
+        var ok = dialog.ShowDialog() == true;
+        if (!ok) return;
+
+        try
+        {
+            if (sender is Button btn) btn.IsEnabled = false;
+
+            var svc = new WithdrawalRequestService();
+            svc.CreateRequest(
+                AppSession.CurrentUser.UserId,
+                dialog.Amount,
+                dialog.BankName,
+                dialog.AccountNumber,
+                dialog.AccountName);
+
+            MessageBox.Show("Đã tạo yêu cầu rút tiền. Vui lòng chờ admin xác nhận.", "Thành công",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            if (sender is Button btn) btn.IsEnabled = true;
+        }
+    }
+
     private void txtTopUpAmount_PreviewTextInput(object sender, TextCompositionEventArgs e)
     {
         e.Handled = !Regex.IsMatch(e.Text, @"^\d+$");

@@ -72,5 +72,12 @@ namespace BuyOldBike_DAL.Constants
             public const string Resolved = "Resolved";
             public const string Rejected = "Rejected";
         }
+
+        public static class WithdrawalRequestStatus
+        {
+            public const string Pending = "Pending";
+            public const string Confirmed = "Confirmed";
+            public const string Rejected = "Rejected";
+        }
     }
 }

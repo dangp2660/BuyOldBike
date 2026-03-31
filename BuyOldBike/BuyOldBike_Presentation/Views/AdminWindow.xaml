@@ -507,6 +507,70 @@
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
+
+            <TabItem Header="Withdrawal Requests" x:Name="TabWithdrawalManagement">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF111827" Text="Withdrawal Requests" />
+
+                        <Border Margin="0,12,0,0" Background="White" BorderBrush="#FFE5E7EB" BorderThickness="1" CornerRadius="14" Padding="16">
+                            <StackPanel>
+                                <DataGrid x:Name="DgWithdrawals"
+                                          Margin="0,12,0,0"
+                                          Height="480"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          CanUserDeleteRows="False"
+                                          CanUserResizeRows="False"
+                                          CanUserReorderColumns="False"
+                                          IsReadOnly="True"
+                                          SelectionMode="Single"
+                                          SelectionUnit="FullRow"
+                                          HeadersVisibility="Column"
+                                          GridLinesVisibility="None"
+                                          RowHeaderWidth="0"
+                                          BorderBrush="#FFE5E7EB"
+                                          BorderThickness="1"
+                                          Background="White"
+                                          RowBackground="White"
+                                          AlternatingRowBackground="#FFF9FAFB"
+                                          ItemsSource="{Binding}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Created At" Width="140" Binding="{Binding CreatedAt, StringFormat={}{0:yyyy-MM-dd HH:mm}}" />
+                                        <DataGridTextColumn Header="User" Width="180" Binding="{Binding UserEmail}" />
+                                        <DataGridTextColumn Header="Amount" Width="120" Binding="{Binding AmountText}" />
+                                        <DataGridTextColumn Header="Bank" Width="180" Binding="{Binding BankName}" />
+                                        <DataGridTextColumn Header="Account No" Width="140" Binding="{Binding AccountNumber}" />
+                                        <DataGridTextColumn Header="Account Name" Width="180" Binding="{Binding AccountName}" />
+                                        <DataGridTextColumn Header="Status" Width="110" Binding="{Binding Status}" />
+                                        <DataGridTextColumn Header="Confirmed At" Width="140" Binding="{Binding ConfirmedAt, StringFormat={}{0:yyyy-MM-dd HH:mm}}" />
+                                        <DataGridTemplateColumn Header="Actions" Width="*">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="4,0">
+                                                        <Button Height="28" Padding="10,4" Content="Confirm" Click="BtnConfirmWithdrawal_Click">
+                                                            <Button.Style>
+                                                                <Style TargetType="Button">
+                                                                    <Setter Property="IsEnabled" Value="False" />
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding Status}" Value="Pending">
+                                                                            <Setter Property="IsEnabled" Value="True" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Button.Style>
+                                                        </Button>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

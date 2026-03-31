@@ -55,6 +55,27 @@ BEGIN
 
     CREATE INDEX IX_inspection_images_inspection_id ON dbo.inspection_images(inspection_id);
 END
+
+IF OBJECT_ID(N'dbo.withdrawal_requests', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.withdrawal_requests
+    (
+        withdrawal_request_id UNIQUEIDENTIFIER NOT NULL CONSTRAINT DF_withdrawal_requests_withdrawal_request_id DEFAULT (NEWID()),
+        user_id UNIQUEIDENTIFIER NOT NULL,
+        amount DECIMAL(18, 2) NOT NULL,
+        bank_name NVARCHAR(255) NOT NULL,
+        account_number VARCHAR(50) NOT NULL,
+        account_name NVARCHAR(255) NOT NULL,
+        status VARCHAR(20) NOT NULL CONSTRAINT DF_withdrawal_requests_status DEFAULT ('Pending'),
+        created_at DATETIME NOT NULL CONSTRAINT DF_withdrawal_requests_created_at DEFAULT (GETDATE()),
+        confirmed_at DATETIME NULL,
+        CONSTRAINT PK_withdrawal_requests PRIMARY KEY (withdrawal_request_id),
+        CONSTRAINT FK_withdrawal_requests_users FOREIGN KEY (user_id) REFERENCES dbo.users(user_id)
+    );
+
+    CREATE INDEX IX_withdrawal_requests_user_id ON dbo.withdrawal_requests(user_id);
+    CREATE INDEX IX_withdrawal_requests_status ON dbo.withdrawal_requests(status);
+END
 ");
 
             _schemaEnsured = true;
@@ -90,6 +111,8 @@ END
     public virtual DbSet<UserWallet> UserWallets { get; set; }
 
     public virtual DbSet<WalletTransaction> WalletTransactions { get; set; }
+
+    public virtual DbSet<WithdrawalRequest> WithdrawalRequests { get; set; }
 
     public virtual DbSet<ReturnRequest> ReturnRequests { get; set; }
 
@@ -760,6 +783,49 @@ END
                 .HasForeignKey(d => d.WalletId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__wallet_t__wallet__00400204");
+        });
+
+        modelBuilder.Entity<WithdrawalRequest>(entity =>
+        {
+            entity.HasKey(e => e.WithdrawalRequestId).HasName("PK_withdrawal_requests");
+
+            entity.ToTable("withdrawal_requests");
+
+            entity.HasIndex(e => e.UserId, "IX_withdrawal_requests_user_id");
+
+            entity.Property(e => e.WithdrawalRequestId)
+                .HasDefaultValueSql("(newid())")
+                .HasColumnName("withdrawal_request_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.Amount)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("amount");
+            entity.Property(e => e.BankName)
+                .HasMaxLength(255)
+                .HasColumnName("bank_name");
+            entity.Property(e => e.AccountNumber)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("account_number");
+            entity.Property(e => e.AccountName)
+                .HasMaxLength(255)
+                .HasColumnName("account_name");
+            entity.Property(e => e.Status)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasDefaultValue("Pending")
+                .HasColumnName("status");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("created_at");
+            entity.Property(e => e.ConfirmedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("confirmed_at");
+
+            entity.HasOne(d => d.User).WithMany(p => p.WithdrawalRequests)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_withdrawal_requests_users");
         });
 
         modelBuilder.Entity<User>(entity =>
